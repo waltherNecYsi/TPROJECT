@@ -1,7 +1,11 @@
-import React from 'react'
+import { Helmet } from "react-helmet-async";
 
 export default function LoginPage() {
   return (
-    <div>LoginPage</div>
-  )
+    <>
+      <Helmet>
+        <title> Login | Nubefa</title>
+      </Helmet>
+    </>
+  );
 }
