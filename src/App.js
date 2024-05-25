@@ -3,12 +3,16 @@ import { HelmetProvider } from "react-helmet-async";
 
 import Router from "./routes";
 
+import AuthProvider from "./auth/JwtContext";
+
 export default function App() {
   return (
-    <HelmetProvider>
-      <BrowserRouter>
-        <Router />
-      </BrowserRouter>
-    </HelmetProvider>
+    <AuthProvider>
+      <HelmetProvider>
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
+      </HelmetProvider>
+    </AuthProvider>
   );
 }
