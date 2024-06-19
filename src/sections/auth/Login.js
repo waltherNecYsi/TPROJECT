@@ -9,6 +9,9 @@ import { PATH_AUTH } from "../../routes/paths";
 // layouts
 import LoginLayout from "../../layouts/login";
 
+import AuthLoginForm from './AuthLoginForm';
+
+
 export default function Login() {
 
     const { method } = useAuthContext();
@@ -40,6 +43,7 @@ export default function Login() {
             />
           </Tooltip>
         </Stack>
+        <AuthLoginForm />
       </LoginLayout>
     </>
   );
