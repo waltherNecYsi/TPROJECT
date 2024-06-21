@@ -13,6 +13,7 @@ NavSectionMini.propTypes = {
 };
 
 function NavSectionMini({ data, sx, ...other }) {
+  console.log(data)
   return (
     <Stack
       spacing={0.5}

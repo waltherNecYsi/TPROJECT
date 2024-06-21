@@ -55,9 +55,13 @@ const Image = forwardRef(
         component="span"
         sx={{
           lineHeight: 1,
-          display: 'block',
+          // display: 'block',
           overflow: 'hidden',
           position: 'relative',
+          width: '40vh',
+          height: '40vh',
+          display: 'flex',
+          justifyContent: 'center',
           '& .wrapper': {
             width: 1,
             height: 1,

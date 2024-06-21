@@ -1,7 +1,6 @@
 import axios from 'axios';
 // config
 import { HOST_API_KEY } from '../config-global';
-import { tenantUrl } from '../auth/TenantUtils';
 import { useAuthContext } from '../auth/useAuthContext';
 
 // ----------------------------------------------------------------------
@@ -21,10 +20,8 @@ axiosInstance.interceptors.request.use(
     // const { user } = useAuthContext();
     config.data = {
       ...config.data,
-      inquilino: tenantUrl,
+      inquilino: 'api',
       token: localStorage.getItem('accessToken'),
-      idEmpresa: localStorage.getItem('empId'),
-      // idEmpresa: user.empId,
     };
     return config;
   },

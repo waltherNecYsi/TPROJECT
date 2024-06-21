@@ -20,8 +20,7 @@ export default function Login() {
     <>
       <LoginLayout>
         <Stack spacing={2} sx={{ mb: 5, position: "relative" }}>
-          <Typography variant="h4">inicia Sesión en Nubefa</Typography>
-
+          <Typography variant="h4">inicia Sesión en SUKHA</Typography>
           <Stack direction="row" spacing={0.5}>
             <Typography variant="body2">Nuevo usuario?</Typography>
 

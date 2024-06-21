@@ -11,8 +11,8 @@ import { RHFTextField } from '../hook-form';
 import { useAuthContext } from '../../auth/useAuthContext';
 import axios from '../../utils/axios';
 
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import '../../pages/Main/style.css';
+// import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+// import '../../pages/Main/style.css';
 
 const RegisterSchema = Yup.object().shape({
   nomyape: Yup.string().required('Tus nombres completos es requerido'),

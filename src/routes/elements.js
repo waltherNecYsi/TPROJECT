@@ -17,5 +17,16 @@ const Loadable = (Component) => (props) =>
 
 // AUTH
 export const LoginPage = Loadable(lazy(() => import('../pages/auth/LoginPage')))
+export const RegisterPage = Loadable(lazy(() => import('../pages/auth/RegisterPage')));
 
+// pages
+export const RegistroClientesPage = Loadable(
+  lazy(() => import('../pages/dashboard/Registro/RegistroClientesPage'))
+);
+export const RegistroCitasPage = Loadable(
+  lazy(() => import('../pages/dashboard/Registro/RegistroCitasPage'))
+);
+export const RegistroEstilistasPage = Loadable(
+  lazy(() => import('../pages/dashboard/Registro/RegistroEstilistasPage'))
+);
 
