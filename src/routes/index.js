@@ -2,13 +2,20 @@ import { Navigate, useRoutes, Outlet } from "react-router-dom";
 import { PATH_AUTH } from "./paths";
 
 import GuestGuard from "../auth/GuestGuard";
+import { PATH_AFTER_LOGIN } from "../config-global";
 
 import DashboardLayout from '../layouts/dashboard';
+import CompactLayout from '../layouts/compact';
+
 
 import {
   // Auth
   LoginPage,
   RegisterPage,
+
+  // Main
+  GeneralBookingPage,
+
 
   /// Dashboard
   // Registro
@@ -42,14 +49,25 @@ export default function Router() {
       ],
     },
 
+    // {
+    //   path: 'AppUser',
+    //   element: <CompactLayout />,
+    //   children: [
+    //     { path: 'app', element: <GeneralBookingPage /> },
+    //   ]
+    // },
+    
+    // Dashboard
     {
       path: 'dashboard',
       element: (
         // <GuestGuard>
-          <DashboardLayout />
+        <DashboardLayout />
         // </GuestGuard>
       ),
       children: [
+        // { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+        { path: 'app', element: <GeneralBookingPage /> },
         {
           path: 'registro',
           children: [

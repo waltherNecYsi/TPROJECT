@@ -1,16 +1,12 @@
 import { Suspense , lazy } from "react";
 
+import LoadingScreen from '../components/loading-screen';
 
-export function Loading() {
-    return (
-      <div>Loading...</div>
-    )
-  }
   
 
 const Loadable = (Component) => (props) =>
     (
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<LoadingScreen />}>
         <Component {...props} />
       </Suspense>
     );
@@ -18,6 +14,11 @@ const Loadable = (Component) => (props) =>
 // AUTH
 export const LoginPage = Loadable(lazy(() => import('../pages/auth/LoginPage')))
 export const RegisterPage = Loadable(lazy(() => import('../pages/auth/RegisterPage')));
+
+// Main
+export const GeneralBookingPage = Loadable(
+  lazy(() => import('../pages/dashboard/GeneralBookingPage'))
+);
 
 // pages
 export const RegistroClientesPage = Loadable(
