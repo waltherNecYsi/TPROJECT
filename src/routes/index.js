@@ -49,14 +49,13 @@ export default function Router() {
       ],
     },
 
-    // {
-    //   path: 'AppUser',
-    //   element: <CompactLayout />,
-    //   children: [
-    //     { path: 'app', element: <GeneralBookingPage /> },
-    //   ]
-    // },
-    
+    {
+      path: 'AppUser',
+      element: <CompactLayout />,
+      children: [
+        { path: 'app', element: <GeneralBookingPage /> },
+      ],
+    },
     // Dashboard
     {
       path: 'dashboard',
@@ -66,11 +65,10 @@ export default function Router() {
         // </GuestGuard>
       ),
       children: [
-        // { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
-        { path: 'app', element: <GeneralBookingPage /> },
         {
           path: 'registro',
           children: [
+            // { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
             { element: <Navigate to="/dashboard/registro/clientes" replace />, index: true },
             { path: 'clientes', element: <RegistroClientesPage /> },
             { path: 'citas', element: <RegistroCitasPage /> },

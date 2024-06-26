@@ -1,4 +1,4 @@
-import { m } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
@@ -67,10 +67,11 @@ export default function LoadingScreen() {
           <LinearProgress color="inherit" sx={{ width: 1, maxWidth: 360 }} />
         ) : (
           <>
-            <m.div
+            <motion.div
               animate={{
-                scale: [1, 0.9, 0.9, 1, 1],
+                scale: [1.2, 0.9, 0.9, 1, 1.2],
                 opacity: [1, 0.48, 0.48, 1, 1],
+                rotate: [270, 0, 0, 240, 270],
               }}
               transition={{
                 duration: 2,
@@ -80,10 +81,10 @@ export default function LoadingScreen() {
               }}
             >
               <Logo disabledLink sx={{ width: 64, height: 64 }} />
-            </m.div>
+            </motion.div>
 
             <Box
-              component={m.div}
+              component={motion.div}
               animate={{
                 scale: [1.6, 1, 1, 1.6, 1.6],
                 rotate: [270, 0, 0, 270, 270],
@@ -92,15 +93,15 @@ export default function LoadingScreen() {
               }}
               transition={{ ease: 'linear', duration: 3.2, repeat: Infinity }}
               sx={{
-                width: 100,
-                height: 100,
+                width: 80,
+                height: 80,
                 position: 'absolute',
                 border: (theme) => `solid 3px ${alpha(theme.palette.primary.dark, 0.24)}`,
               }}
             />
 
             <Box
-              component={m.div}
+              component={motion.div}
               animate={{
                 scale: [1, 1.2, 1.2, 1, 1],
                 rotate: [0, 270, 270, 0, 0],
@@ -113,8 +114,8 @@ export default function LoadingScreen() {
                 repeat: Infinity,
               }}
               sx={{
-                width: 120,
-                height: 120,
+                width: 100,
+                height: 100,
                 position: 'absolute',
                 border: (theme) => `solid 8px ${alpha(theme.palette.primary.dark, 0.24)}`,
               }}

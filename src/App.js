@@ -14,6 +14,20 @@ import { store, persistor } from "./redux/store";
 import ThemeProvider from "./theme";
 import AuthProvider from "./auth/JwtContext";
 
+// scroll bar
+import 'simplebar-react/dist/simplebar.min.css';
+
+// editor
+import 'react-quill/dist/quill.snow.css';
+
+// slick-carousel
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+// lazy image
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
+
 export default function App() {
   return (
     <AuthProvider>
