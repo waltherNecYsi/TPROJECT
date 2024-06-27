@@ -13,8 +13,6 @@ export const _userAbout = {
     'Tart I love sugar plum I love oat cake. Sweet roll caramels I love jujubes. Topping cake wafer..',
   country: _mock.address.country(1),
   email: _mock.email(1),
-  company: _mock.company(1),
-  school: _mock.company(2),
   socialLinks: {
     facebookLink: `https://www.facebook.com/caitlyn.kerluke`,
     instagramLink: `https://www.instagram.com/caitlyn.kerluke`,
@@ -130,7 +128,6 @@ export const _userList = [...Array(24)].map((_, index) => ({
   state: 'Virginia',
   city: 'Rancho Cordova',
   zipCode: '85807',
-  company: _mock.company(index),
   isVerified: _mock.boolean(index),
   status: randomInArray(['active', 'banned']),
   role: _mock.role(index),

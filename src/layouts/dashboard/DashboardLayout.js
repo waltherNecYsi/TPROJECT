@@ -14,8 +14,6 @@ import NavVertical from './nav/NavVertical';
 import NavHorizontal from './nav/NavHorizontal';
 
 import { useDispatch } from '../../redux/store';
-import { getCompany } from '../../redux/slices/company';
-import { getTypesDocumentsIdentity } from '../../redux/slices/utils';
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout() {
@@ -38,12 +36,6 @@ export default function DashboardLayout() {
   const handleClose = () => {
     setOpen(false);
   };
-
-  // initial data fetch 
-  useEffect(() => {
-    dispatch(getCompany());
-    dispatch(getTypesDocumentsIdentity());
-  }, [dispatch]);
 
   const renderNavVertical = <NavVertical openNav={open} onCloseNav={handleClose} />;
 

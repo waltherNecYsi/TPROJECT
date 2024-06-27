@@ -20,7 +20,6 @@ export const _inventario = [...Array(20)].map((_, index) => ({
     id: _mock.id(index),
     name: _mock.name.fullName(index),
     address: _mock.address.fullAddress(index),
-    company: _mock.company(index),
     email: _mock.email(index),
     phone: _mock.phoneNumber(index),
   },

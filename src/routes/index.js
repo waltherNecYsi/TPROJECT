@@ -4,9 +4,8 @@ import { PATH_AUTH } from "./paths";
 import GuestGuard from "../auth/GuestGuard";
 import { PATH_AFTER_LOGIN } from "../config-global";
 
-import DashboardLayout from '../layouts/dashboard';
-import CompactLayout from '../layouts/compact';
-
+import DashboardLayout from "../layouts/dashboard";
+import CompactLayout from "../layouts/compact";
 
 import {
   // Auth
@@ -15,7 +14,6 @@ import {
 
   // Main
   GeneralBookingPage,
-
 
   /// Dashboard
   // Registro
@@ -49,16 +47,9 @@ export default function Router() {
       ],
     },
 
-    {
-      path: 'AppUser',
-      element: <CompactLayout />,
-      children: [
-        { path: 'app', element: <GeneralBookingPage /> },
-      ],
-    },
     // Dashboard
     {
-      path: 'dashboard',
+      path: "dashboard",
       element: (
         // <GuestGuard>
         <DashboardLayout />
@@ -66,17 +57,20 @@ export default function Router() {
       ),
       children: [
         {
-          path: 'registro',
+          path: "registro",
           children: [
-            // { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
-            { element: <Navigate to="/dashboard/registro/clientes" replace />, index: true },
-            { path: 'clientes', element: <RegistroClientesPage /> },
-            { path: 'citas', element: <RegistroCitasPage /> },
-            { path: 'estilistas', element: <RegistroEstilistasPage /> },
+            {
+              element: <Navigate to="/dashboard/registro/clientes" replace />,
+              index: true,
+            },
+            { path: "clientes", element: <RegistroClientesPage /> },
+            { path: "citas", element: <RegistroCitasPage /> },
+            { path: "estilistas", element: <RegistroEstilistasPage /> },
           ],
         },
-      ]
-    }
-
+        { path: "app", element: <GeneralBookingPage /> },
+        { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+      ],
+    },
   ]);
 }

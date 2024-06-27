@@ -1,4 +1,4 @@
-import { sub } from 'date-fns';
+import { sub } from "date-fns";
 //
 import {
   age,
@@ -9,7 +9,6 @@ import {
   rating,
   percent,
   country,
-  company,
   boolean,
   sentence,
   lastName,
@@ -18,7 +17,7 @@ import {
   description,
   fullAddress,
   phoneNumber,
-} from './assets';
+} from "./assets";
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +28,6 @@ const _mock = {
   time: (index) => sub(new Date(), { days: index, hours: index }),
   boolean: (index) => boolean[index],
   role: (index) => role[index],
-  company: (index) => company[index],
   address: {
     fullAddress: (index) => fullAddress[index],
     country: (index) => country[index],
@@ -52,11 +50,15 @@ const _mock = {
   },
   image: {
     cover: (index) =>
-      `https://api-dev-minimal-v4.vercel.app/assets/images/covers/cover_${index + 1}.jpg`,
+      // `https://api-dev-minimal-v4.vercel.app/assets/images/covers/cover_${index + 1}.jpg`,
+      `https://wootag.com/assets/images/showcase${index + 1}.png`,
     product: (index) =>
-      `https://api-dev-minimal-v4.vercel.app/assets/images/products/product_${index + 1}.jpg`,
+      // `https://api-dev-minimal-v4.vercel.app/assets/images/products/product_${index + 1}.jpg`,
+      `https://wootag.com/assets/images/showcase${index + 1}.png`,
+
     avatar: (index) =>
-      `https://api-dev-minimal-v4.vercel.app/assets/images/avatars/avatar_${index + 1}.jpg`,
+      // `https://api-dev-minimal-v4.vercel.app/assets/images/avatars/avatar_${index + 1}.jpg`,
+      `https://wootag.com/assets/images/showcase${index + 1}.png`,
   },
 };
 
