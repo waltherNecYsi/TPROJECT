@@ -31,6 +31,7 @@
     "eslint-config-prettier": "^9.1.0",
     "framer-motion": "^11.2.12",
     "highlight.js": "^11.9.0",
+    "i18next": "^23.11.5",
     "lodash": "^4.17.21",
     "lodash.merge": "^4.6.2",
     "mdb-react-ui-kit": "^8.0.0",

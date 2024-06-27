@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
+
 // utils
 import localStorageAvailable from '../utils/localStorageAvailable';
 // components
@@ -9,7 +11,7 @@ import { allLangs, defaultLang } from './config-lang';
 // ----------------------------------------------------------------------
 
 export default function useLocales() {
-  const { i18n, t: translate } = useTranslation();
+  const {  t: translate } = useTranslation();
 
   const { onChangeDirectionByLang } = useSettingsContext();
 
