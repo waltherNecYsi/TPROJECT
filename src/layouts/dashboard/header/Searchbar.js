@@ -195,8 +195,6 @@ function Searchbar() {
               renderOption={(props, option, { inputValue }) => {
                 const { title, path } = option;
 
-                console.log(props);
-
                 const partsTitle = parse(title, match(title, inputValue));
 
                 const partsPath = parse(path, match(path, inputValue));

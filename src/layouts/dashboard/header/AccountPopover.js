@@ -171,7 +171,7 @@ export default function AccountPopover() {
           sx: {
             ...bgBlur({ color: theme.palette.background.default, opacity: 0.9 }),
             width: NAV.W_BASE,
-            boxShadow: `-24px 12px 40px 0 ${alpha(
+            boxShadow: `40px 0px 40px 0 ${alpha(
               theme.palette.mode === 'light' ? theme.palette.grey[500] : theme.palette.common.black,
               0.16
             )}`,
@@ -180,7 +180,7 @@ export default function AccountPopover() {
         sx={{
           '.MuiPaper-root': {
             borderRadius: '12px 0px 0px 0px',
-            background: 'white',
+            background: theme.palette.background.default,
           },
           '.MuiBackdrop-root': {
             backgroundColor: 'rgba(0, 0, 0, 0.1)',
