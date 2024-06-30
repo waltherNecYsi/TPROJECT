@@ -67,8 +67,17 @@ const navConfig = [
           { title: "clientes", path: PATH_DASHBOARD.registro.regCliente },
           { title: "citas", path: PATH_DASHBOARD.registro.regCitas },
           { title: "estilistas", path: PATH_DASHBOARD.registro.regEstilistas },
+          { title: "servicios", path: PATH_DASHBOARD.registro.regServicios },
         ],
       },
+      {
+        title: "Consultas",
+        path: PATH_DASHBOARD.consulta.consultaCitas,
+        icon: ICONS.file,
+        children: [
+          { title: "citas", path: PATH_DASHBOARD.consulta.consultaCitas },
+        ],
+      }
     ],
   },
 ];

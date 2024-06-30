@@ -114,8 +114,6 @@ function Searchbar() {
     };
   });
 
-  console.log(allItems);
-
   useEffect(() => {
     if (open) {
       handleClose();

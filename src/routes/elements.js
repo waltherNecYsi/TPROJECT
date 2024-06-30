@@ -30,4 +30,10 @@ export const RegistroCitasPage = Loadable(
 export const RegistroEstilistasPage = Loadable(
   lazy(() => import('../pages/dashboard/Registro/RegistroEstilistasPage'))
 );
+export const RegistroServiciosPage = Loadable(
+  lazy(() => import('../pages/dashboard/Registro/RegistroServiciosPage'))
+);
 
+export const ConsultaCitasPage = Loadable(
+  lazy(() => import('../pages/dashboard/Consulta/ConsultaCitasPage'))
+);

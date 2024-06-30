@@ -21,5 +21,10 @@ export const PATH_DASHBOARD = {
     regCliente: path(ROOTS_DASHBOARD , '/registro/clientes'),
     regCitas: path(ROOTS_DASHBOARD , '/registro/citas'),
     regEstilistas: path(ROOTS_DASHBOARD , '/registro/estilistas'),
+    regServicios: path(ROOTS_DASHBOARD , '/registro/servicios'),
+  },
+  consulta: {
+    root: path(ROOTS_DASHBOARD, '/consulta'),
+    consultaCitas: path(ROOTS_DASHBOARD , '/consulta/citas'),
   },
 }

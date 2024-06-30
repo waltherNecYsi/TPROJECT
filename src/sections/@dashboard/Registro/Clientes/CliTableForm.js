@@ -309,7 +309,7 @@ export default function CliTableForm({ inputs, request, closeModal, fetchDataFro
             '& .MuiDialogActions-root': {
               padding: 1,
             },
-            '& .css-1nk0ik3-MuiPaper-root-MuiDialog-paper': {
+            '& .MuiPaper-root.MuiDialog-paper': {
               maxWidth: 'max-content',
             },
           }}

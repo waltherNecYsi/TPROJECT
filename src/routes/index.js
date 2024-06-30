@@ -20,6 +20,9 @@ import {
   RegistroClientesPage,
   RegistroCitasPage,
   RegistroEstilistasPage,
+  RegistroServiciosPage,
+
+  ConsultaCitasPage,
 } from "./elements";
 
 export default function Router() {
@@ -56,6 +59,8 @@ export default function Router() {
         // </GuestGuard>
       ),
       children: [
+        { path: "app", element: <GeneralBookingPage /> },
+        { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         {
           path: "registro",
           children: [
@@ -66,10 +71,16 @@ export default function Router() {
             { path: "clientes", element: <RegistroClientesPage /> },
             { path: "citas", element: <RegistroCitasPage /> },
             { path: "estilistas", element: <RegistroEstilistasPage /> },
+            { path: "servicios", element: <RegistroServiciosPage /> },
           ],
         },
-        { path: "app", element: <GeneralBookingPage /> },
-        { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+        {
+          path: "consulta",
+          children: [
+            { path: "citas", element: <ConsultaCitasPage /> },
+          ],
+        }
+        
       ],
     },
   ]);

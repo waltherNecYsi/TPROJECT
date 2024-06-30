@@ -23,6 +23,8 @@
     "@mui/material": "^5.15.18",
     "@mui/x-date-pickers": "^7.7.0",
     "@reduxjs/toolkit": "^2.2.5",
+    "@syncfusion/ej2-base": "^26.1.37",
+    "@syncfusion/ej2-react-schedule": "^26.1.39",
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.7.2",
     "change-case": "^5.4.4",
