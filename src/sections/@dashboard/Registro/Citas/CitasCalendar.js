@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { Box, Typography } from "@mui/material";
-import { useForm } from "react-hook-form";
-import PropTypes from "prop-types";
+import React, { useState, useRef } from "react";
+import { Box, Typography, Button, TextField } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+
+import { useForm, Controller } from "react-hook-form";
 
 import {
   ScheduleComponent,
@@ -24,85 +25,74 @@ import useResponsive from "../../../../hooks/useResponsive";
 
 import { useSettingsContext } from "../../../../components/settings";
 
-import FormProvider from "../../../../components/hook-form/FormProvider";
-
-import formatTimeAP from "../../../../utils/formatTimeAP";
+import { useEditorTemplate, dayEventTemplate } from "./CitasCalendarTemplate";
 
 registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NCaF5cXmZCeUx0THxbf1x0ZFRHal9ZTnZZUj0eQnxTdEFjX31XcndWTmBbV0d1WQ=="
 );
 
-const dayEventTemplate = (props) => {
-  console.log(props);
-  const { Stylist, StartTime, EndTime } = props;
-  return (
-    <div className="e-subject">
-      <Typography variant="h6" gutterBottom>
-        Cita
-      </Typography>
-      <Typography variant="subtitle2" gutterBottom>
-        Estilista: {Stylist}
-      </Typography>
-      <Typography variant="subtitle2" gutterBottom>
-        Horario: {formatTimeAP(StartTime)} - {formatTimeAP(EndTime)}
-      </Typography>
-    </div>
-  );
-};
-
-dayEventTemplate.propTypes = {
-  Stylist: PropTypes.string,
-};
-
 export default function CitasCalendar() {
-  const defaultValues = {
-    cliente: "",
+  // const { themeStretch } = useSettingsContext();
+
+  // const upMd = useResponsive("up", "md");
+  const scheduleRef = useRef(null);
+
+  const handlePopupOpen = (args) => {
+    console.log(args);
+    if (args.type === "Editor" && !args.data.Subject) {
+      args.element.querySelector(".e-title-text").innerHTML = "Nuevo Evento";
+    } else if (args.type === "Editor" && args.data.Subject) {
+      args.element.querySelector(".e-title-text").innerHTML = "Editar Evento";
+    }
   };
-  const { themeStretch } = useSettingsContext();
 
-  const upMd = useResponsive("up", "md");
-  const methods = useForm({ defaultValues });
-
-  const {
-    watch,
-    reset,
-    control,
-    setValue,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+  const handleActionBegin = (args) => {
+    if (args.requestType === "eventCreate") {
+      console.log("a");
+      console.log(data);
+    } else if (args.requestType === "eventChange") {
+      console.log("b");
+    } else if (args.requestType === "eventDelete") {
+      console.log("c");
+    }
+  };
 
   const data = [
     {
       Id: 1,
       Subject: "Cita",
       Stylist: "Roxanne",
-
       StartTime: new Date(2024, 5, 30, 10, 0),
       EndTime: new Date(2024, 5, 30, 12, 30),
     },
   ];
 
+
   return (
-    <FormProvider methods={methods}>
+    <>
       <ScheduleComponent
         height="60vh"
         selectedDate={new Date()}
+        ref={scheduleRef}
+        popupOpen={handlePopupOpen}
+          actionBegin={handleActionBegin}
+        editorTemplate={useEditorTemplate}
         eventSettings={{
           dataSource: data,
+          editDialogTitle: "Editar Evento",
         }}
       >
         <ViewsDirective>
           <ViewDirective
             option="Day"
-            startHour="07:00"
-            endHour="24:00"
+            // startHour="07:00"
+            // endHour="24:00"
             eventTemplate={dayEventTemplate}
           />
           <ViewDirective
             option="Week"
-            startHour="09:00"
-            endHour="19:00"
+            // startHour="09:00"
+            // endHour="19:00"
             showWeekend={false}
             timeScale={{ interval: 60, slotCount: 4 }}
           />
@@ -111,6 +101,6 @@ export default function CitasCalendar() {
         </ViewsDirective>
         <Inject services={[Day, Week, Month, Agenda]} />
       </ScheduleComponent>
-    </FormProvider>
+    </>
   );
 }
