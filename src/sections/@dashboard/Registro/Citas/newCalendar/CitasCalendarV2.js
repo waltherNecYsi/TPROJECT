@@ -1,9 +1,8 @@
 import React from "react";
 
-import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
+import { ViewState, EditingState , Resources } from "@devexpress/dx-react-scheduler";
 import {
   Scheduler,
-  Resources,
   Toolbar,
   DateNavigator,
   TodayButton,
@@ -207,6 +206,8 @@ export default class CitasCalendarV2 extends React.PureComponent {
           <AppointmentTooltip showOpenButton showCloseButton showDeleteButton />
           <Resources
               data={resources}
+              mainResourceName="Citas"
+              palette={["#009688", "#00695C", "#D32F2F", "#7B1FA2", "#8E24AA", "#EB8834", "#F57C00", "#FF9800", "#607D8B"]} 
               // mainResourceName={mainResourceName}
             />
           <Toolbar />
