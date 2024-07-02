@@ -168,6 +168,7 @@ export default function CitasCalendar() {
     getData(setData, setLoading);
   }, [setData, currentViewName, currentDate, setLoading]);
 
+
   return (
     <>
       <Paper>

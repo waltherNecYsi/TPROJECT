@@ -120,93 +120,109 @@ export class AppointmentFormContainer extends React.PureComponent {
     };
 
     return (
-      <AppointmentForm.Overlay
-        visible={visible}
-        target={target}
-        fullSize
-        onHide={onHide}
-      >
-        <StyledDiv>
-          <div className={classes.header}>
-            <IconButton
-              className={classes.closeButton}
-              onClick={cancelChanges}
-              size="large"
-            >
-              <Close color="action" />
-            </IconButton>
-          </div>
-          <div className={classes.content}>
-            <div className={classes.wrapper}>
-              <Create className={classes.icon} color="action" />
-              <TextField {...textEditorProps("title")} />
+      <StyledDiv>
+        <AppointmentForm.Overlay
+          visible={visible}
+          target={target}
+          // fullSize
+          onHide={onHide}
+        >
+          <StyledDiv style={{ width: "fit-content" }}>
+            <div className={classes.container}>
+              <div className={classes.header}>
+                <IconButton
+                  className={classes.closeButton}
+                  onClick={cancelChanges}
+                  size="large"
+                >
+                  <Close color="action" />
+                </IconButton>
+              </div>
+              <div className={classes.content}>
+                <div className={classes.wrapper}>
+                  <Create className={classes.icon} color="action" />
+                  <TextField {...textEditorProps("title")} size="small" />
+                </div>
+                <div className={classes.wrapper}>
+                  <Create className={classes.icon} color="action" />
+                  <TextField {...textEditorProps("estilista")} size="small" />
+                </div>
+                <div className={classes.wrapper}>
+                  <CalendarToday className={classes.icon} color="action" />
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <DateTimePicker
+                      label="Start Date"
+                      renderInput={(props) => (
+                        <TextField
+                          className={classes.picker}
+                          {...props}
+                          size="small"
+                        />
+                      )}
+                      {...startDatePickerProps}
+                    />
+                    <DateTimePicker
+                      label="End Date"
+                      renderInput={(props) => (
+                        <TextField
+                          className={classes.picker}
+                          {...props}
+                          size="small"
+                        />
+                      )}
+                      {...endDatePickerProps}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div className={classes.wrapper}>
+                  <LocationOn className={classes.icon} color="action" />
+                  <TextField {...textEditorProps("location")} size="small" />
+                </div>
+                <div className={classes.wrapper}>
+                  <Notes className={classes.icon} color="action" />
+                  <TextField {...textEditorProps("notes")} multiline rows="6" />
+                </div>
+              </div>
+              <div className={classes.buttonGroup}>
+                {!isNewAppointment && (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className={classes.button}
+                    onClick={() => {
+                      visibleChange();
+                      this.commitAppointment("deleted");
+                    }}
+                  >
+                    Delete
+                  </Button>
+                )}
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  className={classes.button}
+                  onClick={() => {
+                    visibleChange();
+                    applyChanges();
+                  }}
+                >
+                  {isNewAppointment ? "Create" : "Save"}
+                </Button>
+              </div>
             </div>
-            <div className={classes.wrapper}>
-              <CalendarToday className={classes.icon} color="action" />
-              <LocalizationProvider dateAdapter={AdapterMoment}>
-                <DateTimePicker
-                  label="Start Date"
-                  renderInput={(props) => (
-                    <TextField className={classes.picker} {...props} />
-                  )}
-                  {...startDatePickerProps}
-                />
-                <DateTimePicker
-                  label="End Date"
-                  renderInput={(props) => (
-                    <TextField className={classes.picker} {...props} />
-                  )}
-                  {...endDatePickerProps}
-                />
-              </LocalizationProvider>
-            </div>
-            <div className={classes.wrapper}>
-              <LocationOn className={classes.icon} color="action" />
-              <TextField {...textEditorProps("location")} />
-            </div>
-            <div className={classes.wrapper}>
-              <Notes className={classes.icon} color="action" />
-              <TextField {...textEditorProps("notes")} multiline rows="6" />
-            </div>
-          </div>
-          <div className={classes.buttonGroup}>
-            {!isNewAppointment && (
-              <Button
-                variant="outlined"
-                color="secondary"
-                className={classes.button}
-                onClick={() => {
-                  visibleChange();
-                  this.commitAppointment("deleted");
-                }}
-              >
-                Delete
-              </Button>
-            )}
-            <Button
-              variant="outlined"
-              color="primary"
-              className={classes.button}
-              onClick={() => {
-                visibleChange();
-                applyChanges();
-              }}
-            >
-              {isNewAppointment ? "Create" : "Save"}
-            </Button>
-          </div>
-        </StyledDiv>
-      </AppointmentForm.Overlay>
+          </StyledDiv>
+        </AppointmentForm.Overlay>
+      </StyledDiv>
     );
   }
 }
 
 AppointmentFormContainer.propTypes = {
-    appointmentData: PropTypes.object,
-    commitChanges: PropTypes.func.isRequired,
-    visible: PropTypes.bool.isRequired,
-    visibleChange: PropTypes.func.isRequired,
-    cancelAppointment: PropTypes.func.isRequired,
-    target: PropTypes.any,
-    onHide: PropTypes.func.isRequired,
-  };
+  appointmentData: PropTypes.object,
+  commitChanges: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+  visibleChange: PropTypes.func.isRequired,
+  cancelAppointment: PropTypes.func.isRequired,
+  target: PropTypes.any,
+  onHide: PropTypes.func.isRequired,
+};

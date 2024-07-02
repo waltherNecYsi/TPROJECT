@@ -3,7 +3,10 @@ import React from "react";
 import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
 import {
   Scheduler,
+  Resources,
   Toolbar,
+  DateNavigator,
+  TodayButton,
   DayView,
   WeekView,
   MonthView,
@@ -34,21 +37,37 @@ import { appointments } from "../demo-data/appointments";
 import { AppointmentFormContainer } from "./AppointmentFormContainer";
 import { StyledFab, classes } from "./StyledComponents";
 
+const estilistas = [
+  { id: 1, text: "Andrew Glover" },
+  { id: 2, text: "Arnie Schwartz" },
+  { id: 3, text: "John Heart" },
+  { id: 4, text: "Taylor Riley" },
+  { id: 5, text: "Brad Farkus" },
+]
+
 export default class CitasCalendarV2 extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       data: appointments,
-      currentDate: "2018-06-27",
+      currentDate: new Date(),
       confirmationVisible: false,
       editingFormVisible: false,
       deletedAppointmentId: undefined,
       editingAppointment: undefined,
       previousAppointment: undefined,
       addedAppointment: {},
-      startDayHour: 9,
-      endDayHour: 19,
+      startDayHour: 7,
+      endDayHour: 20,
       isNewAppointment: false,
+      resources: [
+        {
+          fieldName: "estilistas",
+          title: "Estilistas",
+          allowMultiple: true,
+          instances: estilistas,
+        },
+      ],
     };
 
     this.toggleConfirmationVisible = this.toggleConfirmationVisible.bind(this);
@@ -166,7 +185,9 @@ export default class CitasCalendarV2 extends React.PureComponent {
       editingFormVisible,
       startDayHour,
       endDayHour,
+      resources,
     } = this.state;
+    console.log(this.state);
 
     return (
       <Paper>
@@ -184,7 +205,13 @@ export default class CitasCalendarV2 extends React.PureComponent {
           <EditRecurrenceMenu />
           <Appointments />
           <AppointmentTooltip showOpenButton showCloseButton showDeleteButton />
+          <Resources
+              data={resources}
+              // mainResourceName={mainResourceName}
+            />
           <Toolbar />
+          <DateNavigator />
+          <TodayButton />
           <ViewSwitcher />
           <AppointmentForm
             overlayComponent={this.appointmentForm}

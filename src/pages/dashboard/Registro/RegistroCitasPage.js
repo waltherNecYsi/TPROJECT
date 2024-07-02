@@ -61,7 +61,6 @@ import {
 } from "../../../sections/@dashboard/Registro/Citas";
 
 import CitasCalendarV2 from "../../../sections/@dashboard/Registro/Citas/newCalendar/CitasCalendarV2";
-
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------

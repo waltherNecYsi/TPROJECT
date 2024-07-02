@@ -4,8 +4,6 @@ import Fab from "@mui/material/Fab";
 const PREFIX = "Demo";
 export const classes = {
   content: `${PREFIX}-content`,
-  container: `${PREFIX}-container`,
-  containerForm: `${PREFIX}-containerForm`,
   header: `${PREFIX}-header`,
   closeButton: `${PREFIX}-closeButton`,
   buttonGroup: `${PREFIX}-buttonGroup`,
@@ -18,13 +16,6 @@ export const classes = {
 };
 
 export const StyledDiv = styled("div")(({ theme }) => ({
-  [`& .${classes.containerForm}`]: {
-    width: "fit-content",
-  },
-  [`& .${classes.container}`]: {
-    display: "flex",
-    flexDirection: "column",
-  },
   [`& .${classes.icon}`]: {
     margin: theme.spacing(2, 0),
     marginRight: theme.spacing(2),
@@ -52,8 +43,7 @@ export const StyledDiv = styled("div")(({ theme }) => ({
   },
   [`& .${classes.wrapper}`]: {
     display: "flex",
-    justifyContent: "flex-start",
-    gap: theme.spacing(2),
+    justifyContent: "space-between",
     padding: theme.spacing(1, 0),
   },
   [`& .${classes.buttonGroup}`]: {
@@ -67,9 +57,7 @@ export const StyledDiv = styled("div")(({ theme }) => ({
 }));
 
 export const StyledFab = styled(Fab)(({ theme }) => ({
-  [`&.${classes.addButton}`]: {
-    position: "absolute",
-    bottom: theme.spacing(3),
-    right: theme.spacing(4),
-  },
+  position: "absolute",
+  bottom: theme.spacing(3),
+  right: theme.spacing(4),
 }));
