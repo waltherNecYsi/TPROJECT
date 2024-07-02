@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Box ,  TextField } from "@mui/material";
-import { useForm , Controller } from "react-hook-form";
+import { Box, TextField } from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
 import { createFilterOptions } from "@mui/material/Autocomplete";
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker } from "@mui/x-date-pickers";
 
 import FormProvider, {
   RHFTextField,
@@ -20,7 +20,6 @@ export default function CitasCalendarToolbar() {
   const upMd = useResponsive("up", "md");
   const methods = useForm({ defaultValues });
   const isDesktop = useResponsive("up", "md");
-
 
   const {
     watch,
@@ -137,16 +136,17 @@ export default function CitasCalendarToolbar() {
           size="small"
           render={({ field, fieldState: { error } }) => (
             <DatePicker
-            {...field}
+              {...field}
               name="fechas"
               label="Tiempo || Fecha"
               inputFormat="dd/MM/yyyy"
               size="small"
-              slotProps={{ textField: { size: 'small' , sx: { m: 1 , width: "-webkit-fill-available" } } }}
+              slotProps={{ textField: { size: "small" } }}
               renderInput={(params) => (
                 <TextField
                   size="small"
                   fullWidth
+                  sx={{ m: 1, width: "-webkit-fill-available" }}
                   {...params}
                   error={!!error}
                   helperText={error?.message}

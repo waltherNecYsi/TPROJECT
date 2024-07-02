@@ -60,6 +60,8 @@ import {
   CitasCalendarToolbar,
 } from "../../../sections/@dashboard/Registro/Citas";
 
+import CitasCalendarV2 from "../../../sections/@dashboard/Registro/Citas/newCalendar/CitasCalendarV2";
+
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -137,7 +139,7 @@ export default function RegistroCitasPage() {
           </Card>
           <Card sx={{ width: isDesktop ? "75%" : "100%" }}>
             <CitasCalendarToolbar />
-            <CitasCalendar />
+            <CitasCalendarV2 />
           </Card>
         </Card>
       </Container>
