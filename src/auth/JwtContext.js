@@ -190,23 +190,22 @@ const AuthProvider = ({ children }) => {
         }
       );
 
-      const { token, user } = loginData;
-      const empId = user?.empresa.id;
+      const { access_token , user } = loginData;
 
       console.log("User: ", user);
-      console.log("Token :", token);
+      console.log("Token :", access_token);
 
-      setSession(token, user, empId);
+      setSession(access_token, user);
 
       dispatch({
         type: "LOGIN",
         payload: {
           user: {
             ...user,
-            displayName: user.empresa.nombre,
-            empId: user.empresa.id,
-            localId: user.local.id,
-            photoURL: user?.empresa.imagen,
+            displayName: user?.empresa?.nombre ?? "Logan",
+            // empId: user.empresa.id,
+            // localId: user.local.id,
+            // photoURL: user?.empresa.imagen,
             role: "admin",
           },
         },

@@ -44,7 +44,7 @@ export default function CliTableRow ({
   onEditRow,
   onDeleteRow,
 }) {
-  const { ane_id ,ane_tipdoc, ane_numdoc, ane_nom, ane_dir, ane_tel , ane_ema} = row;
+  const { Nomb_Clt , Apell_Clt , Telef_Clt , Email_Clt , FechaReg_Clt } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -70,7 +70,7 @@ export default function CliTableRow ({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
+        <TableCell padding="checkbox" align='center'>
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
@@ -78,15 +78,17 @@ export default function CliTableRow ({
 
         <TableCell align="left">{keyIndex + 1}</TableCell>
 
-        <TableCell align="left">{ane_numdoc}</TableCell>
+        {/* <TableCell align="left">{ane_numdoc}</TableCell> */}
 
-        <TableCell align="left">{ane_nom}</TableCell>
+        <TableCell align="left">{Nomb_Clt}</TableCell>
 
-        <TableCell align="left">{ane_dir}</TableCell>
+        <TableCell align="left">{Apell_Clt}</TableCell>
 
-        <TableCell align="left">{ane_tel}</TableCell>
+        <TableCell align="left">{Telef_Clt}</TableCell>
 
-        <TableCell align="left">{ane_ema}</TableCell>
+        <TableCell align="left">{Email_Clt}</TableCell>
+        
+        <TableCell align="left">{FechaReg_Clt}</TableCell>
 
         {/* <TableCell align="left">{fDate(created_at)}</TableCell> */}
 

@@ -57,12 +57,12 @@ import {
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'ane_tipdoc', label: 'Dcto', align: 'left' },
-  { id: 'ane_numdoc', label: 'Número', align: 'left' },
-  { id: 'ane_nom', label: 'Nombre', align: 'left' },
-  { id: 'ane_dir', label: 'Dirección', align: 'left' },
-  { id: 'ane_tel', label: 'Teléfono', align: 'left' },
-  { id: 'ane_ema', label: 'Email', align: 'center' },
+  { id: 0, label: 'ID', align: 'left' },
+  { id: 1, label: 'Nombre', align: 'left' },
+  { id: 2, label: 'Apellido', align: 'left' },
+  { id: 3, label: 'Telefono', align: 'left' },
+  { id: 4, label: 'Email', align: 'left' },
+  { id: 5, label: 'F. Registro', align: 'left' },
   { id: '' },
 ];
 
@@ -136,7 +136,7 @@ export default function RegistroClientesPage() {
     const deleteRow = tableData.filter((row) => row.ane_id !== id.ane_id);
     setSelected([]);
     try {
-      const response = axios.post(`/api/cliente-delete/${id.ane_id}`);
+      const response = axios.delete(`/api/cliente/${id.ClienteID}`);
       setFetchTrigger((prevState) => !prevState);
       if (page > 0 && dataInPage.length < 2) {
         setPage(page - 1);

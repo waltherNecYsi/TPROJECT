@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import { Grow, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 
 import PropTypes from 'prop-types';
-import CliTableFormEdit from './CliTableFormEdit';
+import CliTableForm from './CliTableForm';
 
 export default function CliTableEdit({
   modal2Inputs,
@@ -23,7 +23,7 @@ export default function CliTableEdit({
   return (
     <>
       {isModalOpen && (
-        <CliTableFormEdit
+        <CliTableForm
           inputs={modal2Inputs}
           request={modal2Request}
           id={id}
