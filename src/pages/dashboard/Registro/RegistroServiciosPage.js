@@ -220,7 +220,7 @@ export default function RegistroClientesPage() {
 
   const fetchDataFromAPI = useCallback(async () => {
     try {
-      const response = await axios.post(`/api/cliente-dominio`);
+      const response = await axios.get(`/api/cliente-dominio`);
       setTableData(response.data);
       return response.data;
     } catch (error) {

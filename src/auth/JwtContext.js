@@ -1,16 +1,23 @@
-import PropTypes from 'prop-types';
-import { createContext, useEffect, useReducer, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { PATH_DASHBOARD, PATH_AUTH } from '../routes/paths';
-import useCustomSWR, { fetcher } from './useCustomSWR';
+import PropTypes from "prop-types";
+import {
+  createContext,
+  useEffect,
+  useReducer,
+  useCallback,
+  useMemo,
+} from "react";
+import { useNavigate } from "react-router-dom";
+import { PATH_DASHBOARD, PATH_AUTH } from "../routes/paths";
+import useCustomSWR, { fetcher } from "./useCustomSWR";
+import { HOST_API_KEY } from "../config-global";
 
 // utils
 // import { createHmac } from 'crypto';
 // import axios from '../utils/axios';
 
-import localStorageAvailable from '../utils/localStorageAvailable';
+import localStorageAvailable from "../utils/localStorageAvailable";
 //
-import { setSession, setEstablishment } from './utils';
+import { setSession, setEstablishment } from "./utils";
 
 // const { createHmac } = require('node:crypto');
 
@@ -34,7 +41,7 @@ const reducer = (state, action) => {
   // console.log({ old: state });
   // console.log(action.type);
   // console.log(action.payload);
-  if (action.type === 'INITIAL') {
+  if (action.type === "INITIAL") {
     return {
       isInitialized: true,
       isAuthenticated: action.payload.isAuthenticated,
@@ -43,14 +50,14 @@ const reducer = (state, action) => {
       user: action.payload.user,
     };
   }
-  if (action.type === 'LOGIN') {
+  if (action.type === "LOGIN") {
     return {
       ...state,
       isAuthenticated: true,
       user: action.payload.user,
     };
   }
-  if (action.type === 'REGISTER') {
+  if (action.type === "REGISTER") {
     return {
       ...state,
       isRegistered: true,
@@ -58,7 +65,7 @@ const reducer = (state, action) => {
       user: action.payload.user,
     };
   }
-  if (action.type === 'LOGOUT') {
+  if (action.type === "LOGOUT") {
     return {
       ...state,
       isAuthenticated: false,
@@ -66,7 +73,7 @@ const reducer = (state, action) => {
       user: null,
     };
   }
-  if (action.type === 'ESTABLISHMENT') {
+  if (action.type === "ESTABLISHMENT") {
     return {
       ...state,
       isEstablishment: action.payload.isEstablishment,
@@ -87,13 +94,14 @@ const AuthProvider = ({ children }) => {
 
   const storageAvailable = localStorageAvailable();
 
-
   const handleAuthentication = useCallback(
     async (establishmentId) => {
       try {
-        const accessToken = storageAvailable ? localStorage.getItem('accessToken') : '';
+        const accessToken = storageAvailable
+          ? localStorage.getItem("accessToken")
+          : "";
 
-        const tokenData = await fetcher('http://www.glomeran.com/api/token', {
+        const tokenData = await fetcher(`http://${HOST_API_KEY}/api/token`, {
           token: accessToken,
         });
 
@@ -103,7 +111,7 @@ const AuthProvider = ({ children }) => {
         setSession(token, user, empId);
 
         dispatch({
-          type: 'INITIAL',
+          type: "INITIAL",
           payload: {
             isAuthenticated: true,
             isRegistered: true,
@@ -114,14 +122,14 @@ const AuthProvider = ({ children }) => {
               empId: user?.empresa.id,
               localId: user?.local.id,
               photoURL: user?.empresa.imagen,
-              role: 'admin',
+              role: "admin",
             },
           },
         });
 
         // return { data, error, isLoading };
       } catch (error) {
-        console.error('Error en la solicitud:', error.message);
+        console.error("Error en la solicitud:", error.message);
       }
     },
     [storageAvailable]
@@ -130,19 +138,23 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initialize = async () => {
       try {
-        const accessToken = storageAvailable ? localStorage.getItem('accessToken') : '';
-        const usuario = accessToken ? localStorage.getItem('username') : '';
+        const accessToken = storageAvailable
+          ? localStorage.getItem("accessToken")
+          : "";
+        const usuario = accessToken ? localStorage.getItem("username") : "";
 
         if (accessToken) {
           setSession(accessToken, usuario);
-          const establishmentId = storageAvailable ? localStorage.getItem('establishment_id') : '';
+          const establishmentId = storageAvailable
+            ? localStorage.getItem("establishment_id")
+            : "";
           setEstablishment(establishmentId);
 
           handleAuthentication(establishmentId);
         } else {
-          console.log('else');
+          console.log("else");
           dispatch({
-            type: 'INITIAL',
+            type: "INITIAL",
             payload: {
               isAuthenticated: false,
               user: null,
@@ -151,9 +163,9 @@ const AuthProvider = ({ children }) => {
         }
       } catch (error) {
         console.error(error);
-        console.log('error');
+        console.log("error");
         dispatch({
-          type: 'INITIAL',
+          type: "INITIAL",
           payload: {
             isAuthenticated: false,
             isEstablishment: null,
@@ -166,27 +178,28 @@ const AuthProvider = ({ children }) => {
     initialize();
   }, [handleAuthentication, storageAvailable]);
 
-
-
   // LOGIN
 
   const login = useCallback(async (email, password) => {
     try {
-      const loginData = await fetcher('http://www.glomeran.com/api/iniciar-sesion', {
-        email,
-        password,
-      });
+      const loginData = await fetcher(
+        `http://${HOST_API_KEY}/api/login`,
+        {
+          email,
+          password,
+        }
+      );
 
       const { token, user } = loginData;
       const empId = user?.empresa.id;
 
-      console.log('User: ', user);
-      console.log('Token :', token);
+      console.log("User: ", user);
+      console.log("Token :", token);
 
       setSession(token, user, empId);
 
       dispatch({
-        type: 'LOGIN',
+        type: "LOGIN",
         payload: {
           user: {
             ...user,
@@ -194,42 +207,50 @@ const AuthProvider = ({ children }) => {
             empId: user.empresa.id,
             localId: user.local.id,
             photoURL: user?.empresa.imagen,
-            role: 'admin',
+            role: "admin",
           },
         },
       });
     } catch (error) {
-      console.error('Error en la solicitud:', error.message);
+      console.error("Error en la solicitud:", error.message);
     }
   }, []);
 
-  const Mainregister = async (name, email, ruc, phone, password, reppassword) => {
+  const Mainregister = async (
+    name,
+    email,
+    ruc,
+    phone,
+    password,
+    reppassword
+  ) => {
     try {
-      const { data, error, isLoading } = await fetcher('http://www.glomeran.com/api/main', {
-        email,
-        password,
-        name,
-        ruc,
-        phone,
-        reppassword,
-      });
+      const { data, error, isLoading } = await fetcher(
+        `http://${HOST_API_KEY}/api/main`,
+        {
+          email,
+          password,
+          name,
+          ruc,
+          phone,
+          reppassword,
+        }
+      );
 
       if (!error) {
         const { accessToken, user } = data;
 
         if (accessToken && user) {
-          console.log('La solicitud de registro fue exitosa');
+          console.log("La solicitud de registro fue exitosa");
           console.log(data);
-
         } else {
-          console.error('La respuesta exitosa no contiene accessToken o user');
+          console.error("La respuesta exitosa no contiene accessToken o user");
         }
       } else {
-
         console.error(`Error en la solicitud: ${error}`);
       }
     } catch (error) {
-      console.error('Error en la solicitud:', error);
+      console.error("Error en la solicitud:", error);
     }
   };
 
@@ -237,9 +258,8 @@ const AuthProvider = ({ children }) => {
 
   const register = useCallback(async (email, password, name) => {
     try {
-
       const { data, error, isLoading } = await fetcher(
-        'http://www.glomeran.com/api/auth/register',
+        `http://${HOST_API_KEY}/api/register`,
         {
           email,
           password,
@@ -249,23 +269,23 @@ const AuthProvider = ({ children }) => {
 
       if (!error) {
         if (data && data.user) {
-          console.log('La solicitud fue exitosa');
+          console.log("La solicitud fue exitosa");
           console.log(data);
 
           const { user } = data;
 
           dispatch({
-            type: 'REGISTER',
+            type: "REGISTER",
             payload: {
               user,
             },
           });
         } else {
-          console.log('No se encontró ningún usuario en la respuesta.');
+          console.log("No se encontró ningún usuario en la respuesta.");
           dispatch({
-            type: 'REGISTER',
+            type: "REGISTER",
             payload: {
-              user: '',
+              user: "",
             },
           });
         }
@@ -273,7 +293,7 @@ const AuthProvider = ({ children }) => {
         console.error(`Error en la solicitud: ${error}`);
       }
     } catch (error) {
-      console.error('Error en la solicitud:', error);
+      console.error("Error en la solicitud:", error);
     }
   }, []);
 
@@ -281,32 +301,30 @@ const AuthProvider = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      const storedToken = localStorage.getItem('accessToken');
+      const storedToken = localStorage.getItem("accessToken");
 
       if (storedToken) {
-
-
         const { data, error, isLoading } = await fetcher(
-          'http://www.glomeran.com/api/cerrar-sesion',
+          `http://${HOST_API_KEY}/api/logout`,
           {
             token: storedToken,
           }
         );
 
         if (!error) {
-          console.log('Sesión cerrada exitosamente en el servidor');
+          console.log("Sesión cerrada exitosamente en el servidor");
         } else {
-          console.error('Error al cerrar sesión en el servidor:', error);
+          console.error("Error al cerrar sesión en el servidor:", error);
         }
       }
 
       setSession(null);
       setEstablishment(null);
       dispatch({
-        type: 'LOGOUT',
+        type: "LOGOUT",
       });
     } catch (error) {
-      console.log('Error en la solicitud', error);
+      console.log("Error en la solicitud", error);
     }
   }, []);
 
@@ -315,7 +333,7 @@ const AuthProvider = ({ children }) => {
     setEstablishment(establishment_id);
 
     dispatch({
-      type: 'ESTABLISHMENT',
+      type: "ESTABLISHMENT",
       payload: {
         isEstablishment: establishment_id,
         isAuthenticated: false,
@@ -330,7 +348,7 @@ const AuthProvider = ({ children }) => {
       isAuthenticated: state.isAuthenticated,
       isRegistered: state.isRegistered,
       user: state.user,
-      method: 'jwt',
+      method: "jwt",
       login,
       register,
       logout,
@@ -349,7 +367,11 @@ const AuthProvider = ({ children }) => {
     ]
   );
 
-  return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={memoizedValue}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 AuthProvider.propTypes = {

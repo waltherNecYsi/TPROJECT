@@ -82,14 +82,10 @@ export default function CliTableForm({
     const valuesSubmit = methods.getValues();
 
     const DataSubmit = {
-      ane_tipdoc: valuesSubmit.documento.id,
-      ane_numdoc: valuesSubmit.nro_doc,
-      ane_nom: valuesSubmit.ane_nom,
-      ane_dir: valuesSubmit.direccion,
-      ubi_id: valuesSubmit.ubigeo.ubi_id,
-      ane_fijo: valuesSubmit.fijo,
-      ane_tel: valuesSubmit.movil,
-      ane_ema: valuesSubmit.email,
+      Nomb_Clt : valuesSubmit.nombre,
+      Apell_Clt : valuesSubmit.apellido,
+      Telef_Clt : valuesSubmit.telefono,
+      Email_Clt : valuesSubmit.email,
     };
 
     try {

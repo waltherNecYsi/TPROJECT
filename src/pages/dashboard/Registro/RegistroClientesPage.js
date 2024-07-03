@@ -176,91 +176,7 @@ export default function RegistroClientesPage() {
     setFilterStartDate(null);
   };
 
-  const modal1Inputs = [
-    {
-      name: 'ane_tipdoc',
-      label: 'Dcto',
-      type: 'select',
-      defaultValue: '',
-      helperText: 'Seleccione el tipo de documento',
-    },
-    {
-      name: 'ane_numdoc',
-      label: 'Número',
-      type: 'text',
-      defaultValue: '',
-    },
-    {
-      name: 'ane_nom',
-      label: 'Nombre',
-      type: 'text',
-      defaultValue: '',
-    },
-    {
-      name: 'ane_dir',
-      label: 'Dirección',
-      type: 'text',
-      defaultValue: '',
-    },
-    {
-      name: 'ane_tel',
-      label: 'Teléfono',
-      type: 'text',
-      defaultValue: '',
-    },
-    {
-      name: 'ane_ema',
-      label: 'Email',
-      type: 'text',
-      defaultValue: '',
-    },
-  ];
 
-  const modal2Inputs = [
-    {
-      name: 'ane_id',
-      label: 'Id Almacen',
-      type: 'text',
-      defaultValue: '',
-    },
-    {
-      name: 'ane_tipdoc',
-      label: 'Dcto',
-      type: 'select',
-      defaultValue: '',
-      helperText: 'Seleccione el tipo de documento',
-    },
-    {
-      name: 'ane_numdoc',
-      label: 'Número',
-      type: 'text',
-      defaultValue: '',
-    },
-    {
-      name: 'ane_nom',
-      label: 'Nombre',
-      type: 'text',
-      defaultValue: '',
-    },
-    {
-      name: 'ane_dir',
-      label: 'Dirección',
-      type: 'text',
-      defaultValue: '',
-    },
-    {
-      name: 'ane_tel',
-      label: 'Teléfono',
-      type: 'text',
-      defaultValue: '',
-    },
-    {
-      name: 'ane_ema',
-      label: 'Email',
-      type: 'text',
-      defaultValue: '',
-    },
-  ];
 
   const modal1Request = async (formData, closeModal) => {
     try {
@@ -302,7 +218,7 @@ export default function RegistroClientesPage() {
 
   const fetchDataFromAPI = useCallback(async () => {
     try {
-      const response = await axios.post(`/api/cliente-dominio`);
+      const response = await axios.get(`/api/cliente`);
       setTableData(response.data);
       return response.data;
     } catch (error) {
@@ -367,7 +283,6 @@ export default function RegistroClientesPage() {
           ]}
           action={
             <CliTableButtom
-              modal1Inputs={modal1Inputs}
               modal1Request={modal1Request}
               fetchDataFromAPI={fetchDataFromAPI}
             />
@@ -469,7 +384,6 @@ export default function RegistroClientesPage() {
                       />
                     ))}
                   <CliTableEdit
-                    modal2Inputs={modal2Inputs}
                     modal2Request={modal2Request}
                     fetchDataFromAPI={fetchDataFromAPI}
                     isModalOpen={isModalEditOpen}

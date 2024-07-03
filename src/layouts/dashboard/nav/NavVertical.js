@@ -68,7 +68,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
       <NavSectionVertical data={navConfig} />
 
-      <Box sx={{ display:'flex' , justifyContent: 'flex-start' }}>
+      <Box sx={{ display:'flex' , justifyContent: 'flex-start' , overflow: 'hidden' }}>
       <Box
         component="img"
         alt="Nav_img.png"

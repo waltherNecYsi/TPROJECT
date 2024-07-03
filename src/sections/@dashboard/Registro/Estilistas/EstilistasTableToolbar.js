@@ -1,8 +1,17 @@
-import PropTypes from 'prop-types';
-import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import PropTypes from "prop-types";
+import {
+  Stack,
+  InputAdornment,
+  TextField,
+  MenuItem,
+  Button,
+} from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { useForm, Controller } from "react-hook-form";
+
+import FormProvider from "../../../../components/hook-form";
 // components
-import Iconify from '../../../../components/iconify';
+import Iconify from "../../../../components/iconify";
 
 // ----------------------------------------------------------------------
 
@@ -35,13 +44,31 @@ export default function EstilistasTableToolbar({
   onFilterEndDate,
   onFilterStartDate,
 }) {
+  const defaultValues = {
+    cliente: "",
+  };
+
+  const methods = useForm({ defaultValues });
+
+
+  const {
+    watch,
+    reset,
+    control,
+    setValue,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+
   return (
+    <FormProvider methods={methods}>
     <Stack
       spacing={2}
       alignItems="center"
       direction={{
-        xs: 'column',
-        md: 'row',
+        xs: "column",
+        md: "row",
       }}
       sx={{ px: 2.5, py: 3 }}
     >
@@ -79,36 +106,54 @@ export default function EstilistasTableToolbar({
         ))}
       </TextField> */}
 
-      <DatePicker
-        label="Fecha Inicio"
-        size='small'
-        value={filterStartDate}
-        onChange={onFilterStartDate}
-        slotProps={{ textField: { size: 'small' } }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            fullWidth
-            sx={{
-              maxWidth: { md: INPUT_WIDTH },
-            }}
+      <Controller
+        name="fecha_inicio"
+        control={control}
+        size="small"
+        render={({ field, fieldState: { error } }) => (
+          <DatePicker
+            {...field}
+            name="fecha_inicio"
+            label="Fecha Inicio"
+            inputFormat="dd/MM/yyyy"
+            size="small"
+            slotProps={{ textField: { size: "small" } }}
+            renderInput={(params) => (
+              <TextField
+                size="small"
+                fullWidth
+                sx={{ m: 1, width: "-webkit-fill-available" }}
+                {...params}
+                error={!!error}
+                helperText={error?.message}
+              />
+            )}
           />
         )}
       />
 
-      <DatePicker
-        label="Fecha Fin"
-        size='small'
-        value={filterEndDate}
-        onChange={onFilterEndDate}
-        slotProps={{ textField: { size: 'small' } }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            fullWidth
-            sx={{
-              maxWidth: { md: INPUT_WIDTH },
-            }}
+      <Controller
+        name="fecha_fin"
+        control={control}
+        size="small"
+        render={({ field, fieldState: { error } }) => (
+          <DatePicker
+            {...field}
+            name="fecha_fin"
+            label="Fecha Fin"
+            inputFormat="dd/MM/yyyy"
+            size="small"
+            slotProps={{ textField: { size: "small" } }}
+            renderInput={(params) => (
+              <TextField
+                size="small"
+                fullWidth
+                sx={{ m: 1, width: "-webkit-fill-available" }}
+                {...params}
+                error={!!error}
+                helperText={error?.message}
+              />
+            )}
           />
         )}
       />
@@ -118,11 +163,11 @@ export default function EstilistasTableToolbar({
         value={filterName}
         onChange={onFilterName}
         placeholder="Busca por Nombre o Direccion..."
-        size='small'
+        size="small"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+              <Iconify icon="eva:search-fill" sx={{ color: "text.disabled" }} />
             </InputAdornment>
           ),
         }}
@@ -139,5 +184,6 @@ export default function EstilistasTableToolbar({
         </Button>
       )}
     </Stack>
+    </FormProvider>
   );
 }
