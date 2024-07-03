@@ -27,6 +27,13 @@ import {
 
 export default function Router() {
   return useRoutes([
+
+    {
+      path: "*",
+      element: <Navigate to={PATH_AUTH.login} replace />,
+
+    },
+
     // Auth
     {
       path: "auth",

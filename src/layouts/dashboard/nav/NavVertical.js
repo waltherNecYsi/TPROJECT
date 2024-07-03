@@ -78,6 +78,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             "linear-gradient(transparent,black 50% , black 50%, transparent)",
           filter: "blur(1px)",
           maxWidth: "80%",
+          mt: '20%',
         }}
       />
       </Box>

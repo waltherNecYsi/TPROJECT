@@ -1,22 +1,22 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 // @mui
-import { Stack, Typography, Link } from '@mui/material';
+import { Stack, Typography, Link } from "@mui/material";
 // layouts
-import LoginLayout from '../../layouts/login';
+import LoginLayout from "../../layouts/login";
 // routes
-import { PATH_AUTH } from '../../routes/paths';
+import { PATH_AUTH } from "../../routes/paths";
 
 //
 // import AuthWithSocial from './AuthWithSocial';
 
-import AuthRegisterForm from './AuthRegisterForm';
+import AuthRegisterForm from "./AuthRegisterForm";
 
 // ----------------------------------------------------------------------
 
 export default function Register() {
   return (
-    <LoginLayout >
-      <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
+    <LoginLayout>
+      <Stack spacing={2} sx={{ mb: 5, position: "relative" }}>
         <Typography variant="h4">Regístrate</Typography>
 
         <Stack direction="row" spacing={0.5}>
@@ -32,15 +32,20 @@ export default function Register() {
 
       <Typography
         component="div"
-        sx={{ color: 'text.secondary', mt: 3, typography: 'caption', textAlign: 'center' }}
+        sx={{
+          color: "text.secondary",
+          mt: 3,
+          typography: "caption",
+          textAlign: "center",
+        }}
       >
-        {'By signing up, I agree to '}
+        {"Al inscribirme, acepto "}
         <Link underline="always" color="text.primary">
-          Terms of Service
+          Terminos de Servicio
         </Link>
-        {' and '}
+        {" y "}
         <Link underline="always" color="text.primary">
-          Privacy Policy
+          Politica de Privacidad
         </Link>
         .
       </Typography>

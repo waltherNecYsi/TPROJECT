@@ -33,14 +33,6 @@ export default function Login() {
             </Link>
           </Stack>
 
-          <Tooltip title={method} placement="left">
-            <Box
-              component="img"
-              alt={method}
-              src={`/assets/icons/auth/ic_${method}.png`}
-              sx={{ width: 32, height: 32, position: "absolute", right: 0 }}
-            />
-          </Tooltip>
         </Stack>
         <AuthLoginForm />
       </LoginLayout>
