@@ -218,23 +218,6 @@ export default function EstilistasTableForm({ inputs, request, closeModal, fetch
     reset(resetValues);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [docResponse, cndPagoResponse] = await Promise.all([
-          axios.post(`/api/document`),
-          axios.post(`/api/condicionPago-dominio`),
-        ]);
-
-        setDocOptions(docResponse.data);
-        setCndPagoOptiom(cndPagoResponse.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleSubmitDef = async (formData) => {
     // setIsSubmitting(true);

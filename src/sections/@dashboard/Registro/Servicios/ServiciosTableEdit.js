@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import { Grow, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 
 import PropTypes from 'prop-types';
-import CliTableFormEdit from './ServiciosTableFormEdit';
+import ServiciosTableForm from './ServiciosTableForm';
 
 export default function EstilistasTableEdit({
   modal2Inputs,
@@ -23,7 +23,7 @@ export default function EstilistasTableEdit({
   return (
     <>
       {isModalOpen && (
-        <CliTableFormEdit
+        <ServiciosTableForm
           inputs={modal2Inputs}
           request={modal2Request}
           id={id}

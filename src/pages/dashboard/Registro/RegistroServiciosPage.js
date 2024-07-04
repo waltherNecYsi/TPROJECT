@@ -58,12 +58,10 @@ import {
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "ane_tipdoc", label: "Dcto", align: "left" },
-  { id: "ane_numdoc", label: "Número", align: "left" },
-  { id: "ane_nom", label: "Nombre", align: "left" },
-  { id: "ane_dir", label: "Dirección", align: "left" },
-  { id: "ane_tel", label: "Teléfono", align: "left" },
-  { id: "ane_ema", label: "Email", align: "center" },
+  { id: 1, label: "Servicio", align: "left" },
+  { id: 2, label: "Descripcion", align: "left" },
+  { id: 3, label: "Precio", align: "left" },
+  { id: 4, label: "Duracion", align: "left" },
   { id: "" },
 ];
 
@@ -134,15 +132,14 @@ export default function RegistroClientesPage() {
   };
 
   const handleDeleteRow = async (id) => {
-    const deleteRow = tableData.filter((row) => row.ane_id !== id.ane_id);
+    const deleteRow = tableData.filter((row) => row.ServicioID !== id.ServicioID);
     setSelected([]);
     try {
-      const response = axios.post(`/api/cliente-delete/${id.ane_id}`);
-      setFetchTrigger((prevState) => !prevState);
-      if (page > 0 && dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-      return response.data;
+      const response = axios.delete(`/api/servicio/${id.ServicioID}`);
+      // if (page > 0 && dataInPage.length < 2) {
+      //   setPage(page - 1);
+      // }
+      // return response.data;
     } catch (error) {
       console.error("Error al realizar la solicitud DELETE:", error);
       throw error;
@@ -182,11 +179,10 @@ export default function RegistroClientesPage() {
 
   const modal1Request = async (formData, closeModal) => {
     try {
-      const response = await axios.post(`/api/cliente`, {
+      const response = await axios.post(`/api/servicio`, {
         ...formData,
       });
       console.log("Respuesta exitosa:", response.data);
-      setFetchTrigger((prevState) => !prevState);
       return response.data;
     } catch (error) {
       console.error("Error al realizar la solicitud POST:", error);
@@ -197,11 +193,10 @@ export default function RegistroClientesPage() {
 
   const modal2Request = async (formData, closeModal) => {
     try {
-      const response = await axios.put(`/api/cliente/${formData.ane_id}`, {
+      const response = await axios.put(`/api/servicio/${formData.ServicioID}`, {
         ...formData,
       });
       console.log("Respuesta exitosa:", response.data);
-      setFetchTrigger((prevState) => !prevState);
       return response.data;
     } catch (error) {
       console.error("Error al realizar la solicitud POST:", error);
@@ -211,16 +206,15 @@ export default function RegistroClientesPage() {
   };
 
   const handleOpenEditModal = (id) => {
-    console.log("Se seleccionó editar la fila con ID:", id.ane_id);
+    console.log("Se seleccionó editar la fila con ID:", id.ServicioID);
     setIsModalEditOpen(true);
     setRowData(id);
-    console.log(id);
-    console.log(typeof rowData);
+
   };
 
   const fetchDataFromAPI = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/cliente-dominio`);
+      const response = await axios.get(`/api/servicio`);
       setTableData(response.data);
       return response.data;
     } catch (error) {
@@ -379,7 +373,7 @@ export default function RegistroClientesPage() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
                       <ServiciosTableRow
-                        key={row.ane_id}
+                        key={index}
                         keyIndex={index}
                         row={row}
                         selected={selected.includes(row.ane_id)}

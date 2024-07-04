@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import PropTypes from "prop-types";
+import { useState } from "react";
 // @mui
 import {
   Link,
@@ -12,16 +12,16 @@ import {
   TableCell,
   IconButton,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 // utils
-import { fDate } from '../../../../utils/formatTime';
-import { fCurrency } from '../../../../utils/formatNumber';
+import { fDate } from "../../../../utils/formatTime";
+import { fCurrency } from "../../../../utils/formatNumber";
 // components
-import Label from '../../../../components/label';
-import Iconify from '../../../../components/iconify';
-import { CustomAvatar } from '../../../../components/custom-avatar';
-import MenuPopover from '../../../../components/menu-popover';
-import ConfirmDialog from '../../../../components/confirm-dialog';
+import Label from "../../../../components/label";
+import Iconify from "../../../../components/iconify";
+import { CustomAvatar } from "../../../../components/custom-avatar";
+import MenuPopover from "../../../../components/menu-popover";
+import ConfirmDialog from "../../../../components/confirm-dialog";
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ EstilistasTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function EstilistasTableRow ({
+export default function EstilistasTableRow({
   row,
   keyIndex,
   selected,
@@ -44,7 +44,7 @@ export default function EstilistasTableRow ({
   onEditRow,
   onDeleteRow,
 }) {
-  const { ane_id ,ane_tipdoc, ane_numdoc, ane_nom, ane_dir, ane_tel , ane_ema} = row;
+  const { Nomb_Serv, Desc_Serv, Precio_Serv, DurMin_Serv } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -66,7 +66,6 @@ export default function EstilistasTableRow ({
     setOpenPopover(null);
   };
 
-
   return (
     <>
       <TableRow hover selected={selected}>
@@ -74,48 +73,21 @@ export default function EstilistasTableRow ({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
+        {/* <TableCell align="left">{keyIndex + 1}</TableCell> */}
 
+        <TableCell align="left">{Nomb_Serv}</TableCell>
 
-        <TableCell align="left">{keyIndex + 1}</TableCell>
+        <TableCell align="left">{Desc_Serv}</TableCell>
 
-        <TableCell align="left">{ane_numdoc}</TableCell>
+        <TableCell align="left">{Precio_Serv}</TableCell>
 
-        <TableCell align="left">{ane_nom}</TableCell>
-
-        <TableCell align="left">{ane_dir}</TableCell>
-
-        <TableCell align="left">{ane_tel}</TableCell>
-
-        <TableCell align="left">{ane_ema}</TableCell>
-
-        {/* <TableCell align="left">{fDate(created_at)}</TableCell> */}
-
-        {/* <TableCell align="left">{fDate(createDate)}</TableCell>
-
-        <TableCell align="left">{fDate(dueDate)}</TableCell>
-
-        <TableCell align="center">{fCurrency(totalPrice)}</TableCell>
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {sent}
-        </TableCell>
-
-        <TableCell align="left">
-          <Label
-            variant="soft"
-            color={
-              (status === 'paid' && 'success') ||
-              (status === 'unpaid' && 'warning') ||
-              (status === 'overdue' && 'error') ||
-              'default'
-            }
-          >
-            {status}
-          </Label>
-        </TableCell>
-*/}
+        <TableCell align="left">{DurMin_Serv}</TableCell>
 
         <TableCell align="right">
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
+          <IconButton
+            color={openPopover ? "inherit" : "default"}
+            onClick={handleOpenPopover}
+          >
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
@@ -147,14 +119,14 @@ export default function EstilistasTableRow ({
           Edit
         </MenuItem>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: "dashed" }} />
 
         <MenuItem
           onClick={() => {
             handleOpenConfirm();
             handleClosePopover();
           }}
-          sx={{ color: 'error.main' }}
+          sx={{ color: "error.main" }}
         >
           <Iconify icon="eva:trash-2-outline" />
           Delete

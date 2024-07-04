@@ -11,7 +11,7 @@ const StyledGradientText = styled(motion.h3)(({ theme }) => ({
   ),
   backgroundSize: "400%",
   fontFamily: "'Barlow', sans-serif",
-  fontSize: `4rem`,
+  fontSize: `2rem`,
   textAlign: "center",
   lineHeight: 1,
   padding: 0,
