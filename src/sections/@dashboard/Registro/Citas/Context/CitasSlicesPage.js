@@ -9,8 +9,8 @@ export const IVCitas = {
   infoToolbar: {
     cliente: null,
     servicios: [],
-    tiempo: '',
-    estilista: {},
+    tiempo: [],
+    estilista: [],
   },
   cita: {},
   citaticket: {},

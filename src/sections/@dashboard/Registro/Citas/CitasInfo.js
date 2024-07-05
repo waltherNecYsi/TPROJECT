@@ -19,19 +19,15 @@ export default function CitasInfo() {
 
   const { infoToolbar } = state;
 
-  console.log(infoToolbar);
-
   const defaultValues = {
     cliente: infoToolbar.cliente ?? null,
-    servicios: infoToolbar.servicios ?? [],
-    fechas: infoToolbar.tiempo ?? '',
-    estilistas:  infoToolbar.estilistas ?? '',
+    servicios: infoToolbar?.servicios?.map((servicio) => servicio.text) ?? "",
+    fechas: infoToolbar.tiempo ?? "",
+    estilistas:
+      infoToolbar?.estilista?.map((estilista) => estilista.text) ?? "",
   };
   const upMd = useResponsive("up", "md");
   const methods = useForm({ defaultValues });
-
-
-
   const {
     watch,
     reset,
@@ -140,6 +136,7 @@ export default function CitasInfo() {
           }}
           onChange={(event, value) => {
             if (value && value.ane_id !== "a") {
+              console.log(state);
               const values = getValues();
               setInfoToolbar(dispatch, values);
             }
@@ -174,6 +171,9 @@ export default function CitasInfo() {
         <RHFTextField
           name="estilistas"
           label="Estilistas"
+          value={
+            infoToolbar?.estilista?.map((estilista) => estilista.text) ?? ""
+          }
           size="small"
           fullWidth
           multiline

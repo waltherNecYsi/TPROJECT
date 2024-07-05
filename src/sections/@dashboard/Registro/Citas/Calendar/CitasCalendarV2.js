@@ -37,6 +37,8 @@ import { appointments } from "../demo-data/appointments";
 import AppointmentFormContainer from "./AppointmentFormContainer";
 import { StyledFab, classes } from "./StyledComponents";
 import Content from "./CustomAptTooltip";
+import { useCitasContext } from "../Context/CitasContextPage";
+import { setFilterToolbar } from "../Context/CitasActionspage";
 
 const estilista = [
   { id: 1, text: "Andrew Glover" },
@@ -58,6 +60,10 @@ const CitasCalendarV2 = () => {
   const [startDayHour] = useState(7);
   const [endDayHour] = useState(20);
   const [isNewAppointment, setIsNewAppointment] = useState(false);
+
+  const { state, dispatch } = useCitasContext();
+
+
   // const [resources] = useState([
   //   {
   //     fieldName: "estilista",
@@ -72,8 +78,8 @@ const CitasCalendarV2 = () => {
   };
 
   const commitDeletedAppointment = () => {
-    setData((state) => {
-      const nextData = state.filter(
+    setData((states) => {
+      const nextData = states.filter(
         (appointment) => appointment.id !== deletedAppointmentId
       );
       return nextData;
@@ -82,14 +88,22 @@ const CitasCalendarV2 = () => {
   };
 
   const commitChanges = ({ added, changed, deleted }) => {
-    setData((state) => {
-      let updatedData = [...state];
+    setData((states) => {
+      let updatedData = [...states];
       if (added) {
         const startingAddedId =
           updatedData.length > 0
             ? updatedData[updatedData.length - 1].id + 1
             : 0;
         updatedData.push({ id: startingAddedId, ...added });
+
+        const values = {
+          tiempo : updatedData.map(item => item.endDate),
+          estilista : updatedData.map(item => item.estilista),
+          servicios : updatedData.map(item => item.servicio),
+        }
+        console.log(values)
+        setFilterToolbar(dispatch, values);
         console.log(updatedData)
         console.log(startingAddedId)
       }
