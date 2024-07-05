@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { useState, useEffect, useCallback } from "react";
 import sumBy from "lodash/sumBy";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { LoadingButton } from '@mui/lab';
+import { LoadingButton } from "@mui/lab";
 
 // @mui
 import { useTheme } from "@mui/material/styles";
@@ -47,11 +47,10 @@ import useResponsive from "../../../hooks/useResponsive";
 
 import {
   CitasInfo,
-  CitasCalendar,
+  CitasCalendarV2,
   CitasCalendarToolbar,
 } from "../../../sections/@dashboard/Registro/Citas";
 
-import CitasCalendarV2 from "../../../sections/@dashboard/Registro/Citas/newCalendar/CitasCalendarV2";
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -73,7 +72,7 @@ export default function RegistroCitasPage() {
 
       <Container
         // maxWidth={themeStretch ? false : "lg"}
-        sx={{ padding: isDesktop ? "0px" : "0px" , maxWidth: "100%!important" }}
+        sx={{ padding: isDesktop ? "0px" : "0px", maxWidth: "100%!important" }}
       >
         <CustomBreadcrumbs
           heading="Crear Cita"
@@ -92,28 +91,28 @@ export default function RegistroCitasPage() {
           ]}
           action={
             <Card
-            sx={{
-              gap: '15px',
-              display: 'flex',
-              borderRadius: '0px',
-              flexDirection: isDesktop ? 'row' : 'column',
-            }}
-          >
-            <Button variant="contained" size="small " color="error" >
-              <Iconify icon="material-symbols:close" />
-              {isDesktop ? 'Cerrar' : ''}
-            </Button>
-            <LoadingButton
-              variant="contained"
-              // loading={isLoading}
-              loading={false}
-              size="small "
-              // onClick={ventasEnvio}
+              sx={{
+                gap: "15px",
+                display: "flex",
+                borderRadius: "0px",
+                flexDirection: isDesktop ? "row" : "column",
+              }}
             >
-              <Iconify icon="material-symbols:check" />
-              {isDesktop ? 'Guardar' : ''}
-            </LoadingButton>
-          </Card>
+              <Button variant="contained" size="small " color="error">
+                <Iconify icon="material-symbols:close" />
+                {isDesktop ? "Cerrar" : ""}
+              </Button>
+              <LoadingButton
+                variant="contained"
+                // loading={isLoading}
+                loading={false}
+                size="small "
+                // onClick={ventasEnvio}
+              >
+                <Iconify icon="material-symbols:check" />
+                {isDesktop ? "Guardar" : ""}
+              </LoadingButton>
+            </Card>
           }
         />
         <Card

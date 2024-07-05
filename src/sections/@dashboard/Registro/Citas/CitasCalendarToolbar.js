@@ -6,6 +6,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 
 import FormProvider, {
   RHFTextField,
+  RHFAutocomplete,
   RHFSelect,
   RHFCheckbox,
   RHFAutocompleteModalv2,
@@ -31,8 +32,38 @@ export default function CitasCalendarToolbar() {
   } = methods;
 
   const [cliOption, setCliOption] = useState([]);
+  const [stylistOption, setStylistOption] = useState([]);
+  const [serviceOption, setServiceOption] = useState([]);
 
   const filter = createFilterOptions();
+
+  const handleSearchService = async (inputValue, setCuentaEOptions) => {
+    if (inputValue === undefined) {
+      inputValue = "";
+    }
+
+    if (typeof inputValue === "string" && inputValue !== "") {
+      const response = await axios.post(`/api/servicio-buscar/${inputValue}`);
+      setCuentaEOptions(response.data);
+    } else {
+      setValue(inputValue);
+      setCuentaEOptions([]);
+    }
+  };
+
+  const handleSearchStylist = async (inputValue, setCuentaEOptions) => {
+    if (inputValue === undefined) {
+      inputValue = "";
+    }
+
+    if (typeof inputValue === "string" && inputValue !== "") {
+      const response = await axios.post(`/api/estilista-buscar/${inputValue}`);
+      setCuentaEOptions(response.data);
+    } else {
+      setValue(inputValue);
+      setCuentaEOptions([]);
+    }
+  };
 
   const buscarCliente = async (nombre) => {
     try {
@@ -74,7 +105,7 @@ export default function CitasCalendarToolbar() {
           marginTop: upMd ? "0vh" : "2vh",
         }}
       >
-        <RHFAutocompleteModalv2
+        <RHFAutocomplete
           name="servicio"
           label="Servicio"
           autoHighlight
@@ -104,30 +135,8 @@ export default function CitasCalendarToolbar() {
             }
             return `${option.ane_nom} ${option.ane_apepat} ${option.ane_apemat}`;
           }}
-          filterOptions={(options, params) => {
-            const filtered = filter(cliOption, params);
-            const { inputValue } = params;
-            const isExisting = cliOption.some(
-              (option) => inputValue === option.ane_nom
-            );
-            const isExistingA = cliOption.some(
-              (option) => option.ane_id === "a"
-            );
-            if (!isExistingA && !isExisting) {
-              filtered.push({
-                ane_id: "a",
-                ane_nom: `Añadir Cliente`,
-                ane_apepat: null,
-                ane_apemat: null,
-              });
-            }
-            return filtered;
-          }}
-          onChange={(event, value) => {
-            if (value && value.ane_id === "a") {
-              //   setOpenModal(true);
-              console.log("agregar");
-            }
+          onInputChange={(event, newInputValue) => {
+            handleSearchService(newInputValue, setServiceOption);
           }}
         />
         <Controller
@@ -156,7 +165,7 @@ export default function CitasCalendarToolbar() {
           )}
         />
 
-        <RHFAutocompleteModalv2
+        <RHFAutocomplete
           name="estilista"
           label="Estilista"
           autoHighlight
@@ -186,30 +195,8 @@ export default function CitasCalendarToolbar() {
             }
             return `${option.ane_nom} ${option.ane_apepat} ${option.ane_apemat}`;
           }}
-          filterOptions={(options, params) => {
-            const filtered = filter(cliOption, params);
-            const { inputValue } = params;
-            const isExisting = cliOption.some(
-              (option) => inputValue === option.ane_nom
-            );
-            const isExistingA = cliOption.some(
-              (option) => option.ane_id === "a"
-            );
-            if (!isExistingA && !isExisting) {
-              filtered.push({
-                ane_id: "a",
-                ane_nom: `Añadir Cliente`,
-                ane_apepat: null,
-                ane_apemat: null,
-              });
-            }
-            return filtered;
-          }}
-          onChange={(event, value) => {
-            if (value && value.ane_id === "a") {
-              //   setOpenModal(true);
-              console.log("agregar");
-            }
+          onInputChange={(event, newInputValue) => {
+            handleSearchStylist(newInputValue, setStylistOption);
           }}
         />
       </Box>

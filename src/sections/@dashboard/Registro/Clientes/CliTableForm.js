@@ -86,7 +86,7 @@ export default function CliTableForm({
       Apell_Clt : valuesSubmit.apellido,
       Telef_Clt : valuesSubmit.telefono,
       Email_Clt : valuesSubmit.email,
-      ane_id: rowData.ClienteID,
+      ane_id: rowData?.ClienteID,
     };
 
     try {

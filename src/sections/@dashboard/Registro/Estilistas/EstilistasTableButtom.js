@@ -4,7 +4,7 @@ import { Button, Grow, Dialog, DialogContent, DialogTitle } from '@mui/material'
 
 import PropTypes from 'prop-types';
 import Iconify from '../../../../components/iconify';
-import CliTableForm from './EstilistasTableForm';
+import EstilistasTableForm from './EstilistasTableForm';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function EstilistasTableButtom({
@@ -39,7 +39,7 @@ export default function EstilistasTableButtom({
         Añadir
       </Button>
       {currentModal && (
-        <CliTableForm
+        <EstilistasTableForm
           inputs={currentModal.inputs}
           request={currentModal.request}
           closeModal={closeModal}

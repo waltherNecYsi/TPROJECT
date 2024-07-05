@@ -3,17 +3,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { Card, Container, Divider } from "@mui/material";
-import {
-  ScheduleComponent,
-  Day,
-  Week,
-  WorkWeek,
-  Month,
-  Agenda,
-  Inject,
-} from "@syncfusion/ej2-react-schedule";
 
-import { registerLicense } from "@syncfusion/ej2-base";
+
 
 import { PATH_DASHBOARD } from "../../../routes/paths";
 import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
@@ -24,9 +15,7 @@ import useResponsive from "../../../hooks/useResponsive";
 
 import { CitasCalendar, CitasCalendarToolbar } from "../../../sections/@dashboard/Consultas/Citas";
 
-registerLicense(
-  "Ngo9BigBOggjHTQxAR8/V1NCaF5cXmZCeUx0THxbf1x0ZFRHal9ZTnZZUj0eQnxTdEFjX31XcndWTmBbV0d1WQ=="
-);
+
 
 export default function ConsultaCitasPage() {
   const { themeStretch } = useSettingsContext();

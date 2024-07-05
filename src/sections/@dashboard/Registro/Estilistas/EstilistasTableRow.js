@@ -44,7 +44,7 @@ export default function EstilistasTableRow ({
   onEditRow,
   onDeleteRow,
 }) {
-  const { ane_id ,ane_tipdoc, ane_numdoc, ane_nom, ane_dir, ane_tel , ane_ema} = row;
+  const { Nombr_Est , Apell_Est, Telef_Est , Email_Est , FechaReg_Est} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -78,15 +78,15 @@ export default function EstilistasTableRow ({
 
         <TableCell align="left">{keyIndex + 1}</TableCell>
 
-        <TableCell align="left">{ane_numdoc}</TableCell>
+        <TableCell align="left">{Nombr_Est}</TableCell>
 
-        <TableCell align="left">{ane_nom}</TableCell>
+        <TableCell align="left">{Apell_Est}</TableCell>
 
-        <TableCell align="left">{ane_dir}</TableCell>
+        <TableCell align="left">{Telef_Est}</TableCell>
 
-        <TableCell align="left">{ane_tel}</TableCell>
-
-        <TableCell align="left">{ane_ema}</TableCell>
+        <TableCell align="left">{Email_Est}</TableCell>
+        
+        <TableCell align="left">{FechaReg_Est}</TableCell>
 
         {/* <TableCell align="left">{fDate(created_at)}</TableCell> */}
 
