@@ -7,17 +7,27 @@ import { DatePicker } from "@mui/x-date-pickers";
 import FormProvider, {
   RHFTextField,
   RHFAutocomplete,
+  RHFAutocompleteChange,
   RHFSelect,
   RHFCheckbox,
   RHFAutocompleteModalv2,
 } from "../../../../components/hook-form";
 import useResponsive from "../../../../hooks/useResponsive";
 import axios from "../../../../utils/axios";
+import { useCitasContext } from "./Context/CitasContextPage";
+import { setFilterToolbar } from "./Context/CitasActionspage";
 
 export default function CitasCalendarToolbar() {
   const defaultValues = {
-    cliente: "",
+    servicio: null,
+    fechas: new Date(),
+    estilista: null,
   };
+
+  const { state, dispatch } = useCitasContext();
+
+  const { filterToolbar } = state;
+
   const upMd = useResponsive("up", "md");
   const methods = useForm({ defaultValues });
   const isDesktop = useResponsive("up", "md");
@@ -28,12 +38,23 @@ export default function CitasCalendarToolbar() {
     control,
     setValue,
     handleSubmit,
+    getValues,
     formState: { isSubmitting },
   } = methods;
 
   const [cliOption, setCliOption] = useState([]);
   const [stylistOption, setStylistOption] = useState([]);
   const [serviceOption, setServiceOption] = useState([]);
+
+  const stylistOption2 = [
+    { ane_nom: "hola", ane_apepat: "hola", ane_apemat: "hola", ane_id: 1 },
+    { ane_nom: "hola2", ane_apepat: "hola2", ane_apemat: "hola2", ane_id: 2 },
+  ];
+
+  const serviceOption2 = [
+    { ane_nom: "hola3", ane_apepat: "hola3", ane_apemat: "hola3", ane_id: 3 },
+    { ane_nom: "hola4", ane_apepat: "hola4", ane_apemat: "hola4", ane_id: 4 },
+  ];
 
   const filter = createFilterOptions();
 
@@ -52,16 +73,21 @@ export default function CitasCalendarToolbar() {
   };
 
   const handleSearchStylist = async (inputValue, setCuentaEOptions) => {
+    console.log(inputValue);
     if (inputValue === undefined) {
       inputValue = "";
     }
 
     if (typeof inputValue === "string" && inputValue !== "") {
-      const response = await axios.post(`/api/estilista-buscar/${inputValue}`);
-      setCuentaEOptions(response.data);
+      const response = await axios.get(`/api/buscar_estilistas`, {
+        params: {
+          search: inputValue,
+        },
+      });
+      setStylistOption(response.data);
     } else {
       setValue(inputValue);
-      setCuentaEOptions([]);
+      setStylistOption([]);
     }
   };
 
@@ -96,6 +122,8 @@ export default function CitasCalendarToolbar() {
     }
   };
 
+  const [dateValue, setDateValue] = useState(new Date());
+
   return (
     <FormProvider methods={methods}>
       <Box
@@ -105,7 +133,7 @@ export default function CitasCalendarToolbar() {
           marginTop: upMd ? "0vh" : "2vh",
         }}
       >
-        <RHFAutocomplete
+        <RHFAutocompleteModalv2
           name="servicio"
           label="Servicio"
           autoHighlight
@@ -113,31 +141,28 @@ export default function CitasCalendarToolbar() {
           clearOnBlur
           handleHomeEndKeys
           size="small"
-          options={cliOption}
+          options={stylistOption2}
           sx={{ m: 1, width: "-webkit-fill-available" }}
           isOptionEqualToValue={(option, value) =>
             option.ane_id === value.ane_id
           }
-          handleAutoGetOptions={ApiBuscarCliente}
+          handleAutoGetOptions={handleSearchStylist}
           renderOption={(props, option) => (
             <li {...props}>
               {option.ane_nom}
-              {option.ane_apepat}
-              {option.ane_apemat}{" "}
+              {/* {option.ane_apepat}
+              {option.ane_apemat}{" "} */}
             </li>
           )}
-          getOptionLabel={(option) => {
-            if (typeof option === "string") {
-              return option;
-            }
-            if (option.ane_apepat === null && option.ane_apemat === null) {
-              return option.ane_nom;
-            }
-            return `${option.ane_nom} ${option.ane_apepat} ${option.ane_apemat}`;
+          getOptionLabel={(option) => option.ane_nom}
+          onChange={(event, newInputValue) => {
+            // setValue("estilista", event.target.value);
+            const values = getValues();
+            setFilterToolbar(dispatch, values);
           }}
-          onInputChange={(event, newInputValue) => {
-            handleSearchService(newInputValue, setServiceOption);
-          }}
+          // onInputChange={(event, newInputValue) => {
+          //   handleSearchStylist(newInputValue, setStylistOption);
+          // }}
         />
         <Controller
           name="fechas"
@@ -150,7 +175,14 @@ export default function CitasCalendarToolbar() {
               label="Tiempo || Fecha"
               inputFormat="dd/MM/yyyy"
               size="small"
+              value={dateValue}
               slotProps={{ textField: { size: "small" } }}
+              onChange={(date) => {
+                setValue("fechas", date);
+                setDateValue(date);
+                const values = getValues();
+                setFilterToolbar(dispatch, values);
+              }}
               renderInput={(params) => (
                 <TextField
                   size="small"
@@ -165,7 +197,7 @@ export default function CitasCalendarToolbar() {
           )}
         />
 
-        <RHFAutocomplete
+        <RHFAutocompleteModalv2
           name="estilista"
           label="Estilista"
           autoHighlight
@@ -173,31 +205,28 @@ export default function CitasCalendarToolbar() {
           clearOnBlur
           handleHomeEndKeys
           size="small"
-          options={cliOption}
+          options={stylistOption2}
           sx={{ m: 1, width: "-webkit-fill-available" }}
           isOptionEqualToValue={(option, value) =>
             option.ane_id === value.ane_id
           }
-          handleAutoGetOptions={ApiBuscarCliente}
+          handleAutoGetOptions={handleSearchStylist}
           renderOption={(props, option) => (
             <li {...props}>
               {option.ane_nom}
-              {option.ane_apepat}
-              {option.ane_apemat}{" "}
+              {/* {option.ane_apepat}
+              {option.ane_apemat}{" "} */}
             </li>
           )}
-          getOptionLabel={(option) => {
-            if (typeof option === "string") {
-              return option;
-            }
-            if (option.ane_apepat === null && option.ane_apemat === null) {
-              return option.ane_nom;
-            }
-            return `${option.ane_nom} ${option.ane_apepat} ${option.ane_apemat}`;
+          getOptionLabel={(option) => option.ane_nom}
+          onChange={(event, newInputValue) => {
+            // setValue("estilista", event.target.value);
+            const values = getValues();
+            setFilterToolbar(dispatch, values);
           }}
-          onInputChange={(event, newInputValue) => {
-            handleSearchStylist(newInputValue, setStylistOption);
-          }}
+          // onInputChange={(event, newInputValue) => {
+          //   handleSearchStylist(newInputValue, setStylistOption);
+          // }}
         />
       </Box>
     </FormProvider>

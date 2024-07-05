@@ -51,6 +51,8 @@ import {
   CitasCalendarToolbar,
 } from "../../../sections/@dashboard/Registro/Citas";
 
+import CitasContextPage from "../../../sections/@dashboard/Registro/Citas/Context/CitasContextPage";
+
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -66,8 +68,9 @@ export default function RegistroCitasPage() {
 
   return (
     <>
+    <CitasContextPage>
       <Helmet>
-        <title>Clientes</title>
+        <title>Crear Cita</title>
       </Helmet>
 
       <Container
@@ -132,6 +135,7 @@ export default function RegistroCitasPage() {
           </Card>
         </Card>
       </Container>
+      </CitasContextPage>
     </>
   );
 }

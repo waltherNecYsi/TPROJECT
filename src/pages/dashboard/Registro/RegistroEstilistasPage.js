@@ -133,7 +133,9 @@ export default function RegistroEstilistasPage() {
   };
 
   const handleDeleteRow = async (id) => {
-    const deleteRow = tableData.filter((row) => row.EstilistaID !== id.EstilistaID);
+    const deleteRow = tableData.filter(
+      (row) => row.EstilistaID !== id.EstilistaID
+    );
     setSelected([]);
     try {
       const response = axios.delete(`/api/estilistas/${id.EstilistaID}`);
@@ -194,11 +196,14 @@ export default function RegistroEstilistasPage() {
   };
 
   const modal2Request = async (formData, closeModal) => {
-    console.log(formData)
+    console.log(formData);
     try {
-      const response = await axios.put(`/api/estilistas/${formData.EstilistaID}`, {
-        ...formData,
-      });
+      const response = await axios.put(
+        `/api/estilistas/${formData.EstilistaID}`,
+        {
+          ...formData,
+        }
+      );
       console.log("Respuesta exitosa:", response.data);
       setFetchTrigger((prevState) => !prevState);
       return response.data;
@@ -221,9 +226,13 @@ export default function RegistroEstilistasPage() {
 
   const handleOpenEditModal = async (id) => {
     console.log("Se seleccionó editar la fila con ID:", id.EstilistaID);
-    const response = await handleShowEditModal(id.EstilistaID);
-    setRowData(response);
-    setIsModalEditOpen(true);
+    try {
+      const response = await handleShowEditModal(id.EstilistaID);
+      setRowData(response);
+      setIsModalEditOpen(true);
+    } catch (error) {
+      setIsModalEditOpen(false);
+    }
   };
 
   const fetchDataFromAPI = useCallback(async () => {

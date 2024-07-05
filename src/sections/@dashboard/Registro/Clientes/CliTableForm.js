@@ -26,23 +26,6 @@ import FormProvider from "../../../../components/hook-form/FormProvider";
 
 import axios from "../../../../utils/axios";
 
-export const defaultValues = {
-  documento: {
-    created_at: null,
-    doc_nomb: "DOCUMENTO NACIONAL DE IDENTIDAD (DNI)",
-    id: "1",
-    updated_at: null,
-  },
-  nro_doc: "",
-  alias: "",
-  ane_nom: "",
-  direccion: "",
-  ubigeo: null,
-  email: "",
-  movil: "",
-  fijo: "",
-};
-
 export default function CliTableForm({
   inputs,
   request,
@@ -50,6 +33,14 @@ export default function CliTableForm({
   fetchDataFromAPI,
   rowData,
 }) {
+  const defaultValues = {
+    nombre: rowData?.Nomb_Clt ?? "",
+    apellido_mat: rowData?.Apell_Clt ?? "",
+    apellido_pat: rowData?.Apell_Pater ?? "",
+    telefono: rowData?.Telef_Clt ?? "",
+    email: rowData?.Email_Clt ?? "",
+  };
+
   const [openModal, setOpenModal] = useState(true);
 
   const methods = useForm({
@@ -82,10 +73,11 @@ export default function CliTableForm({
     const valuesSubmit = methods.getValues();
 
     const DataSubmit = {
-      Nomb_Clt : valuesSubmit.nombre,
-      Apell_Clt : valuesSubmit.apellido,
-      Telef_Clt : valuesSubmit.telefono,
-      Email_Clt : valuesSubmit.email,
+      Nomb_Clt: valuesSubmit.nombre,
+      Apell_Pater: valuesSubmit.apellido_pat,
+      Apell_Clt: valuesSubmit.apellido_mat,
+      Telef_Clt: valuesSubmit.telefono,
+      Email_Clt: valuesSubmit.email,
       ane_id: rowData?.ClienteID,
     };
 
@@ -182,9 +174,15 @@ export default function CliTableForm({
               />
 
               <RHFTextField
-                name="apellido"
+                name="apellido_mat"
                 size="small"
-                label="Apellido"
+                label="Apellido Materno"
+                sx={{ width: "-webkit-fill-available", m: 1 }}
+              />
+              <RHFTextField
+                name="apellido_pat"
+                size="small"
+                label="Apellido Paterno"
                 sx={{ width: "-webkit-fill-available", m: 1 }}
               />
             </Box>

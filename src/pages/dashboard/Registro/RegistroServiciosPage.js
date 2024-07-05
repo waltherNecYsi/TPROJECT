@@ -205,10 +205,20 @@ export default function RegistroClientesPage() {
     }
   };
 
-  const handleOpenEditModal = (id) => {
+  const handleShowEditModal = async (id) => {
+    const response = await axios.get(`/api/servicio/${id.ServicioID}`);
+    return response.data;
+  };
+
+  const handleOpenEditModal = async(id) => {
     console.log("Se seleccionó editar la fila con ID:", id.ServicioID);
-    setIsModalEditOpen(true);
-    setRowData(id);
+    try {
+      const response = await handleShowEditModal(id);
+      setRowData(response);
+      setIsModalEditOpen(true);
+    } catch (error) {
+      setIsModalEditOpen(false);
+    }
 
   };
 
@@ -216,7 +226,6 @@ export default function RegistroClientesPage() {
     try {
       const response = await axios.get(`/api/servicio`);
       setTableData(response.data);
-      return response.data;
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
@@ -225,14 +234,7 @@ export default function RegistroClientesPage() {
 
   useEffect(() => {
     fetchDataFromAPI()
-      .then((data) => {
-        setTableData(data);
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, [fetchDataFromAPI, fetchTrigger]);
+  }, [fetchDataFromAPI]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,

@@ -26,22 +26,7 @@ import FormProvider from "../../../../components/hook-form/FormProvider";
 
 import axios from "../../../../utils/axios";
 
-export const defaultValues = {
-  documento: {
-    created_at: null,
-    doc_nomb: "DOCUMENTO NACIONAL DE IDENTIDAD (DNI)",
-    id: "1",
-    updated_at: null,
-  },
-  nro_doc: "",
-  alias: "",
-  ane_nom: "",
-  direccion: "",
-  ubigeo: null,
-  email: "",
-  movil: "",
-  fijo: "",
-};
+
 
 export default function EstilistasTableForm({
   inputs,
@@ -50,6 +35,14 @@ export default function EstilistasTableForm({
   fetchDataFromAPI,
   rowData,
 }) {
+
+  const defaultValues = {
+    nombre: rowData?.Nombr_Est ?? "",
+    apellido: rowData?.Apell_Est ?? "",
+    telefono: rowData?.Telef_Est ?? "",
+    email: rowData?.Email_Est ?? "",
+  };
+
   const [openModal, setOpenModal] = useState(true);
 
   const methods = useForm({

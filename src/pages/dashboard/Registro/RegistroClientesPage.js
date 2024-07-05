@@ -1,9 +1,9 @@
-import { Helmet } from 'react-helmet-async';
-import { useState, useEffect, useCallback } from 'react';
-import sumBy from 'lodash/sumBy';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Helmet } from "react-helmet-async";
+import { useState, useEffect, useCallback } from "react";
+import sumBy from "lodash/sumBy";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 // @mui
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 import {
   Tab,
   Tabs,
@@ -17,24 +17,24 @@ import {
   Container,
   IconButton,
   TableContainer,
-} from '@mui/material';
-import axios from '../../../utils/axios';
+} from "@mui/material";
+import axios from "../../../utils/axios";
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from "../../../routes/paths";
 // utils
-import { fTimestamp } from '../../../utils/formatTime';
+import { fTimestamp } from "../../../utils/formatTime";
 // import { tenantUrl } from '../../../auth/TenantUtils';
 
 // _mock_
 
 // import { _invoices } from '../../_mock/arrays';
 // components
-import Label from '../../../components/label';
-import Iconify from '../../../components/iconify';
-import Scrollbar from '../../../components/scrollbar';
-import ConfirmDialog from '../../../components/confirm-dialog';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import { useSettingsContext } from '../../../components/settings';
+import Label from "../../../components/label";
+import Iconify from "../../../components/iconify";
+import Scrollbar from "../../../components/scrollbar";
+import ConfirmDialog from "../../../components/confirm-dialog";
+import CustomBreadcrumbs from "../../../components/custom-breadcrumbs";
+import { useSettingsContext } from "../../../components/settings";
 import {
   useTable,
   getComparator,
@@ -44,7 +44,7 @@ import {
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
-} from '../../../components/table';
+} from "../../../components/table";
 // sections
 
 import {
@@ -52,18 +52,18 @@ import {
   CliTableToolbar,
   CliTableButtom,
   CliTableEdit,
-} from '../../../sections/@dashboard/Registro/Clientes';
+} from "../../../sections/@dashboard/Registro/Clientes";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 0, label: 'ID', align: 'left' },
-  { id: 1, label: 'Nombre', align: 'left' },
-  { id: 2, label: 'Apellido', align: 'left' },
-  { id: 3, label: 'Telefono', align: 'left' },
-  { id: 4, label: 'Email', align: 'left' },
-  { id: 5, label: 'F. Registro', align: 'left' },
-  { id: '' },
+  { id: 0, label: "ID", align: "left" },
+  { id: 1, label: "Nombre", align: "left" },
+  { id: 2, label: "Apellido", align: "left" },
+  { id: 3, label: "Telefono", align: "left" },
+  { id: 4, label: "Email", align: "left" },
+  { id: 5, label: "F. Registro", align: "left" },
+  { id: "" },
 ];
 
 // ----------------------------------------------------------------------
@@ -92,19 +92,19 @@ export default function RegistroClientesPage() {
     onChangeDense,
     onChangePage,
     onChangeRowsPerPage,
-  } = useTable({ defaultOrderBy: 'createDate' });
+  } = useTable({ defaultOrderBy: "createDate" });
 
   const [tableData, setTableData] = useState([]);
 
-  const [filterName, setFilterName] = useState('');
+  const [filterName, setFilterName] = useState("");
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState("all");
 
   const [filterEndDate, setFilterEndDate] = useState(null);
 
-  const [filterService, setFilterService] = useState('all');
+  const [filterService, setFilterService] = useState("all");
 
   const [filterStartDate, setFilterStartDate] = useState(null);
 
@@ -143,13 +143,15 @@ export default function RegistroClientesPage() {
       }
       return response.data;
     } catch (error) {
-      console.error('Error al realizar la solicitud DELETE:', error);
+      console.error("Error al realizar la solicitud DELETE:", error);
       throw error;
     }
   };
 
   const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.ane_id));
+    const deleteRows = tableData.filter(
+      (row) => !selectedRows.includes(row.ane_id)
+    );
     setSelected([]);
     setTableData(deleteRows);
 
@@ -159,7 +161,8 @@ export default function RegistroClientesPage() {
       } else if (selectedRows.length === dataFiltered.length) {
         setPage(0);
       } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
+        const newPage =
+          Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
         setPage(newPage);
       }
     }
@@ -170,25 +173,23 @@ export default function RegistroClientesPage() {
   };
 
   const handleResetFilter = () => {
-    setFilterName('');
-    setFilterStatus('all');
+    setFilterName("");
+    setFilterStatus("all");
     setFilterEndDate(null);
     setFilterStartDate(null);
   };
 
-
-
   const modal1Request = async (formData, closeModal) => {
     try {
       const response = await axios.post(`/api/cliente`, {
-        ...formData
+        ...formData,
       });
-      console.log('Respuesta exitosa:', response.data);
+      console.log("Respuesta exitosa:", response.data);
       setFetchTrigger((prevState) => !prevState);
       return response.data;
     } catch (error) {
-      console.error('Error al realizar la solicitud POST:', error);
-      console.log('Error', formData);
+      console.error("Error al realizar la solicitud POST:", error);
+      console.log("Error", formData);
       throw error;
     }
   };
@@ -196,24 +197,32 @@ export default function RegistroClientesPage() {
   const modal2Request = async (formData, closeModal) => {
     try {
       const response = await axios.put(`/api/cliente/${formData.ane_id}`, {
-        ...formData
+        ...formData,
       });
-      console.log('Respuesta exitosa:', response.data);
+      console.log("Respuesta exitosa:", response.data);
       setFetchTrigger((prevState) => !prevState);
       return response.data;
     } catch (error) {
-      console.error('Error al realizar la solicitud POST:', error);
-      console.log('Error', formData);
+      console.error("Error al realizar la solicitud POST:", error);
+      console.log("Error", formData);
       throw error;
     }
   };
 
-  const handleOpenEditModal = (id) => {
-    console.log('Se seleccionó editar la fila con ID:', id.ane_id);
-    setIsModalEditOpen(true);
-    setRowData(id);
-    console.log(id);
-    console.log(typeof rowData);
+  const handleShowEditModal = async (id) => {
+    const response = await axios.get(`/api/cliente/${id.ClienteID}`);
+    return response.data;
+  };
+
+  const handleOpenEditModal = async (id) => {
+    console.log("Se seleccionó editar la fila con ID:", id.ane_id);
+    try {
+      const response = await handleShowEditModal(id);
+      setRowData(response);
+      setIsModalEditOpen(true);
+    } catch (error) {
+      setIsModalEditOpen(false);
+    }
   };
 
   const fetchDataFromAPI = useCallback(async () => {
@@ -222,7 +231,7 @@ export default function RegistroClientesPage() {
       setTableData(response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
       throw error;
     }
   }, []);
@@ -234,7 +243,7 @@ export default function RegistroClientesPage() {
         console.log(data);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       });
   }, [fetchDataFromAPI, fetchTrigger]);
 
@@ -246,12 +255,17 @@ export default function RegistroClientesPage() {
     filterEndDate,
   });
 
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const dataInPage = dataFiltered.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   const denseHeight = dense ? 56 : 76;
 
   const isFiltered =
-    filterStatus !== 'all' || filterName !== '' || (!!filterStartDate && !!filterEndDate);
+    filterStatus !== "all" ||
+    filterName !== "" ||
+    (!!filterStartDate && !!filterEndDate);
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||
@@ -265,20 +279,20 @@ export default function RegistroClientesPage() {
         <title>Clientes</title>
       </Helmet>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : "lg"}>
         <CustomBreadcrumbs
           heading="Clientes"
           links={[
             {
-              name: 'Dashboard',
+              name: "Dashboard",
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Registros',
+              name: "Registros",
               href: PATH_DASHBOARD.registro.root,
             },
             {
-              name: 'Clientes',
+              name: "Clientes",
             },
           ]}
           action={
@@ -310,7 +324,7 @@ export default function RegistroClientesPage() {
             }}
           />
 
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <TableContainer sx={{ position: "relative", overflow: "unset" }}>
             <TableSelectedAction
               dense={dense}
               numSelected={selected.length}
@@ -351,7 +365,7 @@ export default function RegistroClientesPage() {
             />
 
             <Scrollbar>
-              <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+              <Table size={dense ? "small" : "medium"} sx={{ minWidth: 800 }}>
                 <TableHeadCustom
                   order={order}
                   orderBy={orderBy}
@@ -370,7 +384,7 @@ export default function RegistroClientesPage() {
                 <TableBody>
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row , index) => (
+                    .map((row, index) => (
                       <CliTableRow
                         key={index}
                         keyIndex={index}
@@ -420,7 +434,8 @@ export default function RegistroClientesPage() {
         title="Delete"
         content={
           <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
+            Are you sure want to delete <strong> {selected.length} </strong>{" "}
+            items?
           </>
         }
         action={
@@ -442,7 +457,13 @@ export default function RegistroClientesPage() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filterName, filterStartDate, filterEndDate }) {
+function applyFilter({
+  inputData,
+  comparator,
+  filterName,
+  filterStartDate,
+  filterEndDate,
+}) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -456,8 +477,10 @@ function applyFilter({ inputData, comparator, filterName, filterStartDate, filte
   if (filterName) {
     inputData = inputData.filter(
       (invoice) =>
-        invoice.alm_nomb.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
-        invoice.emp_nom.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
+        invoice.alm_nomb.toLowerCase().indexOf(filterName.toLowerCase()) !==
+          -1 ||
+        invoice.emp_nom.toLowerCase().indexOf(filterName.toLowerCase()) !==
+          -1 ||
         invoice.direccion.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
     );
   }

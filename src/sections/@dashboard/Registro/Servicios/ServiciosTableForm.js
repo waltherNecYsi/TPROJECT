@@ -28,13 +28,6 @@ import FormProvider from "../../../../components/hook-form/FormProvider";
 
 import axios from "../../../../utils/axios";
 
-export const defaultValues = {
-  Nomb_Serv: "",
-  Desc_Serv: "",
-  Precio_Serv: 0,
-  DurMin_Serv: 0,
-};
-
 export default function ServiciosTableForm({
   inputs,
   request,
@@ -42,6 +35,12 @@ export default function ServiciosTableForm({
   fetchDataFromAPI,
   rowData,
 }) {
+  const defaultValues = {
+    Nomb_Serv: rowData.Nomb_Serv ?? "",
+    Desc_Serv: rowData.Desc_Serv ?? "",
+    Precio_Serv: rowData.Precio_Serv ?? 0,
+    DurMin_Serv: rowData.DurMin_Serv ?? 0,
+  };
   const [openModal, setOpenModal] = useState(true);
 
   const [docOptions, setDocOptions] = useState([]);
@@ -212,8 +211,14 @@ export default function ServiciosTableForm({
                 rows={4}
                 sx={{ width: "-webkit-fill-available", m: 1 }}
               />
+              <RHFTextField
+                name="DurMin_Serv"
+                size="small"
+                label="Duracion"
+                sx={{ width: "-webkit-fill-available", m: 1 }}
+              />
 
-              <TimePicker
+              {/* <TimePicker
                 views={["minutes", "seconds"]}
                 format="mm:ss"
                 name="DurMin_Serv"
@@ -227,7 +232,7 @@ export default function ServiciosTableForm({
                 onChange={(e) => {
                   console.log(e?.target?.value ?? "b");
                 }}
-              />
+              /> */}
             </Box>
           </DialogContent>
         </Dialog>
