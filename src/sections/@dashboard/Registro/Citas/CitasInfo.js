@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Dialog, DialogContent } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { createFilterOptions } from "@mui/material/Autocomplete";
+import format from "date-fns/format";
+
 import FormProvider, {
   RHFTextField,
   RHFSelect,
@@ -21,10 +23,10 @@ export default function CitasInfo() {
 
   const defaultValues = {
     cliente: infoToolbar.cliente ?? null,
-    servicios: infoToolbar?.servicios?.map((servicio) => servicio.text) ?? "",
-    fechas: infoToolbar.tiempo ?? "",
+    servicios: infoToolbar?.servicios ?? [],
+    fechas: infoToolbar?.tiempo ?? [],
     estilistas:
-      infoToolbar?.estilista?.map((estilista) => estilista.text) ?? "",
+      infoToolbar?.estilista?.map((estilistas) => estilistas.text) ?? "",
   };
   const upMd = useResponsive("up", "md");
   const methods = useForm({ defaultValues });
@@ -41,10 +43,10 @@ export default function CitasInfo() {
   const [cliOption, setCliOption] = useState([]);
   const [openModal, setOpenModal] = useState(false);
 
-  const clienteOption2 = [
-    { ane_nom: "hola", ane_apepat: "hola", ane_apemat: "hola", ane_id: 1 },
-    { ane_nom: "hola2", ane_apepat: "hola2", ane_apemat: "hola2", ane_id: 2 },
-  ];
+  // const clienteOption2 = [
+  //   { ane_nom: "hola", ane_apepat: "hola", ane_apemat: "hola", ane_id: 1 },
+  //   { ane_nom: "hola2", ane_apepat: "hola2", ane_apemat: "hola2", ane_id: 2 },
+  // ];
 
   const filter = createFilterOptions();
 
@@ -52,36 +54,50 @@ export default function CitasInfo() {
     setOpenModal(false);
   };
 
+  useEffect(() => {
+    console.log(infoToolbar);
+  }, [infoToolbar]);
+
   const buscarCliente = async (nombre) => {
     try {
-      const response = await axios.post(`/api/cliente-buscar/${nombre}`);
+      const response = await axios.get(`/api/buscar_clientes`, {
+        params: {
+          nombre,
+        },
+      });
       return response.data;
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data:");
       throw error;
     }
   };
 
   const ApiBuscarCliente = async (nombre) => {
-    if (!nombre) {
+    if (!nombre || nombre === "" || nombre === undefined) {
       setCliOption([]);
       return;
     }
 
     try {
       const response = await buscarCliente(nombre);
-      if (response !== undefined) {
+      if (response !== undefined && response.length > 0) {
         setCliOption(response);
-        if (response.length > 0 && nombre === response[0].ane_nom) {
-          setValue("cliente", response[0], { shouldValidate: true });
-        } else {
-          setValue("cliente", "", { shouldValidate: true });
-        }
+        // if (response.length > 0 && nombre === response[0].Nomb_Clt) {
+        //   setValue("cliente", response[0], { shouldValidate: true });
+        // } else {
+        //   setValue("cliente", "", { shouldValidate: true });
+        // }
       }
     } catch (error) {
-      console.error("Validation errors:", error);
+      console.error("Validation errors:");
     }
   };
+
+  const TiempoFecha = () =>
+    defaultValues?.fechas?.map((tiempos) => {
+      const formattedDate = format(new Date(tiempos), "dd/MM/yyyy HH:mm:ss");
+      return formattedDate;
+    }) ?? [];
 
   return (
     <FormProvider methods={methods}>
@@ -102,32 +118,32 @@ export default function CitasInfo() {
           size="small"
           sx={{ m: 1, width: "-webkit-fill-available" }}
           // options={cliOption}
-          options={clienteOption2}
+          options={cliOption}
           isOptionEqualToValue={(option, value) =>
-            option.ane_id === value.ane_id
+            option.ClienteID === value.ClienteID
           }
           handleAutoGetOptions={ApiBuscarCliente}
           renderOption={(props, option) => (
             <li {...props}>
-              {option.ane_nom}
+              {option.Nomb_Clt}
               {/* {option.ane_apepat}
               {option.ane_apemat}{" "} */}
             </li>
           )}
-          getOptionLabel={(option) => option.ane_nom}
+          getOptionLabel={(option) => option.Nomb_Clt}
           filterOptions={(options, params) => {
-            const filtered = filter(clienteOption2, params);
+            const filtered = filter(cliOption, params);
             const { inputValue } = params;
-            const isExisting = clienteOption2.some(
-              (option) => inputValue === option.ane_nom
+            const isExisting = cliOption.some(
+              (option) => inputValue === option.Nomb_Clt
             );
-            const isExistingA = clienteOption2.some(
-              (option) => option.ane_id === "a"
+            const isExistingA = cliOption.some(
+              (option) => option.ClienteID === "a"
             );
             if (!isExistingA && !isExisting) {
               filtered.push({
-                ane_id: "a",
-                ane_nom: `Añadir Cliente`,
+                ClienteID: "a",
+                Nomb_Clt: `Añadir Cliente`,
                 ane_apepat: null,
                 ane_apemat: null,
               });
@@ -135,12 +151,16 @@ export default function CitasInfo() {
             return filtered;
           }}
           onChange={(event, value) => {
-            if (value && value.ane_id !== "a") {
+            if (value && value.ClienteID !== "a") {
               console.log(state);
               const values = getValues();
-              setInfoToolbar(dispatch, values);
+              const newValues = {
+                ...defaultValues,
+                cliente: value,
+              };
+              setInfoToolbar(dispatch, newValues);
             }
-            if (value && value.ane_id === "a") {
+            if (value && value.ClienteID === "a") {
               setOpenModal(true);
               console.log("agregar");
             }
@@ -150,6 +170,11 @@ export default function CitasInfo() {
           name="servicios"
           label="Servicios"
           size="small"
+          value={
+            infoToolbar?.servicios?.flatMap((subArray) =>
+              subArray?.map((item) => item.text ?? item.name)
+            ) ?? ""
+          }
           fullWidth
           multiline
           rows={4}
@@ -162,6 +187,7 @@ export default function CitasInfo() {
           name="fechas"
           label="Tiempo // Fechas"
           size="small"
+          value={TiempoFecha?.length > 0 ? TiempoFecha?.join("\n") : ""}
           fullWidth
           multiline
           rows={4}
@@ -171,9 +197,7 @@ export default function CitasInfo() {
         <RHFTextField
           name="estilistas"
           label="Estilistas"
-          value={
-            infoToolbar?.estilista?.map((estilista) => estilista.text) ?? ""
-          }
+          value={defaultValues.estilistas}
           size="small"
           fullWidth
           multiline

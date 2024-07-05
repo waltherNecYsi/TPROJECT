@@ -38,7 +38,7 @@ import AppointmentFormContainer from "./AppointmentFormContainer";
 import { StyledFab, classes } from "./StyledComponents";
 import Content from "./CustomAptTooltip";
 import { useCitasContext } from "../Context/CitasContextPage";
-import { setFilterToolbar } from "../Context/CitasActionspage";
+import { setInfoToolbar } from "../Context/CitasActionspage";
 
 const estilista = [
   { id: 1, text: "Andrew Glover" },
@@ -90,6 +90,8 @@ const CitasCalendarV2 = () => {
   const commitChanges = ({ added, changed, deleted }) => {
     setData((states) => {
       let updatedData = [...states];
+      console.log(updatedData)
+
       if (added) {
         const startingAddedId =
           updatedData.length > 0
@@ -103,8 +105,7 @@ const CitasCalendarV2 = () => {
           servicios : updatedData.map(item => item.servicio),
         }
         console.log(values)
-        setFilterToolbar(dispatch, values);
-        console.log(updatedData)
+        setInfoToolbar(dispatch, values);
         console.log(startingAddedId)
       }
       if (changed) {

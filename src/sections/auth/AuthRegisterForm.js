@@ -21,11 +21,12 @@ export default function AuthRegisterForm() {
 
   const RegisterSchema = Yup.object().shape({
     // firstName: Yup.string().required('First name required'),
-    name: Yup.string().required('Tu nombre completo es required'),
+    name: Yup.string().required('Tu nombre completo es requerido'),
+    DNI: Yup.string().required('Tu documento de identidad es requerido'),
     email: Yup.string()
-      .required('Email es required')
+      .required('Email es requerido')
       .email('Email debe ser una direccion de correo valido'),
-    password: Yup.string().required('Contraseña es required'),
+    password: Yup.string().required('Contraseña es requerido'),
   });
 
   const defaultValues = {
@@ -33,6 +34,7 @@ export default function AuthRegisterForm() {
     name: '',
     email: '',
     password: '',
+    DNI: '',
   };
 
   const methods = useForm({
@@ -50,11 +52,10 @@ export default function AuthRegisterForm() {
   const onSubmit = async (data) => {
     try {
       if (register) {
-        await register(data.email, data.password, data.name);
+        await register(data.email, data.password, data.name , data.DNI);
 
       }
     } catch (error) {
-
       console.error(error);
       reset();
       setError('afterSubmit', {
@@ -81,6 +82,8 @@ export default function AuthRegisterForm() {
         <RHFTextField name="name" label="Nombre completo" />
 
         <RHFTextField name="email" label="Direccion de correo" />
+
+        <RHFTextField name="DNI" label="Documento de Identidad" type="number" />
 
         <RHFTextField
           name="password"

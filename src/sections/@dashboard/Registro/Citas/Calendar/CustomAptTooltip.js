@@ -28,7 +28,7 @@ const Content = ({ children, appointmentData, ...restProps }) => {
     >
       <ContentContainer>
         <Title>Cliente</Title>
-        <Text>{appointmentData?.client?.text}</Text>
+        <Text>{appointmentData?.cliente?.ane_nom}</Text>
         <Title>Estilista</Title>
         <Text>{appointmentData?.estilista?.text}</Text>
       </ContentContainer>

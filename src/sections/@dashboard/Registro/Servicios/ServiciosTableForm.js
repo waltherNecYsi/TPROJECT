@@ -36,10 +36,10 @@ export default function ServiciosTableForm({
   rowData,
 }) {
   const defaultValues = {
-    Nomb_Serv: rowData.Nomb_Serv ?? "",
-    Desc_Serv: rowData.Desc_Serv ?? "",
-    Precio_Serv: rowData.Precio_Serv ?? 0,
-    DurMin_Serv: rowData.DurMin_Serv ?? 0,
+    Nomb_Serv: rowData?.Nomb_Serv ?? "",
+    Desc_Serv: rowData?.Desc_Serv ?? "",
+    Precio_Serv: rowData?.Precio_Serv ?? 0,
+    DurMin_Serv: rowData?.DurMin_Serv ?? 0,
   };
   const [openModal, setOpenModal] = useState(true);
 

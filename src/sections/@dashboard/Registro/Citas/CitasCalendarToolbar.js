@@ -46,15 +46,17 @@ export default function CitasCalendarToolbar() {
   const [stylistOption, setStylistOption] = useState([]);
   const [serviceOption, setServiceOption] = useState([]);
 
-  const stylistOption2 = [
-    { ane_nom: "hola", ane_apepat: "hola", ane_apemat: "hola", ane_id: 1 },
-    { ane_nom: "hola2", ane_apepat: "hola2", ane_apemat: "hola2", ane_id: 2 },
-  ];
+  const [dateValue, setDateValue] = useState(new Date());
 
-  const serviceOption2 = [
-    { ane_nom: "hola3", ane_apepat: "hola3", ane_apemat: "hola3", ane_id: 3 },
-    { ane_nom: "hola4", ane_apepat: "hola4", ane_apemat: "hola4", ane_id: 4 },
-  ];
+  // const stylistOption2 = [
+  //   { ane_nom: "hola", ane_apepat: "hola", ane_apemat: "hola", ane_id: 1 },
+  //   { ane_nom: "hola2", ane_apepat: "hola2", ane_apemat: "hola2", ane_id: 2 },
+  // ];
+
+  // const serviceOption2 = [
+  //   { ane_nom: "hola3", ane_apepat: "hola3", ane_apemat: "hola3", ane_id: 3 },
+  //   { ane_nom: "hola4", ane_apepat: "hola4", ane_apemat: "hola4", ane_id: 4 },
+  // ];
 
   const filter = createFilterOptions();
 
@@ -64,65 +66,60 @@ export default function CitasCalendarToolbar() {
     }
 
     if (typeof inputValue === "string" && inputValue !== "") {
-      const response = await axios.post(`/api/servicio-buscar/${inputValue}`);
-      setCuentaEOptions(response.data);
+      const response = await axios.post(`/api/buscar_servicios/${inputValue}`);
+      setServiceOption(response.data);
     } else {
-      setValue(inputValue);
-      setCuentaEOptions([]);
+      // setValue(inputValue);
+      setServiceOption([]);
     }
   };
 
   const handleSearchStylist = async (inputValue, setCuentaEOptions) => {
-    console.log(inputValue);
     if (inputValue === undefined) {
       inputValue = "";
     }
 
     if (typeof inputValue === "string" && inputValue !== "") {
-      const response = await axios.get(`/api/buscar_estilistas`, {
-        params: {
-          search: inputValue,
-        },
+      const response = await axios.post(`/api/buscar_estilistas`, {
+        Nombr_Est: inputValue,
       });
       setStylistOption(response.data);
     } else {
-      setValue(inputValue);
+      // setValue(inputValue);
       setStylistOption([]);
     }
   };
 
-  const buscarCliente = async (nombre) => {
-    try {
-      const response = await axios.post(`/api/cliente-buscar/${nombre}`);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      throw error;
-    }
-  };
+  // const buscarCliente = async (nombre) => {
+  //   try {
+  //     const response = await axios.post(`/api/cliente-buscar/${nombre}`);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     throw error;
+  //   }
+  // };
 
-  const ApiBuscarCliente = async (nombre) => {
-    if (!nombre) {
-      setCliOption([]);
-      return;
-    }
+  // const ApiBuscarCliente = async (nombre) => {
+  //   if (!nombre) {
+  //     setCliOption([]);
+  //     return;
+  //   }
 
-    try {
-      const response = await buscarCliente(nombre);
-      if (response !== undefined) {
-        setCliOption(response);
-        if (response.length > 0 && nombre === response[0].ane_nom) {
-          setValue("cliente", response[0], { shouldValidate: true });
-        } else {
-          setValue("cliente", "", { shouldValidate: true });
-        }
-      }
-    } catch (error) {
-      console.error("Validation errors:", error);
-    }
-  };
-
-  const [dateValue, setDateValue] = useState(new Date());
+  //   try {
+  //     const response = await buscarCliente(nombre);
+  //     if (response !== undefined) {
+  //       setCliOption(response);
+  //       if (response.length > 0 && nombre === response[0].ane_nom) {
+  //         setValue("cliente", response[0], { shouldValidate: true });
+  //       } else {
+  //         setValue("cliente", "", { shouldValidate: true });
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Validation errors:", error);
+  //   }
+  // };
 
   return (
     <FormProvider methods={methods}>
@@ -141,12 +138,12 @@ export default function CitasCalendarToolbar() {
           clearOnBlur
           handleHomeEndKeys
           size="small"
-          options={stylistOption2}
+          options={stylistOption}
           sx={{ m: 1, width: "-webkit-fill-available" }}
           isOptionEqualToValue={(option, value) =>
             option.ane_id === value.ane_id
           }
-          handleAutoGetOptions={handleSearchStylist}
+          handleAutoGetOptions={handleSearchService}
           renderOption={(props, option) => (
             <li {...props}>
               {option.ane_nom}
@@ -156,7 +153,7 @@ export default function CitasCalendarToolbar() {
           )}
           getOptionLabel={(option) => option.ane_nom}
           onChange={(event, newInputValue) => {
-            // setValue("estilista", event.target.value);
+            setValue("estilista", event.target.value);
             const values = getValues();
             setFilterToolbar(dispatch, values);
           }}
@@ -205,28 +202,25 @@ export default function CitasCalendarToolbar() {
           clearOnBlur
           handleHomeEndKeys
           size="small"
-          options={stylistOption2}
+          options={stylistOption}
           sx={{ m: 1, width: "-webkit-fill-available" }}
           isOptionEqualToValue={(option, value) =>
-            option.ane_id === value.ane_id
+            option.EstilistaID === value.EstilistaID
           }
           handleAutoGetOptions={handleSearchStylist}
           renderOption={(props, option) => (
             <li {...props}>
-              {option.ane_nom}
+              {option.Nombr_Est}
               {/* {option.ane_apepat}
               {option.ane_apemat}{" "} */}
             </li>
           )}
-          getOptionLabel={(option) => option.ane_nom}
+          getOptionLabel={(option) => option.Nombr_Est}
           onChange={(event, newInputValue) => {
             // setValue("estilista", event.target.value);
             const values = getValues();
             setFilterToolbar(dispatch, values);
           }}
-          // onInputChange={(event, newInputValue) => {
-          //   handleSearchStylist(newInputValue, setStylistOption);
-          // }}
         />
       </Box>
     </FormProvider>

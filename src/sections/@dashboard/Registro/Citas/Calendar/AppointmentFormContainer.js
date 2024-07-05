@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { TextField, MenuItem, IconButton } from "@mui/material";
+import { TextField, MenuItem, IconButton, Autocomplete } from "@mui/material";
 import Button from "@mui/material/Button";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -17,6 +17,10 @@ import {
 import { AppointmentForm } from "@devexpress/dx-react-scheduler-material-ui";
 import { StyledDiv, classes } from "./StyledComponents";
 
+import axios from "../../../../../utils/axios";
+
+import { useCitasContext } from "../Context/CitasContextPage";
+
 const AppointmentFormContainer = ({
   appointmentData,
   commitChanges,
@@ -28,17 +32,23 @@ const AppointmentFormContainer = ({
 }) => {
   const [appointmentChanges, setAppointmentChanges] = useState({});
 
+  const { state, dispatch } = useCitasContext();
+
+  const { infoToolbar } = state;
+
   // useEffect(() => {
   //   console.log(appointmentChanges);
   // }, [appointmentChanges]);
 
-  const estylist = [
-    { id: 1, name: "Andrew Glover" },
-    { id: 2, name: "Arnie Schwartz" },
-    { id: 3, name: "John Heart" },
-    { id: 4, name: "Taylor Riley" },
-    { id: 5, name: "Brad Farkus" },
-  ];
+  const [stilistOption, setStylistOption] = useState([]);
+
+  // const estylist = [
+  //   { id: 1, name: "Andrew Glover" },
+  //   { id: 2, name: "Arnie Schwartz" },
+  //   { id: 3, name: "John Heart" },
+  //   { id: 4, name: "Taylor Riley" },
+  //   { id: 5, name: "Brad Farkus" },
+  // ];
 
   const services = [
     { id: 1, name: "Blow Dry" },
@@ -76,10 +86,8 @@ const AppointmentFormContainer = ({
   const commitAppointment = (type) => {
     const getAppointmentMod = {
       ...getAppointmentChanges(),
-      servicio:
-        typeof getAppointmentChanges().servicio === "string"
-          ? JSON.parse(getAppointmentChanges().servicio)
-          : getAppointmentChanges().servicio,
+      cliente: infoToolbar.cliente,
+
       estilista:
         typeof getAppointmentChanges().estilista === "string"
           ? JSON.parse(getAppointmentChanges().estilista)
@@ -124,6 +132,23 @@ const AppointmentFormContainer = ({
     size: "small",
   });
 
+  const autocompleteEditorProps = (field) => ({
+    value: displayAppointmentData[field],
+    onChange: (event, newValue) =>
+      changeAppointment({
+        field: [field],
+        changes: newValue,
+      }),
+    renderInput: (params) => (
+      <TextField
+        {...params}
+        label={field[0].toUpperCase() + field.slice(1)}
+        placeholder=""
+        {...textEditorProps(field)}
+      />
+    ),
+  });
+
   const pickerEditorProps = (field) => ({
     value: displayAppointmentData[field],
     onChange: (date) =>
@@ -143,6 +168,29 @@ const AppointmentFormContainer = ({
     setAppointmentChanges({});
     visibleChange();
     cancelAppointment();
+  };
+
+  const handleSearchStylist = async () => {
+    console.log(getAppointmentData());
+    try {
+      const valuesSearch = getAppointmentData();
+      const cita_dominio = await axios.get(`/api/cita_dominio`);
+      const listaEst = await axios.get(`/api/estilistas`);
+      const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
+        FechaInicio: valuesSearch.endDate,
+        FechaFin: valuesSearch.startDate,
+      });
+      const listaEstFiltrada = listaEst.data.filter(
+        (estilista) =>
+          !busquedaEst.data.some((busqEst) => busqEst.EstilistaID === estilista.EstilistaID)
+      );
+      console.log(listaEstFiltrada);
+
+      setStylistOption(listaEstFiltrada);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
   };
 
   return (
@@ -170,7 +218,7 @@ const AppointmentFormContainer = ({
               </div>
               <div className={classes.wrapper}>
                 <LocationOn className={classes.icon} color="action" />
-                <TextField {...textEditorProps("servicio")} select>
+                {/* <TextField {...textEditorProps("servicio")} select >
                   {services.map((option) => (
                     <MenuItem
                       key={option.name}
@@ -182,12 +230,25 @@ const AppointmentFormContainer = ({
                       {option.name}
                     </MenuItem>
                   ))}
-                </TextField>
+                </TextField> */}
+                <Autocomplete
+                  multiple
+                  fullWidth
+                  id="tags-outlined"
+                  options={services}
+                  getOptionLabel={(option) => option?.name}
+                  {...autocompleteEditorProps("servicio")}
+                  defaultValue={[services[0]]}
+                  filterSelectedOptions
+                  renderInput={(params) => (
+                    <TextField {...params} label="Servicios" placeholder="" />
+                  )}
+                />
               </div>
               <div className={classes.wrapper}>
                 <Create className={classes.icon} color="action" />
                 <TextField {...textEditorProps("estilista")} select>
-                  {estylist.map((option) => (
+                  {stilistOption.map((option) => (
                     <MenuItem
                       key={option.name}
                       value={JSON.stringify({
@@ -207,7 +268,13 @@ const AppointmentFormContainer = ({
                   <DateTimePicker
                     label="Start Date"
                     renderInput={(props) => (
-                      <TextField {...props} className={classes.picker} />
+                      <TextField
+                        {...props}
+                        className={classes.picker}
+                        onChange={(date) => {
+                          handleSearchStylist();
+                        }}
+                      />
                     )}
                     {...startDatePickerProps}
                   />

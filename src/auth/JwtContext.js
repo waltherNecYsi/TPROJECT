@@ -255,7 +255,7 @@ const AuthProvider = ({ children }) => {
 
   // REGISTER
 
-  const register = useCallback(async (email, password, name) => {
+  const register = useCallback(async (email, password, name , DNI) => {
     try {
       const { data, error, isLoading } = await fetcher(
         `http://${HOST_API_KEY}/api/register`,
@@ -263,6 +263,7 @@ const AuthProvider = ({ children }) => {
           email,
           password,
           name,
+          DNI,
         }
       );
 

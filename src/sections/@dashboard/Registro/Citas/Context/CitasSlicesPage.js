@@ -34,8 +34,8 @@ export function infoToolbarReducer(state, action) {
   switch (action.type) {
     case "setInfoToolbar": {
       console.log(action.payload);
-      const { cliente, servicios, tiempo, estilistas } = action.payload;
-      return { ...state, cliente, servicios, tiempo, estilistas };
+      const { cliente, servicios, tiempo, estilista } = action.payload;
+      return { ...state, cliente, servicios, tiempo, estilista };
     }
     default:
       return state;
