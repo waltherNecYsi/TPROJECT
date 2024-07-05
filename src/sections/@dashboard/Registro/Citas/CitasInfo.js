@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box , Dialog, DialogContent } from "@mui/material";
+import { Box, Dialog, DialogContent } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import FormProvider, {
@@ -11,13 +11,26 @@ import FormProvider, {
 import useResponsive from "../../../../hooks/useResponsive";
 import axios from "../../../../utils/axios";
 import CliTableForm from "../Clientes/CliTableForm";
+import { useCitasContext } from "./Context/CitasContextPage";
+import { setInfoToolbar } from "./Context/CitasActionspage";
 
 export default function CitasInfo() {
+  const { state, dispatch } = useCitasContext();
+
+  const { infoToolbar } = state;
+
+  console.log(infoToolbar);
+
   const defaultValues = {
-    cliente: "",
+    cliente: infoToolbar.cliente ?? null,
+    servicios: infoToolbar.servicios ?? [],
+    fechas: infoToolbar.tiempo ?? '',
+    estilistas:  infoToolbar.estilistas ?? '',
   };
   const upMd = useResponsive("up", "md");
   const methods = useForm({ defaultValues });
+
+
 
   const {
     watch,
@@ -25,11 +38,17 @@ export default function CitasInfo() {
     control,
     setValue,
     handleSubmit,
+    getValues,
     formState: { isSubmitting },
   } = methods;
 
   const [cliOption, setCliOption] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+
+  const clienteOption2 = [
+    { ane_nom: "hola", ane_apepat: "hola", ane_apemat: "hola", ane_id: 1 },
+    { ane_nom: "hola2", ane_apepat: "hola2", ane_apemat: "hola2", ane_id: 2 },
+  ];
 
   const filter = createFilterOptions();
 
@@ -85,8 +104,9 @@ export default function CitasInfo() {
           clearOnBlur
           handleHomeEndKeys
           size="small"
-          options={cliOption}
           sx={{ m: 1, width: "-webkit-fill-available" }}
+          // options={cliOption}
+          options={clienteOption2}
           isOptionEqualToValue={(option, value) =>
             option.ane_id === value.ane_id
           }
@@ -94,26 +114,18 @@ export default function CitasInfo() {
           renderOption={(props, option) => (
             <li {...props}>
               {option.ane_nom}
-              {option.ane_apepat}
-              {option.ane_apemat}{" "}
+              {/* {option.ane_apepat}
+              {option.ane_apemat}{" "} */}
             </li>
           )}
-          getOptionLabel={(option) => {
-            if (typeof option === "string") {
-              return option;
-            }
-            if (option.ane_apepat === null && option.ane_apemat === null) {
-              return option.ane_nom;
-            }
-            return `${option.ane_nom} ${option.ane_apepat} ${option.ane_apemat}`;
-          }}
+          getOptionLabel={(option) => option.ane_nom}
           filterOptions={(options, params) => {
-            const filtered = filter(cliOption, params);
+            const filtered = filter(clienteOption2, params);
             const { inputValue } = params;
-            const isExisting = cliOption.some(
+            const isExisting = clienteOption2.some(
               (option) => inputValue === option.ane_nom
             );
-            const isExistingA = cliOption.some(
+            const isExistingA = clienteOption2.some(
               (option) => option.ane_id === "a"
             );
             if (!isExistingA && !isExisting) {
@@ -127,6 +139,10 @@ export default function CitasInfo() {
             return filtered;
           }}
           onChange={(event, value) => {
+            if (value && value.ane_id !== "a") {
+              const values = getValues();
+              setInfoToolbar(dispatch, values);
+            }
             if (value && value.ane_id === "a") {
               setOpenModal(true);
               console.log("agregar");

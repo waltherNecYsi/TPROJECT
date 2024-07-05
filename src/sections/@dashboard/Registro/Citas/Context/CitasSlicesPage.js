@@ -7,9 +7,9 @@ export const IVCitas = {
     estilista: {},
   },
   infoToolbar: {
-    cliente: {},
+    cliente: null,
     servicios: [],
-    tiempo: {},
+    tiempo: '',
     estilista: {},
   },
   cita: {},
@@ -32,28 +32,11 @@ export function filterToolbarReducer(state, action) {
 
 export function infoToolbarReducer(state, action) {
   switch (action.type) {
-    // case "CalculoOperaciones": {
-    //   const {
-    //     TotalAfect,
-    //     getTotalProdNoAfect,
-    //     getTotalProdISC,
-    //     TotalIGV,
-    //     TotalOpe,
-    //     ven_per,
-    //   } = action.payload;
-
-    //   return {
-    //     ...state,
-    //     TotalAfect,
-    //     ven_per,
-    //     getTotalProdNoAfect,
-    //     getTotalProdISC,
-    //     TotalIGV,
-    //     TotalOpe,
-    //   };
-    // }
-    // case "resetValues":
-    //   return ISProducts.calcOperaciones;
+    case "setInfoToolbar": {
+      console.log(action.payload);
+      const { cliente, servicios, tiempo, estilistas } = action.payload;
+      return { ...state, cliente, servicios, tiempo, estilistas };
+    }
     default:
       return state;
   }

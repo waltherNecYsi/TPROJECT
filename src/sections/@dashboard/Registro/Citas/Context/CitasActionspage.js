@@ -1,14 +1,23 @@
 // Products TableD
 
 export const setFilterToolbar = (dispatch, payload) => {
-    const action = {
-      type: 'setFilterToolbar',
-      payload,
-    };
-    console.log(payload)
-    dispatch(action);
+  const action = {
+    type: "setFilterToolbar",
+    payload,
   };
-  
+  console.log(payload);
+  dispatch(action);
+};
+
+export const setInfoToolbar = (dispatch, payload) => {
+  const action = {
+    type: "setInfoToolbar",
+    payload,
+  };
+  console.log(payload);
+  dispatch(action);
+};
+
 //   export const changeProduct = (dispatch, payload, index) => {
 //     const action = {
 //       type: 'changeProduct',
@@ -17,7 +26,7 @@ export const setFilterToolbar = (dispatch, payload) => {
 //     };
 //     dispatch(action);
 //   };
-  
+
 //   export const deleteProduct = (dispatch, index) => {
 //     const action = {
 //       type: 'deleteProduct',
@@ -25,7 +34,7 @@ export const setFilterToolbar = (dispatch, payload) => {
 //     };
 //     dispatch(action);
 //   };
-  
+
 //   export const CalculoOperaciones = (dispatch, payload) => {
 //     const action = {
 //       type: 'CalculoOperaciones',
@@ -33,7 +42,7 @@ export const setFilterToolbar = (dispatch, payload) => {
 //     };
 //     dispatch(action);
 //   };
-  
+
 //   export const updateUsuarioOpe = (dispatch, payload) => {
 //     const action = {
 //       type: 'updateUsuarioOpe',
@@ -41,7 +50,7 @@ export const setFilterToolbar = (dispatch, payload) => {
 //     };
 //     dispatch(action);
 //   };
-  
+
 //   export const updatePago = (dispatch, payload) => {
 //     const action = {
 //       type: 'updatePago',
@@ -49,7 +58,7 @@ export const setFilterToolbar = (dispatch, payload) => {
 //     };
 //     dispatch(action);
 //   };
-  
+
 //   export const resetValues = (dispatch, payload) => {
 //     console.log('hola');
 //     const action = {
@@ -57,4 +66,3 @@ export const setFilterToolbar = (dispatch, payload) => {
 //     };
 //     dispatch(action);
 //   };
-  
