@@ -50,13 +50,5 @@ ButtonModalNubefa.propTypes = {
   isEdit: PropTypes.bool,
 };
 
-ButtonModalNubefa.defaultProps = {
-  rowId: null,
-  modal1Inputs: [],
-  modal1Request: () => {},
-  modal2Inputs: [],
-  modal2Request: () => {},
-  isEdit: false,
-};
 
 export default ButtonModalNubefa;

@@ -25,12 +25,7 @@ import axios from "../../../utils/axios";
 import { PATH_DASHBOARD } from "../../../routes/paths";
 // utils
 import { fTimestamp } from "../../../utils/formatTime";
-// import { tenantUrl } from '../../../auth/TenantUtils';
 
-// _mock_
-
-// import { _invoices } from '../../_mock/arrays';
-// components
 import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
 import Scrollbar from "../../../components/scrollbar";
@@ -51,10 +46,6 @@ import {
 import useResponsive from "../../../hooks/useResponsive";
 
 import {
-  CitasTableRow,
-  CitasTableToolbar,
-  CitasTableButtom,
-  CitasTableEdit,
   CitasInfo,
   CitasCalendar,
   CitasCalendarToolbar,

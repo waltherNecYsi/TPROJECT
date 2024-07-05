@@ -1,6 +1,9 @@
-import React from "react";
-
-import { ViewState, EditingState , Resources } from "@devexpress/dx-react-scheduler";
+import React, { useState } from "react";
+import {
+  ViewState,
+  EditingState,
+  Resources,
+} from "@devexpress/dx-react-scheduler";
 import {
   Scheduler,
   Toolbar,
@@ -20,248 +23,234 @@ import {
 import { connectProps } from "@devexpress/dx-react-core";
 import {
   Paper,
-  styled,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Button,
-  Fab,
 } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 
 import { appointments } from "../demo-data/appointments";
-import { AppointmentFormContainer } from "./AppointmentFormContainer";
+import AppointmentFormContainer from "./AppointmentFormContainer";
 import { StyledFab, classes } from "./StyledComponents";
+import Content from "./CustomAptTooltip";
 
-const estilistas = [
+const estilista = [
   { id: 1, text: "Andrew Glover" },
   { id: 2, text: "Arnie Schwartz" },
   { id: 3, text: "John Heart" },
   { id: 4, text: "Taylor Riley" },
   { id: 5, text: "Brad Farkus" },
-]
+];
 
-export default class CitasCalendarV2 extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: appointments,
-      currentDate: new Date(),
-      confirmationVisible: false,
-      editingFormVisible: false,
-      deletedAppointmentId: undefined,
-      editingAppointment: undefined,
-      previousAppointment: undefined,
-      addedAppointment: {},
-      startDayHour: 7,
-      endDayHour: 20,
-      isNewAppointment: false,
-      resources: [
-        {
-          fieldName: "estilistas",
-          title: "Estilistas",
-          allowMultiple: true,
-          instances: estilistas,
-        },
-      ],
-    };
+const CitasCalendarV2 = () => {
+  const [data, setData] = useState(appointments);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [confirmationVisible, setConfirmationVisible] = useState(false);
+  const [editingFormVisible, setEditingFormVisible] = useState(false);
+  const [deletedAppointmentId, setDeletedAppointmentId] = useState(undefined);
+  const [editingAppointments, setEditingAppointments] = useState(undefined);
+  const [previousAppointment, setPreviousAppointment] = useState(undefined);
+  const [addedAppointments, setAddedAppointments] = useState({});
+  const [startDayHour] = useState(7);
+  const [endDayHour] = useState(20);
+  const [isNewAppointment, setIsNewAppointment] = useState(false);
+  // const [resources] = useState([
+  //   {
+  //     fieldName: "estilista",
+  //     title: "Estilista",
+  //     // allowMultiple: true,
+  //     instances: estilista,
+  //   },
+  // ]);
 
-    this.toggleConfirmationVisible = this.toggleConfirmationVisible.bind(this);
-    this.commitDeletedAppointment = this.commitDeletedAppointment.bind(this);
-    this.toggleEditingFormVisibility =
-      this.toggleEditingFormVisibility.bind(this);
-    this.commitChanges = this.commitChanges.bind(this);
-    this.onEditingAppointmentChange =
-      this.onEditingAppointmentChange.bind(this);
-    this.onAddedAppointmentChange = this.onAddedAppointmentChange.bind(this);
-    this.appointmentForm = connectProps(AppointmentFormContainer, () => {
-      const {
-        editingFormVisible,
-        editingAppointment,
-        data,
-        addedAppointment,
-        isNewAppointment,
-        previousAppointment,
-      } = this.state;
-      const currentAppointment =
-        data.filter(
-          (appointment) =>
-            editingAppointment && appointment.id === editingAppointment.id
-        )[0] || addedAppointment;
-      const cancelAppointment = () => {
-        if (isNewAppointment) {
-          this.setState({
-            editingAppointment: previousAppointment,
-            isNewAppointment: false,
-          });
-        }
-      };
+  const toggleConfirmationVisible = () => {
+    setConfirmationVisible((prev) => !prev);
+  };
 
-      return {
-        visible: editingFormVisible,
-        appointmentData: currentAppointment,
-        commitChanges: this.commitChanges,
-        visibleChange: this.toggleEditingFormVisibility,
-        onEditingAppointmentChange: this.onEditingAppointmentChange,
-        cancelAppointment,
-      };
-    });
-  }
-
-  componentDidUpdate() {
-    this.appointmentForm.update();
-  }
-
-  onEditingAppointmentChange(editingAppointment) {
-    this.setState({ editingAppointment });
-  }
-
-  onAddedAppointmentChange(addedAppointment) {
-    this.setState({ addedAppointment });
-    const { editingAppointment } = this.state;
-    if (editingAppointment !== undefined) {
-      this.setState({ previousAppointment: editingAppointment });
-    }
-    this.setState({ editingAppointment: undefined, isNewAppointment: true });
-  }
-
-  setDeletedAppointmentId(id) {
-    this.setState({ deletedAppointmentId: id });
-  }
-
-  toggleEditingFormVisibility() {
-    const { editingFormVisible } = this.state;
-    this.setState({ editingFormVisible: !editingFormVisible });
-  }
-
-  toggleConfirmationVisible() {
-    const { confirmationVisible } = this.state;
-    this.setState({ confirmationVisible: !confirmationVisible });
-  }
-
-  commitDeletedAppointment() {
-    this.setState((state) => {
-      const { data, deletedAppointmentId } = state;
-      const nextData = data.filter(
+  const commitDeletedAppointment = () => {
+    setData((state) => {
+      const nextData = state.filter(
         (appointment) => appointment.id !== deletedAppointmentId
       );
-      return { data: nextData, deletedAppointmentId: null };
+      return nextData;
     });
-    this.toggleConfirmationVisible();
-  }
+    toggleConfirmationVisible();
+  };
 
-  commitChanges({ added, changed, deleted }) {
-    this.setState((state) => {
-      let { data } = state;
+  const commitChanges = ({ added, changed, deleted }) => {
+    setData((state) => {
+      let updatedData = [...state];
       if (added) {
         const startingAddedId =
-          data.length > 0 ? data[data.length - 1].id + 1 : 0;
-        data = [...data, { id: startingAddedId, ...added }];
+          updatedData.length > 0
+            ? updatedData[updatedData.length - 1].id + 1
+            : 0;
+        updatedData.push({ id: startingAddedId, ...added });
+        console.log(updatedData)
+        console.log(startingAddedId)
       }
       if (changed) {
-        data = data.map((appointment) =>
+        updatedData = updatedData.map((appointment) =>
           changed[appointment.id]
             ? { ...appointment, ...changed[appointment.id] }
             : appointment
         );
       }
       if (deleted !== undefined) {
-        this.setDeletedAppointmentId(deleted);
-        this.toggleConfirmationVisible();
+        setDeletedAppointmentId(deleted);
+        toggleConfirmationVisible();
       }
-      return { data, addedAppointment: {} };
+      return updatedData;
     });
-  }
+    setAddedAppointments({});
+  };
 
-  render() {
-    const {
-      currentDate,
-      data,
-      confirmationVisible,
-      editingFormVisible,
-      startDayHour,
-      endDayHour,
-      resources,
-    } = this.state;
-    console.log(this.state);
+  const appointmentForm = connectProps(AppointmentFormContainer, () => {
+    const currentAppointment =
+      data.find(
+        (appointment) =>
+          editingAppointments && appointment.id === editingAppointments.id
+      ) || addedAppointments;
+      
+    const cancelAppointment = () => {
+      if (isNewAppointment) {
+        setEditingAppointments(previousAppointment);
+        setIsNewAppointment(false);
+      }
+    };
 
-    return (
-      <Paper>
-        <Scheduler data={data} height={660}>
-          <ViewState currentDate={currentDate} />
-          <EditingState
-            onCommitChanges={this.commitChanges}
-            onEditingAppointmentChange={this.onEditingAppointmentChange}
-            onAddedAppointmentChange={this.onAddedAppointmentChange}
-          />
-          <DayView startDayHour={startDayHour} endDayHour={endDayHour} />
-          <WeekView startDayHour={startDayHour} endDayHour={endDayHour} />
-          <MonthView />
-          <AllDayPanel />
-          <EditRecurrenceMenu />
-          <Appointments />
-          <AppointmentTooltip showOpenButton showCloseButton showDeleteButton />
-          <Resources
-              data={resources}
-              mainResourceName="Citas"
-              palette={["#009688", "#00695C", "#D32F2F", "#7B1FA2", "#8E24AA", "#EB8834", "#F57C00", "#FF9800", "#607D8B"]} 
-              // mainResourceName={mainResourceName}
-            />
-          <Toolbar />
-          <DateNavigator />
-          <TodayButton />
-          <ViewSwitcher />
-          <AppointmentForm
-            overlayComponent={this.appointmentForm}
-            visible={editingFormVisible}
-            onVisibilityChange={this.toggleEditingFormVisibility}
-          />
-          <DragDropProvider />
-        </Scheduler>
+    return {
+      visible: editingFormVisible,
+      appointmentData: currentAppointment,
+      commitChanges,
+      visibleChange: setEditingFormVisible,
+      onEditingAppointmentChange: setEditingAppointments,
+      cancelAppointment,
+    };
+  });
 
-        <Dialog open={confirmationVisible} onClose={this.cancelDelete}>
-          <DialogTitle>Delete Appointment</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Are you sure you want to delete this appointment?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={this.toggleConfirmationVisible}
-              color="primary"
-              variant="outlined"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={this.commitDeletedAppointment}
-              color="secondary"
-              variant="outlined"
-            >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
+  // Cuando se edita una cita, se guarda el objeto en estado
+  const handleEditingAppointmentChange = (editingAppointment) => {
+    setEditingAppointments(editingAppointment);
+  };
 
-        <StyledFab
-          color="secondary"
-          className={classes.addButton}
-          onClick={() => {
-            this.setState({ editingFormVisible: true });
-            this.onEditingAppointmentChange(undefined);
-            this.onAddedAppointmentChange({
-              startDate: new Date(currentDate).setHours(startDayHour),
-              endDate: new Date(currentDate).setHours(startDayHour + 1),
-            });
-          }}
-        >
-          <AddIcon />
-        </StyledFab>
-      </Paper>
-    );
-  }
-}
+
+  // Cuando se agrega una nueva cita, se guarda el nuevo objeto en estado
+  const handleAddedAppointmentChange = (addedAppointment) => {
+    console.log(addedAppointment)
+    setAddedAppointments(addedAppointment);
+    if (editingAppointments !== undefined) {
+      setPreviousAppointment(editingAppointments);
+    }
+    setEditingAppointments(undefined);
+    setIsNewAppointment(true);
+  };
+
+  // Cuando se borra una cita, se guarda el id de la cita en estado
+  const handleDeleteAppointment = () => {
+    setDeletedAppointmentId(deletedAppointmentId);
+    toggleConfirmationVisible();
+  };
+
+
+  // botton +
+  const handleAddAppointment = () => {
+    setEditingFormVisible(true);
+    setEditingAppointments(undefined);
+    setAddedAppointments({
+      startDate: new Date(currentDate).setHours(startDayHour),
+      endDate: new Date(currentDate).setHours(startDayHour + 1),
+    });
+  };
+
+  return (
+    <Paper>
+      <Scheduler data={data} height={660} >
+        <ViewState currentDate={currentDate} />
+        <EditingState
+          onCommitChanges={commitChanges}
+          onEditingAppointmentChange={handleEditingAppointmentChange}
+          onAddedAppointmentChange={handleAddedAppointmentChange}
+        />
+        <DayView startDayHour={startDayHour} endDayHour={endDayHour} />
+        <WeekView startDayHour={startDayHour} endDayHour={endDayHour} />
+        <MonthView />
+        <AllDayPanel />
+        <EditRecurrenceMenu />
+        <Appointments />
+        <AppointmentTooltip
+          showOpenButton
+          showCloseButton
+          showDeleteButton
+          contentComponent={Content}
+          // headerComponent={() => null}
+          // layoutComponent={() => null}
+        />
+        {/* <Resources
+          data={resources}
+          mainResourceName="estilista"
+          palette={[
+            "#009688",
+            "#00695C",
+            "#D32F2F",
+            "#7B1FA2",
+            "#8E24AA",
+            "#EB8834",
+            "#F57C00",
+            "#FF9800",
+            "#607D8B",
+          ]}
+        /> */}
+        <Toolbar />
+        <DateNavigator />
+        <TodayButton />
+        <ViewSwitcher />
+        <AppointmentForm
+          overlayComponent={appointmentForm}
+          visible={editingFormVisible}
+          onVisibilityChange={setEditingFormVisible}
+        />
+        <DragDropProvider />
+      </Scheduler>
+
+      <Dialog open={confirmationVisible} onClose={() => {}}>
+        <DialogTitle>Delete Appointment</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this appointment?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={toggleConfirmationVisible}
+            color="primary"
+            variant="outlined"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={commitDeletedAppointment}
+            color="secondary"
+            variant="outlined"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <StyledFab
+        color="secondary"
+        className={classes.addButton}
+        onClick={handleAddAppointment}
+      >
+        <AddIcon />
+      </StyledFab>
+    </Paper>
+  );
+};
+
+export default CitasCalendarV2;
