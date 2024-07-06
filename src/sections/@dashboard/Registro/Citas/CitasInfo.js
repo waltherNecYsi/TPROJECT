@@ -26,7 +26,7 @@ export default function CitasInfo() {
     servicios: infoToolbar?.servicios ?? [],
     fechas: infoToolbar?.tiempo ?? [],
     estilistas:
-      infoToolbar?.estilista?.map((estilistas) => estilistas.text) ?? "",
+      infoToolbar?.estilista?.map((estilistas) => estilistas?.text) ?? "",
   };
   const upMd = useResponsive("up", "md");
   const methods = useForm({ defaultValues });

@@ -92,31 +92,31 @@ export default function RegistroCitasPage() {
               name: "Citas",
             },
           ]}
-          action={
-            <Card
-              sx={{
-                gap: "15px",
-                display: "flex",
-                borderRadius: "0px",
-                flexDirection: isDesktop ? "row" : "column",
-              }}
-            >
-              <Button variant="contained" size="small " color="error">
-                <Iconify icon="material-symbols:close" />
-                {isDesktop ? "Cerrar" : ""}
-              </Button>
-              <LoadingButton
-                variant="contained"
-                // loading={isLoading}
-                loading={false}
-                size="small "
-                // onClick={ventasEnvio}
-              >
-                <Iconify icon="material-symbols:check" />
-                {isDesktop ? "Guardar" : ""}
-              </LoadingButton>
-            </Card>
-          }
+          // action={
+          //   <Card
+          //     sx={{
+          //       gap: "15px",
+          //       display: "flex",
+          //       borderRadius: "0px",
+          //       flexDirection: isDesktop ? "row" : "column",
+          //     }}
+          //   >
+          //     <Button variant="contained" size="small " color="error">
+          //       <Iconify icon="material-symbols:close" />
+          //       {isDesktop ? "Cerrar" : ""}
+          //     </Button>
+          //     <LoadingButton
+          //       variant="contained"
+          //       // loading={isLoading}
+          //       loading={false}
+          //       size="small "
+          //       // onClick={ventasEnvio}
+          //     >
+          //       <Iconify icon="material-symbols:check" />
+          //       {isDesktop ? "Guardar" : ""}
+          //     </LoadingButton>
+          //   </Card>
+          // }
         />
         <Card
           sx={{
@@ -126,11 +126,11 @@ export default function RegistroCitasPage() {
             flexDirection: "row",
           }}
         >
-          <Card sx={{ width: isDesktop ? "25%" : "100%" }}>
+          {/* <Card sx={{ width: isDesktop ? "25%" : "100%" }}>
             <CitasInfo />
-          </Card>
-          <Card sx={{ width: isDesktop ? "75%" : "100%" }}>
-            <CitasCalendarToolbar />
+          </Card> */}
+          <Card sx={{ width: isDesktop ? "100%" : "100%" }}>
+            {/* <CitasCalendarToolbar /> */}
             <CitasCalendarV2 />
           </Card>
         </Card>

@@ -61,9 +61,9 @@ export default function Router() {
     {
       path: "dashboard",
       element: (
-        // <GuestGuard>
+        <GuestGuard>
         <DashboardLayout />
-        // </GuestGuard>
+         </GuestGuard>
       ),
       children: [
         { path: "app", element: <GeneralBookingPage /> },

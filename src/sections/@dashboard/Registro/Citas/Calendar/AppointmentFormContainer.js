@@ -60,7 +60,7 @@ const AppointmentFormContainer = ({
 
   const getAppointmentData = () => appointmentData;
   const getAppointmentChanges = () => appointmentChanges;
-  const changeAppointment = ({ field, changes }) => {
+  const changeAppointment = async({ field, changes }) => {
     const nextChanges = {
       ...getAppointmentChanges(),
       [field]: changes,
@@ -78,15 +78,14 @@ const AppointmentFormContainer = ({
           : nextChanges.estilista,
     };
 
-    console.log(nextChanges);
 
     setAppointmentChanges(nextChanges);
   };
 
-  const commitAppointment = (type) => {
+  const commitAppointment = async(type) => {
     const getAppointmentMod = {
       ...getAppointmentChanges(),
-      cliente: infoToolbar.cliente,
+      cliente: infoToolbar?.cliente,
 
       estilista:
         typeof getAppointmentChanges().estilista === "string"
@@ -102,6 +101,12 @@ const AppointmentFormContainer = ({
       ...getAppointmentData(),
       ...getAppointmentMod,
     };
+
+    const sendAppointment = {
+      ...appointment,
+      ClienteID: appointment.cliente.ane_id,
+    }
+
     if (type === "deleted") {
       commitChanges({ [type]: appointment.id });
     } else if (type === "changed") {
@@ -250,14 +255,14 @@ const AppointmentFormContainer = ({
                 <TextField {...textEditorProps("estilista")} select>
                   {stilistOption.map((option) => (
                     <MenuItem
-                      key={option.name}
+                      key={option.EstilistaID}
                       value={JSON.stringify({
-                        id: option.id,
-                        text: option.name,
+                        id: option.EstilistaID,
+                        text: option.Nombr_Est,
                       })}
-                      inputvalue={option.name}
+                      inputvalue={option.Nombr_Est}
                     >
-                      {option.name}
+                      {option.Nombr_Est}
                     </MenuItem>
                   ))}
                 </TextField>
