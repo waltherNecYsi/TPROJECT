@@ -1,9 +1,8 @@
-import { motion , useScroll } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import { propTypes } from "prop-types";
 import { styled, alpha, useTheme } from "@mui/material/styles";
 import { textGradient, bgGradient } from "../../../utils/cssStyles";
-import { MotionContainer, varFade } from '../../../components/animate';
-
+import { MotionContainer, varFade } from "../../../components/animate";
 
 const StyledGradientText = styled(motion.h3)(({ theme }) => ({
   ...textGradient(
@@ -11,11 +10,11 @@ const StyledGradientText = styled(motion.h3)(({ theme }) => ({
   ),
   backgroundSize: "400%",
   fontFamily: "'Barlow', sans-serif",
-  fontSize: `2rem`,
+  fontSize: `1rem`,
   textAlign: "center",
   lineHeight: 1,
   padding: 0,
-  marginTop: 8,
+  // marginTop: 8,
   marginBottom: 24,
   letterSpacing: 8,
   fontWeight: 800,
@@ -28,17 +27,17 @@ const StyledGradientText = styled(motion.h3)(({ theme }) => ({
 export default function TitleGradient() {
   return (
     <motion.div variants={varFade().in}>
-    <StyledGradientText
-      animate={{ backgroundPosition: "200% center" }}
-      transition={{
-        repeatType: "reverse",
-        ease: "linear",
-        duration: 20,
-        repeat: Infinity,
-      }}
-    >
-      Bienvenido a SUKHA
-    </StyledGradientText>
+      <StyledGradientText
+        animate={{ backgroundPosition: "200% center" }}
+        transition={{
+          repeatType: "reverse",
+          ease: "linear",
+          duration: 20,
+          repeat: Infinity,
+        }}
+      >
+        Bienvenido a SUKHA
+      </StyledGradientText>
     </motion.div>
   );
 }

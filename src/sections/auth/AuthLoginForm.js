@@ -28,8 +28,8 @@ export default function AuthLoginForm() {
   });
 
   const defaultValues = {
-    email: '',
-    password: '',
+    email: 'prueba1@gmail.com',
+    password: 'prueba1',
   };
 
   const methods = useForm({
@@ -81,7 +81,7 @@ export default function AuthLoginForm() {
       </Stack>
 
       <Stack alignItems="flex-end" sx={{ my: 2 }}>
-        {/* <Link
+        <Link
           component={RouterLink}
           to={PATH_AUTH.resetPassword}
           variant="body2"
@@ -89,7 +89,7 @@ export default function AuthLoginForm() {
           underline="always"
         >
           Olvidaste tu contraseña?
-        </Link> */}
+        </Link>
       </Stack>
 
       <LoadingButton

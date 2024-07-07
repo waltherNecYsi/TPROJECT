@@ -136,12 +136,10 @@ export default function RegistroEstilistasPage() {
     const deleteRow = tableData.filter(
       (row) => row.EstilistaID !== id.EstilistaID
     );
-    setSelected([]);
+    // setSelected([]);
     try {
       const response = axios.delete(`/api/estilistas/${id.EstilistaID}`);
-      // if (page > 0 && dataInPage.length < 2) {
-      //   setPage(page - 1);
-      // }
+      fetchDataFromAPI();
       return response.data;
     } catch (error) {
       console.error("Error al realizar la solicitud DELETE:", error);
@@ -237,15 +235,21 @@ export default function RegistroEstilistasPage() {
 
   const fetchDataFromAPI = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/estilistas`);
-      if (response.data.length > 0) {
-        setTableData(response.data);
-      }
+      const response = await axios.get("/api/estilistas", {
+        params: {
+          page: page + 1,
+          fecha_inicio: filterStartDate,
+          fecha_final: filterEndDate,
+          nombre: filterName,
+        },
+      });
+      setTableData(response.data.data);
+      return response.data.data;
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
     }
-  }, []);
+  }, [page, filterStartDate, filterEndDate, filterName]);
 
   useEffect(() => {
     fetchDataFromAPI();
@@ -254,9 +258,9 @@ export default function RegistroEstilistasPage() {
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),
-    filterName,
-    filterStartDate,
-    filterEndDate,
+    // filterName,
+    // filterStartDate,
+    // filterEndDate,
   });
 
   const dataInPage = dataFiltered.slice(
@@ -341,7 +345,7 @@ export default function RegistroEstilistasPage() {
               }
               action={
                 <Stack direction="row">
-                  <Tooltip title="Sent">
+                  {/* <Tooltip title="Sent">
                     <IconButton color="primary">
                       <Iconify icon="ic:round-send" />
                     </IconButton>
@@ -357,7 +361,7 @@ export default function RegistroEstilistasPage() {
                     <IconButton color="primary">
                       <Iconify icon="eva:printer-fill" />
                     </IconButton>
-                  </Tooltip>
+                  </Tooltip> */}
 
                   <Tooltip title="Delete">
                     <IconButton color="primary" onClick={handleOpenConfirm}>

@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // @mui
-import { alpha, useTheme } from '@mui/material/styles';
+import { alpha, useTheme } from "@mui/material/styles";
 import {
   Box,
   Divider,
@@ -12,20 +12,20 @@ import {
   Tooltip,
   IconButton,
   Icon,
-} from '@mui/material';
+} from "@mui/material";
 // routes
-import { PATH_DASHBOARD, PATH_AUTH } from '../../../routes/paths';
+import { PATH_DASHBOARD, PATH_AUTH } from "../../../routes/paths";
 // auth
-import { useAuthContext } from '../../../auth/useAuthContext';
+import { useAuthContext } from "../../../auth/useAuthContext";
 // components
-import { CustomAvatar } from '../../../components/custom-avatar';
-import { useSnackbar } from '../../../components/snackbar';
-import MenuPopover from '../../../components/menu-popover';
-import { IconButtonAnimate } from '../../../components/animate';
-import { bgBlur } from '../../../utils/cssStyles';
-import { NAV } from '../../../config-global';
-import Scrollbar from '../../../components/scrollbar';
-import Iconify from '../../../components/iconify';
+import { CustomAvatar } from "../../../components/custom-avatar";
+import { useSnackbar } from "../../../components/snackbar";
+import MenuPopover from "../../../components/menu-popover";
+import { IconButtonAnimate } from "../../../components/animate";
+import { bgBlur } from "../../../utils/cssStyles";
+import { NAV } from "../../../config-global";
+import Scrollbar from "../../../components/scrollbar";
+import Iconify from "../../../components/iconify";
 
 // ----------------------------------------------------------------------
 
@@ -104,6 +104,14 @@ const PATH_PROFILE = PATH_DASHBOARD.root;
 
 const SPACING = 2.5;
 
+
+const OPTIONS = [
+  {
+    label: 'Inicio',
+    linkTo: PATH_DASHBOARD.root,
+  },
+];
+
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
@@ -114,14 +122,14 @@ export default function AccountPopover() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const [openPopover, setOpenPopover] = useState(false);
+  const [openPopover, setOpenPopover] = useState(null);
 
   const handleOpenPopover = (event) => {
-    setOpenPopover(true);
+    setOpenPopover(event.currentTarget);
   };
 
   const handleClosePopover = () => {
-    setOpenPopover(false);
+    setOpenPopover(null);
   };
 
   const handleLogout = async () => {
@@ -131,7 +139,7 @@ export default function AccountPopover() {
       handleClosePopover();
     } catch (error) {
       console.error(error);
-      enqueueSnackbar('Unable to logout!', { variant: 'error' });
+      enqueueSnackbar("Unable to logout!", { variant: "error" });
     }
   };
 
@@ -147,22 +155,31 @@ export default function AccountPopover() {
         sx={{
           p: 0,
           ...(openPopover && {
-            '&:before': {
+            "&:before": {
               zIndex: 1,
               content: "''",
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              position: 'absolute',
+              width: "100%",
+              height: "100%",
+              borderRadius: "50%",
+              position: "absolute",
               bgcolor: alpha(theme.palette.grey[900], 0.8),
             },
           }),
         }}
       >
-        <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
+        <CustomAvatar
+          src={user?.photoURL}
+          alt={user?.displayName}
+          name={user?.displayName}
+        />
       </IconButtonAnimate>
 
-      <Drawer
+      <MenuPopover
+        open={openPopover}
+        onClose={handleClosePopover}
+        sx={{ width: 200, p: 0 }}
+      >
+        {/* <Drawer
         anchor="right"
         open={openPopover}
         onClose={handleClosePopover}
@@ -195,16 +212,18 @@ export default function AccountPopover() {
             fontSize: 14,
           },
         }}
-      >
+      > */}
         <Stack
           direction="row"
           alignItems="center"
           justifyContent="space-between"
-          sx={{ py: 2, pr: 1, pl: SPACING }}
+          sx={{ pt: 2, pb: 0, pr: 1, pl: SPACING }}
         >
           <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
             Settings
           </Typography>
+          <Divider sx={{ borderStyle: "dashed" }} />
+
 
           <IconButton onClick={handleClosePopover}>
             <Iconify icon="eva:close-fill" />
@@ -215,13 +234,40 @@ export default function AccountPopover() {
           {/* <Stack
             sx={{
               p: 1.5,
-              '.MuiMenuItem-root:hover': {
-                borderRadius: '6px',
+              ".MuiMenuItem-root:hover": {
+                borderRadius: "6px",
               },
-              color: 'text.secondary',
+              color: "text.secondary",
             }}
-          >
-            {SIDEBARNAV.map((seccion, index) => (
+          > */}
+            <Box sx={{ my: 1.5, px: 2.5 }}>
+              <Typography variant="subtitle2" noWrap>
+                {user?.name}
+              </Typography>
+
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary" }}
+                noWrap
+              >
+                {user?.role}
+              </Typography>
+            </Box>
+
+            <Divider sx={{ borderStyle: "dashed" }} />
+
+            <Stack sx={{ p: 1 }}>
+              {OPTIONS.map((option) => (
+                <MenuItem
+                  key={option.label}
+                  onClick={() => handleClickItem(option.linkTo)}
+                >
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Stack>
+
+            {/* {SIDEBARNAV.map((seccion, index) => (
               <Box key={index}>
                 {seccion.SECCION.map((item, key) => (
                   <MenuItem key={key} onClick={() => handleClickItem(item.linkTo)}>
@@ -233,13 +279,14 @@ export default function AccountPopover() {
                 ))}
                 <Divider />
               </Box>
-            ))}
+            ))} */}
             <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
               Cerrar Sesión
             </MenuItem>
-          </Stack> */}
+          {/* </Stack> */}
         </Scrollbar>
-      </Drawer>
+        {/* </Drawer> */}
+      </MenuPopover>
     </>
   );
 }

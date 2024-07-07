@@ -50,7 +50,6 @@ export default function ServiciosTableToolbar({
 
   const methods = useForm({ defaultValues });
 
-
   const {
     watch,
     reset,
@@ -60,130 +59,102 @@ export default function ServiciosTableToolbar({
     formState: { isSubmitting },
   } = methods;
 
-
   return (
     <FormProvider methods={methods}>
-    <Stack
-      spacing={2}
-      alignItems="center"
-      direction={{
-        xs: "column",
-        md: "row",
-      }}
-      sx={{ px: 2.5, py: 3 }}
-    >
-      {/* <TextField
-        fullWidth
-        select
-        label="Service type"
-        value={filterService}
-        onChange={onFilterService}
-        SelectProps={{
-          MenuProps: {
-            PaperProps: {
-              sx: { maxHeight: 220 },
-            },
-          },
+      <Stack
+        spacing={2}
+        alignItems="center"
+        direction={{
+          xs: "column",
+          md: "row",
         }}
-        sx={{
-          maxWidth: { md: INPUT_WIDTH },
-          textTransform: 'capitalize',
-        }}
+        sx={{ px: 2.5, py: 3 }}
       >
-        {optionsService.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            sx={{
-              mx: 1,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-            }}
+        <Controller
+          name="fecha_inicio"
+          control={control}
+          size="small"
+          render={({ field, fieldState: { error } }) => (
+            <DatePicker
+              {...field}
+              name="fecha_inicio"
+              label="Fecha Inicio"
+              inputFormat="dd/MM/yyyy"
+              size="small"
+              value={filterStartDate}
+              onChange={onFilterStartDate}
+              slotProps={{ textField: { size: "small" } }}
+              renderInput={(params) => (
+                <TextField
+                  size="small"
+                  fullWidth
+                  sx={{ m: 1, width: "-webkit-fill-available" }}
+                  {...params}
+                  error={!!error}
+                  helperText={error?.message}
+                />
+              )}
+            />
+          )}
+        />
+
+        <Controller
+          name="fecha_fin"
+          control={control}
+          size="small"
+          render={({ field, fieldState: { error } }) => (
+            <DatePicker
+              {...field}
+              name="fecha_fin"
+              label="Fecha Fin"
+              inputFormat="dd/MM/yyyy"
+              size="small"
+              value={filterEndDate}
+              onChange={onFilterEndDate}
+              slotProps={{ textField: { size: "small" } }}
+              renderInput={(params) => (
+                <TextField
+                  size="small"
+                  fullWidth
+                  sx={{ m: 1, width: "-webkit-fill-available" }}
+                  {...params}
+                  error={!!error}
+                  helperText={error?.message}
+                />
+              )}
+            />
+          )}
+        />
+
+        <TextField
+          fullWidth
+          value={filterName}
+          onChange={onFilterName}
+          placeholder="Busca por Nombre o Direccion..."
+          size="small"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Iconify
+                  icon="eva:search-fill"
+                  sx={{ color: "text.disabled" }}
+                />
+              </InputAdornment>
+            ),
+          }}
+        />
+
+        {isFiltered && (
+          <Button
+            color="error"
+            sx={{ flexShrink: 0 }}
+            onClick={onResetFilter}
+            startIcon={<Iconify icon="eva:trash-2-outline" />}
           >
-            {option}
-          </MenuItem>
-        ))}
-      </TextField> */}
-
-      <Controller
-        name="fecha_inicio"
-        control={control}
-        size="small"
-        render={({ field, fieldState: { error } }) => (
-          <DatePicker
-            {...field}
-            name="fecha_inicio"
-            label="Fecha Inicio"
-            inputFormat="dd/MM/yyyy"
-            size="small"
-            slotProps={{ textField: { size: "small" } }}
-            renderInput={(params) => (
-              <TextField
-                size="small"
-                fullWidth
-                sx={{ m: 1, width: "-webkit-fill-available" }}
-                {...params}
-                error={!!error}
-                helperText={error?.message}
-              />
-            )}
-          />
+            Clear
+          </Button>
         )}
-      />
-
-      <Controller
-        name="fecha_fin"
-        control={control}
-        size="small"
-        render={({ field, fieldState: { error } }) => (
-          <DatePicker
-            {...field}
-            name="fecha_fin"
-            label="Fecha Fin"
-            inputFormat="dd/MM/yyyy"
-            size="small"
-            slotProps={{ textField: { size: "small" } }}
-            renderInput={(params) => (
-              <TextField
-                size="small"
-                fullWidth
-                sx={{ m: 1, width: "-webkit-fill-available" }}
-                {...params}
-                error={!!error}
-                helperText={error?.message}
-              />
-            )}
-          />
-        )}
-      />
-
-      <TextField
-        fullWidth
-        value={filterName}
-        onChange={onFilterName}
-        placeholder="Busca por Nombre o Direccion..."
-        size="small"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Iconify icon="eva:search-fill" sx={{ color: "text.disabled" }} />
-            </InputAdornment>
-          ),
-        }}
-      />
-
-      {isFiltered && (
-        <Button
-          color="error"
-          sx={{ flexShrink: 0 }}
-          onClick={onResetFilter}
-          startIcon={<Iconify icon="eva:trash-2-outline" />}
-        >
-          Clear
-        </Button>
-      )}
-    </Stack>
+      </Stack>
     </FormProvider>
   );
 }

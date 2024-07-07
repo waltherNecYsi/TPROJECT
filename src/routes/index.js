@@ -21,17 +21,18 @@ import {
   RegistroCitasPage,
   RegistroEstilistasPage,
   RegistroServiciosPage,
-
   ConsultaCitasPage,
 } from "./elements";
 
 export default function Router() {
   return useRoutes([
-
     {
       path: "*",
-      element: <Navigate to={PATH_AUTH.login} replace />,
-
+      element: (
+        <GuestGuard>
+          <Navigate to={PATH_AUTH.login} replace />,
+        </GuestGuard>
+      ),
     },
 
     // Auth
@@ -62,8 +63,8 @@ export default function Router() {
       path: "dashboard",
       element: (
         <GuestGuard>
-        <DashboardLayout />
-         </GuestGuard>
+          <DashboardLayout />
+        </GuestGuard>
       ),
       children: [
         { path: "app", element: <GeneralBookingPage /> },
@@ -83,11 +84,8 @@ export default function Router() {
         },
         {
           path: "consulta",
-          children: [
-            { path: "citas", element: <ConsultaCitasPage /> },
-          ],
-        }
-        
+          children: [{ path: "citas", element: <ConsultaCitasPage /> }],
+        },
       ],
     },
   ]);

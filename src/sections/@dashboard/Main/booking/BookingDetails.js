@@ -63,6 +63,7 @@ export default function BookingDetails({ title, subheader, tableLabels, tableDat
           size="small"
           color="inherit"
           endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
+          href='/dashboard/consulta/citas'
         >
           View All
         </Button>

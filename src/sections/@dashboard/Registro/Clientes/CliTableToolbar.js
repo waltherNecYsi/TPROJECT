@@ -84,6 +84,8 @@ export default function CliTableToolbar({
             label="Fecha Inicio"
             inputFormat="dd/MM/yyyy"
             size="small"
+            value={filterStartDate}
+            onChange={onFilterStartDate}
             slotProps={{ textField: { size: "small" } }}
             renderInput={(params) => (
               <TextField
@@ -110,6 +112,8 @@ export default function CliTableToolbar({
             label="Fecha Fin"
             inputFormat="dd/MM/yyyy"
             size="small"
+            value={filterEndDate}
+            onChange={onFilterEndDate}
             slotProps={{ textField: { size: "small" } }}
             renderInput={(params) => (
               <TextField

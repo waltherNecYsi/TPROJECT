@@ -62,6 +62,7 @@ const TABLE_HEAD = [
   { id: 2, label: "Descripcion", align: "left" },
   { id: 3, label: "Precio", align: "left" },
   { id: 4, label: "Duracion", align: "left" },
+  { id: 4, label: "Fecha de Registro", align: "left" },
   { id: "" },
 ];
 
@@ -132,7 +133,9 @@ export default function RegistroClientesPage() {
   };
 
   const handleDeleteRow = async (id) => {
-    const deleteRow = tableData.filter((row) => row.ServicioID !== id.ServicioID);
+    const deleteRow = tableData.filter(
+      (row) => row.ServicioID !== id.ServicioID
+    );
     setSelected([]);
     try {
       const response = axios.delete(`/api/servicio/${id.ServicioID}`);
@@ -140,6 +143,7 @@ export default function RegistroClientesPage() {
       //   setPage(page - 1);
       // }
       // return response.data;
+      fetchDataFromAPI();
     } catch (error) {
       console.error("Error al realizar la solicitud DELETE:", error);
       throw error;
@@ -210,7 +214,7 @@ export default function RegistroClientesPage() {
     return response.data;
   };
 
-  const handleOpenEditModal = async(id) => {
+  const handleOpenEditModal = async (id) => {
     console.log("Se seleccionó editar la fila con ID:", id.ServicioID);
     try {
       const response = await handleShowEditModal(id);
@@ -219,29 +223,36 @@ export default function RegistroClientesPage() {
     } catch (error) {
       setIsModalEditOpen(false);
     }
-
   };
 
   const fetchDataFromAPI = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/servicio`);
-      setTableData(response.data);
+      const response = await axios.get("/api/servicio", {
+        params: {
+          page: page + 1,
+          fecha_inicio: filterStartDate,
+          fecha_final: filterEndDate,
+          nombre: filterName,
+        },
+      });
+      setTableData(response.data.data);
+      return response.data.data;
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
     }
-  }, []);
+  }, [page, filterStartDate, filterEndDate, filterName]);
 
   useEffect(() => {
-    fetchDataFromAPI()
+    fetchDataFromAPI();
   }, [fetchDataFromAPI]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),
-    filterName,
-    filterStartDate,
-    filterEndDate,
+    // filterName,
+    // filterStartDate,
+    // filterEndDate,
   });
 
   const dataInPage = dataFiltered.slice(
@@ -326,7 +337,7 @@ export default function RegistroClientesPage() {
               }
               action={
                 <Stack direction="row">
-                  <Tooltip title="Sent">
+                  {/* <Tooltip title="Sent">
                     <IconButton color="primary">
                       <Iconify icon="ic:round-send" />
                     </IconButton>
@@ -342,7 +353,7 @@ export default function RegistroClientesPage() {
                     <IconButton color="primary">
                       <Iconify icon="eva:printer-fill" />
                     </IconButton>
-                  </Tooltip>
+                  </Tooltip> */}
 
                   <Tooltip title="Delete">
                     <IconButton color="primary" onClick={handleOpenConfirm}>
@@ -386,13 +397,7 @@ export default function RegistroClientesPage() {
                         onDeleteRow={() => handleDeleteRow(row)}
                       />
                     ))}
-                  <ServiciosTableEdit
-                    modal2Request={modal2Request}
-                    fetchDataFromAPI={fetchDataFromAPI}
-                    isModalOpen={isModalEditOpen}
-                    setIsModalOpen={setIsModalEditOpen}
-                    rowData={rowData}
-                  />
+
                   <TableEmptyRows
                     height={denseHeight}
                     emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
@@ -416,6 +421,14 @@ export default function RegistroClientesPage() {
           />
         </Card>
       </Container>
+
+      <ServiciosTableEdit
+        modal2Request={modal2Request}
+        fetchDataFromAPI={fetchDataFromAPI}
+        isModalOpen={isModalEditOpen}
+        setIsModalOpen={setIsModalEditOpen}
+        rowData={rowData}
+      />
 
       <ConfirmDialog
         open={openConfirm}

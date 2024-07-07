@@ -29,6 +29,8 @@ const AppointmentFormContainer = ({
   cancelAppointment,
   target,
   onHide,
+  IFoptions,
+  handleOpenModalCita,
 }) => {
   const [appointmentChanges, setAppointmentChanges] = useState({});
 
@@ -36,31 +38,31 @@ const AppointmentFormContainer = ({
 
   const { infoToolbar } = state;
 
-  // useEffect(() => {
-  //   console.log(appointmentChanges);
-  // }, [appointmentChanges]);
+  console.log(IFoptions);
 
-  const [stilistOption, setStylistOption] = useState([]);
+  const [stilistOption, setStylistOption] = useState(IFoptions);
 
-  // const estylist = [
-  //   { id: 1, name: "Andrew Glover" },
-  //   { id: 2, name: "Arnie Schwartz" },
-  //   { id: 3, name: "John Heart" },
-  //   { id: 4, name: "Taylor Riley" },
-  //   { id: 5, name: "Brad Farkus" },
-  // ];
+  const [services, setServices] = useState([]);
 
-  const services = [
-    { id: 1, name: "Blow Dry" },
-    { id: 2, name: "Haircuts" },
-    { id: 3, name: " Makeup" },
-    { id: 4, name: " Waxing" },
-    { id: 5, name: " Skincare" },
-  ];
+
+
+  useEffect(() => {
+    const getServices = async () => {
+      try {
+        const valuesSearch = infoToolbar?.cliente;
+        const servicesData = await axios.get(`/api/servicio`);
+        setServices(servicesData.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+      }
+    };
+    getServices();
+  }, [infoToolbar]);
 
   const getAppointmentData = () => appointmentData;
   const getAppointmentChanges = () => appointmentChanges;
-  const changeAppointment = async({ field, changes }) => {
+  const changeAppointment = async ({ field, changes }) => {
     const nextChanges = {
       ...getAppointmentChanges(),
       [field]: changes,
@@ -78,14 +80,25 @@ const AppointmentFormContainer = ({
           : nextChanges.estilista,
     };
 
-
     setAppointmentChanges(nextChanges);
   };
 
-  const commitAppointment = async(type) => {
+  const commitAppointment = async (type) => {
     const getAppointmentMod = {
       ...getAppointmentChanges(),
-      cliente: infoToolbar?.cliente,
+      // cliente: infoToolbar?.cliente,
+      cliente: {
+        "ClienteID": 1,
+        "Nomb_Clt": "dasdas",
+        "Apell_Clt": "dsdasdssa",
+        "Apell_Pater": "sdadasd",
+        "Telef_Clt": 23213123,
+        "Email_Clt": "siea39521@gmail.com",
+        "FechaReg_Clt": "2024-07-07",
+        "idEstado": 1,
+        "created_at": "2024-07-07 18:02:59",
+        "updated_at": null
+    },
 
       estilista:
         typeof getAppointmentChanges().estilista === "string"
@@ -102,9 +115,28 @@ const AppointmentFormContainer = ({
       ...getAppointmentMod,
     };
 
+    console.log(appointment);
+
+    const detalle = [];
+    const newAppointment = appointment.servicio.forEach((servicio) => {
+      const nuevoDetalle = {
+        FechaInicio: appointment.startDate,
+        FechaFin: appointment.endDate,
+        ServicioID: servicio.ServicioID,
+        EstilistaID: appointment.estilista.id,
+      };
+      detalle.push(nuevoDetalle);
+    });
+
     const sendAppointment = {
-      ...appointment,
-      ClienteID: appointment.cliente.ane_id,
+      detalle,
+      ClienteID: appointment.cliente.ClienteID,
+    };
+
+    const sendCita = await axios.post(`/api/cita`, sendAppointment);
+
+    if (sendCita.status === 200) {
+      handleOpenModalCita();
     }
 
     if (type === "deleted") {
@@ -126,13 +158,14 @@ const AppointmentFormContainer = ({
 
   const textEditorProps = (field) => ({
     variant: "outlined",
-    onChange: ({ target: change }) =>
+    onChange: (event) => {
       changeAppointment({
-        field: [field],
-        changes: change.value,
-      }),
+        field,
+        changes: event.target.value,
+      });
+    },
     value: displayAppointmentData[field] || "",
-    label: field[0].toUpperCase() + field.slice(1),
+    label: field.charAt(0).toUpperCase() + field.slice(1),
     className: classes.textField,
     size: "small",
   });
@@ -156,11 +189,13 @@ const AppointmentFormContainer = ({
 
   const pickerEditorProps = (field) => ({
     value: displayAppointmentData[field],
-    onChange: (date) =>
+    onChange: (date) => {
       changeAppointment({
-        field: [field],
+        field,
         changes: date ? date.toDate() : new Date(displayAppointmentData[field]),
-      }),
+      });
+      handleSearchStylist();
+    },
     ampm: false,
     inputFormat: "DD/MM/YYYY HH:mm",
     onError: () => null,
@@ -176,27 +211,21 @@ const AppointmentFormContainer = ({
   };
 
   const handleSearchStylist = async () => {
-    console.log(getAppointmentData());
     try {
       const valuesSearch = getAppointmentData();
-      const cita_dominio = await axios.get(`/api/cita_dominio`);
-      const listaEst = await axios.get(`/api/estilistas`);
+      // const cita_dominio = await axios.get(`/api/cita_dominio`);
       const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
-        FechaInicio: valuesSearch.endDate,
-        FechaFin: valuesSearch.startDate,
+        fecha_inicio: valuesSearch.endDate,
+        fecha_final: valuesSearch.startDate,
       });
-      const listaEstFiltrada = listaEst.data.filter(
-        (estilista) =>
-          !busquedaEst.data.some((busqEst) => busqEst.EstilistaID === estilista.EstilistaID)
-      );
-      console.log(listaEstFiltrada);
 
-      setStylistOption(listaEstFiltrada);
+      setStylistOption(busquedaEst.data);
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
     }
   };
+
 
   return (
     <StyledDiv>
@@ -223,27 +252,14 @@ const AppointmentFormContainer = ({
               </div>
               <div className={classes.wrapper}>
                 <LocationOn className={classes.icon} color="action" />
-                {/* <TextField {...textEditorProps("servicio")} select >
-                  {services.map((option) => (
-                    <MenuItem
-                      key={option.name}
-                      value={JSON.stringify({
-                        id: option.id,
-                        text: option.name,
-                      })}
-                    >
-                      {option.name}
-                    </MenuItem>
-                  ))}
-                </TextField> */}
                 <Autocomplete
                   multiple
                   fullWidth
                   id="tags-outlined"
-                  options={services}
-                  getOptionLabel={(option) => option?.name}
+                  options={services ?? []}
+                  getOptionLabel={(option) => option?.Nomb_Serv}
                   {...autocompleteEditorProps("servicio")}
-                  defaultValue={[services[0]]}
+                  // defaultValue={[services[0]]}
                   filterSelectedOptions
                   renderInput={(params) => (
                     <TextField {...params} label="Servicios" placeholder="" />
@@ -273,13 +289,7 @@ const AppointmentFormContainer = ({
                   <DateTimePicker
                     label="Start Date"
                     renderInput={(props) => (
-                      <TextField
-                        {...props}
-                        className={classes.picker}
-                        onChange={(date) => {
-                          handleSearchStylist();
-                        }}
-                      />
+                      <TextField {...props} className={classes.picker} />
                     )}
                     {...startDatePickerProps}
                   />
@@ -332,6 +342,7 @@ const AppointmentFormContainer = ({
         </StyledDiv>
       </AppointmentForm.Overlay>
     </StyledDiv>
+
   );
 };
 
@@ -343,6 +354,8 @@ AppointmentFormContainer.propTypes = {
   cancelAppointment: PropTypes.func.isRequired,
   target: PropTypes.any,
   onHide: PropTypes.func.isRequired,
+  handleOpenModalCita: PropTypes.func.isRequired,
+  IFoptions: PropTypes.array.isRequired,
 };
 
 export default AppointmentFormContainer;

@@ -64,22 +64,17 @@ export default function Header({ onOpenNav }) {
         flexGrow={1}
         direction="row"
         alignItems="center"
-        justifyContent="flex-end"
+        justifyContent="space-between"
         spacing={{ xs: 0.5, sm: 1.5 }}
       >
         {/* <NotificationsPopover /> */}
-
-        <TitleGradient />
-
-        <Box
-          sx={{ display: "flex", alignItems: "center", mr: "20%!important" }}
-        >
-          {/* <Typography variant="h2" color="#dfb326" sx={{ fontSize: '2rem!important' }}>
-            
-          </Typography> */}
-        </Box>
-        <NewDate />
-        <AccountPopover />
+        <Stack direction="row" width='-webkit-fill-available' justifyContent="center">
+          <TitleGradient />
+        </Stack>
+        <Stack direction="row" gap={1} alignItems="center">
+          <NewDate />
+          <AccountPopover />
+        </Stack>
       </Stack>
     </>
   );

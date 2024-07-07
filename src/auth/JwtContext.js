@@ -7,8 +7,9 @@ import {
   useMemo,
 } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { PATH_DASHBOARD, PATH_AUTH } from "../routes/paths";
-import useCustomSWR, { fetcher } from "./useCustomSWR";
+import useCustomSWR, { fetcher , fetchget } from "./useCustomSWR";
 import { HOST_API_KEY } from "../config-global";
 
 // utils
@@ -101,14 +102,13 @@ const AuthProvider = ({ children }) => {
           ? localStorage.getItem("accessToken")
           : "";
 
-        const tokenData = await fetcher(`http://${HOST_API_KEY}/api/token`, {
-          token: accessToken,
-        });
+        const tokenData = await fetchget(`http://${HOST_API_KEY}/api/verifyToken`, 
+          accessToken,
+        );
 
         const { token, user } = tokenData;
-        const empId = user?.empresa.id;
 
-        setSession(token, user, empId);
+        setSession(accessToken, user);
 
         dispatch({
           type: "INITIAL",
@@ -118,11 +118,9 @@ const AuthProvider = ({ children }) => {
             isEstablishment: establishmentId,
             user: {
               ...user,
-              displayName: user?.empresa.nombre,
-              empId: user?.empresa.id,
-              localId: user?.local.id,
-              photoURL: user?.empresa.imagen,
-              role: "admin",
+              displayName: user?.name ?? "Logan",
+              // photoURL: user?.empresa.imagen,
+              role: user?.rol ?? "estilista",
             },
           },
         });
@@ -202,11 +200,11 @@ const AuthProvider = ({ children }) => {
         payload: {
           user: {
             ...user,
-            displayName: user?.empresa?.nombre ?? "Logan",
+            displayName: user?.name ?? "Nombre",
             // empId: user.empresa.id,
             // localId: user.local.id,
             // photoURL: user?.empresa.imagen,
-            role: "admin",
+            role: user?.rol ?? "Rol",
           },
         },
       });

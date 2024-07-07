@@ -68,19 +68,26 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
       <NavSectionVertical data={navConfig} />
 
-      <Box sx={{ display:'flex' , justifyContent: 'flex-start' , overflow: 'hidden' }}>
       <Box
-        component="img"
-        alt="Nav_img.png"
-        src="/assets/illustrations/Nav_Img.png"
         sx={{
-          maskImage:
-            "linear-gradient(transparent,black 50% , black 50%, transparent)",
-          filter: "blur(1px)",
-          maxWidth: "80%",
-          mt: '20%',
+          display: "flex",
+          justifyContent: "flex-start",
+          overflow: "hidden",
         }}
-      />
+      >
+        <Box
+          component="img"
+          alt="Nav_img.png"
+          src="/assets/illustrations/Nav_Img.png"
+          sx={{
+            maskImage:
+              "linear-gradient(transparent,black 50% , black 50%, transparent)",
+            filter: "blur(1px)",
+            maxWidth: "80%",
+            mt: "20%",
+            userSelect: "none",
+          }}
+        />
       </Box>
 
       <Box sx={{ flexGrow: 1 }} />

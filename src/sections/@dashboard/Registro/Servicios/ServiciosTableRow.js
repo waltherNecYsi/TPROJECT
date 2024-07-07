@@ -44,7 +44,7 @@ export default function EstilistasTableRow({
   onEditRow,
   onDeleteRow,
 }) {
-  const { Nomb_Serv, Desc_Serv, Precio_Serv, DurMin_Serv } = row;
+  const { Nomb_Serv, Desc_Serv, Precio_Serv, DurMin_Serv , FechaReg_Serv } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -69,7 +69,7 @@ export default function EstilistasTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
+        <TableCell padding="checkbox" align="center">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
@@ -82,6 +82,8 @@ export default function EstilistasTableRow({
         <TableCell align="left">{Precio_Serv}</TableCell>
 
         <TableCell align="left">{DurMin_Serv}</TableCell>
+
+        <TableCell align="left">{FechaReg_Serv}</TableCell>
 
         <TableCell align="right">
           <IconButton

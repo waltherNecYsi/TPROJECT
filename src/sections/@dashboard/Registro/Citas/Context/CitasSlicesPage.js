@@ -16,8 +16,6 @@ export const IVCitas = {
   citaticket: {},
 };
 
-console.log(IVCitas);
-
 export function filterToolbarReducer(state, action) {
   switch (action.type) {
     case "setFilterToolbar": {

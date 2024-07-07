@@ -225,16 +225,28 @@ export default function RegistroClientesPage() {
     }
   };
 
+  useEffect(() => {
+     console.log(filterStartDate, filterEndDate);
+  }, [filterStartDate, filterEndDate]);
+
+
   const fetchDataFromAPI = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/cliente`);
-      setTableData(response.data);
-      return response.data;
+      const response = await axios.get("/api/cliente", {
+        params: {
+          page: page + 1,
+          fecha_inicio: filterStartDate,
+          fecha_final :filterEndDate,
+          nombre: filterName
+        },
+      });
+      setTableData(response.data.data);
+      return response.data.data;
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
     }
-  }, []);
+  }, [page , filterStartDate, filterEndDate , filterName]);
 
   useEffect(() => {
     fetchDataFromAPI()
@@ -250,9 +262,9 @@ export default function RegistroClientesPage() {
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(order, orderBy),
-    filterName,
-    filterStartDate,
-    filterEndDate,
+    // filterName,
+    // filterStartDate,
+    // filterEndDate,
   });
 
   const dataInPage = dataFiltered.slice(
@@ -337,7 +349,7 @@ export default function RegistroClientesPage() {
               }
               action={
                 <Stack direction="row">
-                  <Tooltip title="Sent">
+                  {/* <Tooltip title="Sent">
                     <IconButton color="primary">
                       <Iconify icon="ic:round-send" />
                     </IconButton>
@@ -353,7 +365,7 @@ export default function RegistroClientesPage() {
                     <IconButton color="primary">
                       <Iconify icon="eva:printer-fill" />
                     </IconButton>
-                  </Tooltip>
+                  </Tooltip> */}
 
                   <Tooltip title="Delete">
                     <IconButton color="primary" onClick={handleOpenConfirm}>

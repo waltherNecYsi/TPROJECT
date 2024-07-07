@@ -40,6 +40,11 @@ import Content from "./CustomAptTooltip";
 import { useCitasContext } from "../Context/CitasContextPage";
 import { setInfoToolbar } from "../Context/CitasActionspage";
 
+import axios from "../../../../../utils/axios";
+
+import ModalCita from "./ModalCita";
+
+
 const estilista = [
   { id: 1, text: "Andrew Glover" },
   { id: 2, text: "Arnie Schwartz" },
@@ -61,8 +66,10 @@ const CitasCalendarV2 = () => {
   const [endDayHour] = useState(20);
   const [isNewAppointment, setIsNewAppointment] = useState(false);
 
-  const { state, dispatch } = useCitasContext();
+  const [modalCitaOpen, setModalCitaOpen] = useState(false);
 
+
+  const { state, dispatch } = useCitasContext();
 
   // const [resources] = useState([
   //   {
@@ -72,6 +79,14 @@ const CitasCalendarV2 = () => {
   //     instances: estilista,
   //   },
   // ]);
+
+  const handleOpenModalCita = () => {
+    setModalCitaOpen(true);
+  };
+
+  const handleCloseModalCita = () => {
+    setModalCitaOpen(false);
+  };
 
   const toggleConfirmationVisible = () => {
     setConfirmationVisible((prev) => !prev);
@@ -90,7 +105,7 @@ const CitasCalendarV2 = () => {
   const commitChanges = ({ added, changed, deleted }) => {
     setData((states) => {
       let updatedData = [...states];
-      console.log(updatedData)
+      console.log(updatedData);
 
       if (added) {
         const startingAddedId =
@@ -100,13 +115,13 @@ const CitasCalendarV2 = () => {
         updatedData.push({ id: startingAddedId, ...added });
 
         const values = {
-          tiempo : updatedData.map(item => item.endDate),
-          estilista : updatedData.map(item => item.estilista),
-          servicios : updatedData.map(item => item.servicio),
-        }
-        console.log(values)
+          tiempo: updatedData.map((item) => item.endDate),
+          estilista: updatedData.map((item) => item.estilista),
+          servicios: updatedData.map((item) => item.servicio),
+        };
+        console.log(values);
         setInfoToolbar(dispatch, values);
-        console.log(startingAddedId)
+        console.log(startingAddedId);
       }
       if (changed) {
         updatedData = updatedData.map((appointment) =>
@@ -124,13 +139,15 @@ const CitasCalendarV2 = () => {
     setAddedAppointments({});
   };
 
+  const [IFoptions, setIFoptions] = useState([]);
+
   const appointmentForm = connectProps(AppointmentFormContainer, () => {
     const currentAppointment =
       data.find(
         (appointment) =>
           editingAppointments && appointment.id === editingAppointments.id
       ) || addedAppointments;
-      
+
     const cancelAppointment = () => {
       if (isNewAppointment) {
         setEditingAppointments(previousAppointment);
@@ -145,6 +162,8 @@ const CitasCalendarV2 = () => {
       visibleChange: setEditingFormVisible,
       onEditingAppointmentChange: setEditingAppointments,
       cancelAppointment,
+      IFoptions,
+      handleOpenModalCita,
     };
   });
 
@@ -153,10 +172,16 @@ const CitasCalendarV2 = () => {
     setEditingAppointments(editingAppointment);
   };
 
-
-  // Cuando se agrega una nueva cita, se guarda el nuevo objeto en estado
-  const handleAddedAppointmentChange = (addedAppointment) => {
-    console.log(addedAppointment)
+  const handleAddedAppointmentChange = async (addedAppointment) => {
+    if (addedAppointment !== undefined) {
+      console.log(addedAppointment);
+      const cita_dominio = await axios.get(`/api/cita_dominio`);
+      const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
+        fecha_inicio: addedAppointment.endDate,
+        fecha_final: addedAppointment.startDate,
+      });
+      setIFoptions(busquedaEst.data);
+    }
     setAddedAppointments(addedAppointment);
     if (editingAppointments !== undefined) {
       setPreviousAppointment(editingAppointments);
@@ -171,7 +196,6 @@ const CitasCalendarV2 = () => {
     toggleConfirmationVisible();
   };
 
-
   // botton +
   const handleAddAppointment = () => {
     setEditingFormVisible(true);
@@ -184,7 +208,7 @@ const CitasCalendarV2 = () => {
 
   return (
     <Paper>
-      <Scheduler data={data} height={660} >
+      <Scheduler data={data} height={660}>
         <ViewState currentDate={currentDate} />
         <EditingState
           onCommitChanges={commitChanges}
@@ -264,6 +288,8 @@ const CitasCalendarV2 = () => {
       >
         <AddIcon />
       </StyledFab>
+
+      <ModalCita open={modalCitaOpen} onClose={handleCloseModalCita} id_Cita={1} />
     </Paper>
   );
 };

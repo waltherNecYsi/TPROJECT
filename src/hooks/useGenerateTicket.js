@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef } from 'react';
-import axios from '../utils/axios';
-import generateTicket from '../utils/createTicket';
-import base64toBlob from '../utils/base64Blob';
-import { DataApiGet } from '../utils/connectApis';
+import { useCallback, useEffect, useRef } from "react";
+import axios from "../utils/axios";
+import generateTicket from "../utils/createTicket";
+import base64toBlob from "../utils/base64Blob";
+import { DataApiGet } from "../utils/connectApis";
 
 // TICKET API
 const useFetchTicket = (id_Venta) => {
@@ -12,6 +12,7 @@ const useFetchTicket = (id_Venta) => {
 };
 
 export const useGenerateTicket = (id_Venta) => {
+
   const { fetchTicket } = useFetchTicket(id_Venta);
 
   // GENERAR TICKET
@@ -23,10 +24,10 @@ export const useGenerateTicket = (id_Venta) => {
       return;
     }
 
-    if (output === 'b64') {
+    if (output === "b64") {
       const ticketBlob = base64toBlob(response?.content);
       const ticketUrl = URL.createObjectURL(ticketBlob);
-      window.open(ticketUrl, '_blank');
+      window.open(ticketUrl, "_blank");
     }
   };
 

@@ -72,40 +72,6 @@ export default function EstilistasTableToolbar({
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-      {/* <TextField
-        fullWidth
-        select
-        label="Service type"
-        value={filterService}
-        onChange={onFilterService}
-        SelectProps={{
-          MenuProps: {
-            PaperProps: {
-              sx: { maxHeight: 220 },
-            },
-          },
-        }}
-        sx={{
-          maxWidth: { md: INPUT_WIDTH },
-          textTransform: 'capitalize',
-        }}
-      >
-        {optionsService.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            sx={{
-              mx: 1,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-            }}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </TextField> */}
-
       <Controller
         name="fecha_inicio"
         control={control}
@@ -116,6 +82,8 @@ export default function EstilistasTableToolbar({
             name="fecha_inicio"
             label="Fecha Inicio"
             inputFormat="dd/MM/yyyy"
+            value={filterStartDate}
+            onChange={onFilterStartDate}
             size="small"
             slotProps={{ textField: { size: "small" } }}
             renderInput={(params) => (
@@ -143,6 +111,8 @@ export default function EstilistasTableToolbar({
             label="Fecha Fin"
             inputFormat="dd/MM/yyyy"
             size="small"
+            value={filterEndDate}
+            onChange={onFilterEndDate}
             slotProps={{ textField: { size: "small" } }}
             renderInput={(params) => (
               <TextField
