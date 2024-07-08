@@ -190,13 +190,14 @@ const AppointmentFormContainer = ({
   const pickerEditorProps = (field) => ({
     value: displayAppointmentData[field],
     onChange: (date) => {
+      console.log(date);
       changeAppointment({
         field,
         changes: date ? date.toDate() : new Date(displayAppointmentData[field]),
       });
       handleSearchStylist();
     },
-    ampm: false,
+    ampm: true,
     inputFormat: "DD/MM/YYYY HH:mm",
     onError: () => null,
   });
@@ -215,8 +216,8 @@ const AppointmentFormContainer = ({
       const valuesSearch = getAppointmentData();
       // const cita_dominio = await axios.get(`/api/cita_dominio`);
       const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
-        fecha_inicio: valuesSearch.endDate,
-        fecha_final: valuesSearch.startDate,
+        fecha_inicio: displayAppointmentData.endDate,
+        fecha_final: displayAppointmentData.startDate,
       });
 
       setStylistOption(busquedaEst.data);

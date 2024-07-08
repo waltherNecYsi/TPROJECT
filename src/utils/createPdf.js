@@ -1,67 +1,67 @@
-import pdfMake from "pdfmake/build/pdfmake"
-import printjs from 'print-js';
-import * as pdfFonts from './vfs_fonts';
+import pdfMake from "pdfmake/build/pdfmake";
+import printjs from "print-js";
+import * as pdfFonts from "./vfs_fonts";
 
 pdfMake.vfs = pdfFonts.default;
 
-const createPdf = (props, output = 'print') =>
+const createPdf = (props, output = "print") =>
   new Promise((resolve, reject) => {
     try {
       const {
         pageSize = {
-          width: 226.77,
-          height: 841.88,
+          width: 4 * 72,
+          height: 6 * 72,
         },
         pageMargins = [5.66, 5.66, 5.66, 5.66],
         info = {
-          title: 'F001-000001',
-          author: 'maclode',
-          subject: 'ticket',
-          keywords: 'tck, sale',
+          title: "F001-000001",
+          author: "maclode",
+          subject: "ticket",
+          keywords: "tck, sale",
         },
         styles = {
           header: {
-            fontSize: 9,
+            fontSize: 15,
             bold: true,
-            alignment: 'center',
+            alignment: "center",
           },
           tHeaderLabel: {
-            fontSize: 8,
-            alignment: 'right',
+            fontSize: 15,
+            alignment: "center",
           },
           tHeaderValue: {
-            fontSize: 8,
+            fontSize: 15,
             bold: true,
           },
           tProductsHeader: {
-            fontSize: 8.5,
+            fontSize: 15,
             bold: true,
           },
           tProductsBody: {
-            fontSize: 8,
+            fontSize: 15,
           },
           tTotals: {
-            fontSize: 9,
+            fontSize: 15,
             bold: true,
-            alignment: 'right',
+            alignment: "right",
           },
           tClientLabel: {
-            fontSize: 8,
-            alignment: 'right',
+            fontSize: 15,
+            alignment: "right",
           },
           tClientValue: {
             fontSize: 8,
             bold: true,
           },
           text: {
-            fontSize: 8,
-            alignment: 'center',
+            fontSize: 15,
+            alignment: "center",
           },
           link: {
             fontSize: 8,
             bold: true,
             margin: [0, 0, 0, 4],
-            alignment: 'center',
+            alignment: "center",
           },
         },
         content,
@@ -75,40 +75,40 @@ const createPdf = (props, output = 'print') =>
         styles, //  ESTILOS PDF
       };
 
-      if (output === 'b64') {
+      if (output === "b64") {
         //  SI INDICAMOS QUE LA SALIDA SERA [b64] Base64
         const pdfMakeCreatePdf = pdfMake.createPdf(docDefinition);
         pdfMakeCreatePdf.getBase64((data) => {
           resolve({
             success: true,
             content: data,
-            message: 'Archivo generado correctamente.',
+            message: "Archivo generado correctamente.",
           });
         });
         return;
       }
 
       //  ENVIAR A IMPRESIÓN DIRECTA
-      if (output === 'print') {
+      if (output === "print") {
         const pdfMakeCreatePdf = pdfMake.createPdf(docDefinition);
         pdfMakeCreatePdf.getBase64((data) => {
           printjs({
             printable: data,
-            type: 'pdf',
+            type: "pdf",
             base64: true,
           });
           resolve({
             success: true,
             content: null,
-            message: 'Documento enviado a impresión.',
+            message: "Documento enviado a impresión.",
           });
         });
         return;
       }
 
-      reject(new Error('Debes enviar tipo salida'));
+      reject(new Error("Debes enviar tipo salida"));
     } catch (error) {
-      reject(new Error(error?.message ?? 'No se pudo generar proceso.'));
+      reject(new Error(error?.message ?? "No se pudo generar proceso."));
     }
   });
 

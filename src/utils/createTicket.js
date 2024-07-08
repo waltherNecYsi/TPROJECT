@@ -12,7 +12,7 @@ const generateTicket = (output, datApi) => {
       alignment: 'center',
       margin: [0, 10, 0, 0],
     },
-    { text: '----', style: 'tHeaderLabel', alignment: 'left' , width: '100%' },
+    { text: '----------------', style: 'tHeaderLabel', alignment: 'center' , width: '100%' },
     { text: `Numero: aaa`, style: 'tHeaderLabel', alignment: 'left' },
     {
       text: `Fecha Registro : 9999`,
@@ -22,6 +22,7 @@ const generateTicket = (output, datApi) => {
     { text: `Registrado Por : 2313`, style: 'tHeaderLabel', alignment: 'left' },
     { text: `RUC: 3232`, style: 'tHeaderValue', alignment: 'left' },
     { text: `Vigente Hasta: 3232`, style: 'tHeaderValue', alignment: 'left' },
+
 
 
     //  QR FACTURA
