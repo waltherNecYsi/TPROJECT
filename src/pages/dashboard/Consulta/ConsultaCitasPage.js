@@ -295,7 +295,7 @@ export default function RegistroClientesPage() {
               href: PATH_DASHBOARD.root,
             },
             {
-              name: "Registros",
+              name: "Consulta",
               href: PATH_DASHBOARD.consulta.root,
             },
             {

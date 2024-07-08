@@ -6,13 +6,11 @@ import { DataApiGet } from "../utils/connectApis";
 
 // TICKET API
 const useFetchTicket = (id_Venta) => {
-  const fetchTicket = () => DataApiGet(`/api/ticket/${id_Venta}`);
-
+  const fetchTicket = () => DataApiGet(`/api/cita/${id_Venta}`);
   return { fetchTicket };
 };
 
 export const useGenerateTicket = (id_Venta) => {
-
   const { fetchTicket } = useFetchTicket(id_Venta);
 
   // GENERAR TICKET

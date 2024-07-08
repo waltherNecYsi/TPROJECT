@@ -12,11 +12,7 @@ export default function ModalCita({ id_Cita, open, onClose }) {
   const [showGenerateConfirmation, setShowGenerateConfirmation] =
     useState(false);
 
-  const handleGenerateTicket = () => {
-    // const { onGenerateTicket } = useGenerateTicket(id_Cita);
-    // onGenerateTicket();
-    onClose();
-  };
+  const { onGenerateTicket } = useGenerateTicket(id_Cita);
 
   if (open && !showGenerateConfirmation) {
     MySwal.fire({
@@ -26,7 +22,7 @@ export default function ModalCita({ id_Cita, open, onClose }) {
           <h2 style={{ fontSize: "large" }}>Cita Creada con éxito</h2>
           <h2 style={{ fontSize: "large" }}>¿Desea generar el ticket?</h2>
           <Button
-            onClick={handleGenerateTicket}
+            onClick={() => onGenerateTicket()}
             style={{
               backgroundColor: "blue",
               color: "white",

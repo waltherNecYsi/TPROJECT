@@ -118,7 +118,7 @@ function BookingItem({ item }) {
           </div>
         </Stack>
 
-        <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
+        {/* <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
           <Stack direction="row" alignItems="center" spacing={1}>
             <Iconify icon="ic:round-vpn-key" width={16} />
             <Typography variant="caption">Room {roomNumber}</Typography>
@@ -128,7 +128,7 @@ function BookingItem({ item }) {
             <Iconify icon="eva:people-fill" width={16} />
             <Typography variant="caption">{person} Person</Typography>
           </Stack>
-        </Stack>
+        </Stack> */}
       </Stack>
 
       <Box sx={{ p: 1, position: 'relative' }}>

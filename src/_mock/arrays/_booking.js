@@ -44,8 +44,8 @@ export const _bookingReview = [...Array(5)].map((_, index) => ({
 export const _bookingNew = [
   {
     id: 1,
-    name: "John Doe",
-    avatar: "/assets/images/avatars/avatar_6.jpg",
+    name: "Sukha Spa",
+    avatar: "/assets/images/avatars/sukhaprofile.jpg",
     bookdAt: "2022-01-01T00:00:00.000Z",
     roomNumber: "A-21",
     roomType: "double",
@@ -55,8 +55,8 @@ export const _bookingNew = [
   },
   {
     id: 2,
-    name: "John Doe",
-    avatar: "/assets/images/avatars/avatar_6.jpg",
+    name: "Sukha Spa",
+    avatar: "/assets/images/avatars/sukhaprofile.jpg",
     bookdAt: "2022-01-01T00:00:00.000Z",
     roomNumber: "A-21",
     roomType: "double",
@@ -66,8 +66,8 @@ export const _bookingNew = [
   },
   {
     id: 3,
-    name: "John Doe",
-    avatar: "/assets/images/avatars/avatar_6.jpg",
+    name: "Sukha Spa",
+    avatar: "/assets/images/avatars/sukhaprofile.jpg",
     bookdAt: "2022-01-01T00:00:00.000Z",
     roomNumber: "A-21",
     roomType: "double",
@@ -77,8 +77,8 @@ export const _bookingNew = [
   },
   {
     id: 4,
-    name: "John Doe",
-    avatar: "/assets/images/avatars/avatar_6.jpg",
+    name: "Sukha Spa",
+    avatar: "/assets/images/avatars/sukhaprofile.jpg",
     bookdAt: "2022-01-01T00:00:00.000Z",
     roomNumber: "A-21",
     roomType: "double",
@@ -88,8 +88,8 @@ export const _bookingNew = [
   },
   {
     id: 5,
-    name: "John Doe",
-    avatar: "/assets/images/avatars/avatar_6.jpg",
+    name: "Sukha Spa",
+    avatar: "/assets/images/avatars/sukhaprofile.jpg",
     bookdAt: "2022-01-01T00:00:00.000Z",
     roomNumber: "A-21",
     roomType: "double",

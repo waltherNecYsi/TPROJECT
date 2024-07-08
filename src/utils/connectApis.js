@@ -4,7 +4,7 @@ import axios from './axios';
 // .get(`${api}/${id}`, headers)
 export const DataApiGet = async (api, headers) => {
   try {
-    const response = await axios.post(api, null, headers);
+    const response = await axios.get(api, null, headers);
     return response.data;
   } catch (error) {
     console.error('Error en los datos', error);

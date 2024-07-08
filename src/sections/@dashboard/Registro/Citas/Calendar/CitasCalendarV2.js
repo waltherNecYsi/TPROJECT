@@ -44,7 +44,6 @@ import axios from "../../../../../utils/axios";
 
 import ModalCita from "./ModalCita";
 
-
 const estilista = [
   { id: 1, text: "Andrew Glover" },
   { id: 2, text: "Arnie Schwartz" },
@@ -67,7 +66,6 @@ const CitasCalendarV2 = () => {
   const [isNewAppointment, setIsNewAppointment] = useState(false);
 
   const [modalCitaOpen, setModalCitaOpen] = useState(false);
-
 
   const { state, dispatch } = useCitasContext();
 
@@ -209,7 +207,8 @@ const CitasCalendarV2 = () => {
   return (
     <Paper>
       <Scheduler data={data} height={660}>
-        <ViewState currentDate={currentDate} />
+        <ViewState />
+        {/* <ViewState currentDate={currentDate} /> */}
         <EditingState
           onCommitChanges={commitChanges}
           onEditingAppointmentChange={handleEditingAppointmentChange}
@@ -253,7 +252,7 @@ const CitasCalendarV2 = () => {
           visible={editingFormVisible}
           onVisibilityChange={setEditingFormVisible}
         />
-        <DragDropProvider />
+        {/* <DragDropProvider /> */}
       </Scheduler>
 
       <Dialog open={confirmationVisible} onClose={() => {}}>
@@ -289,7 +288,11 @@ const CitasCalendarV2 = () => {
         <AddIcon />
       </StyledFab>
 
-      <ModalCita open={modalCitaOpen} onClose={handleCloseModalCita} id_Cita={1} />
+      <ModalCita
+        open={modalCitaOpen}
+        onClose={handleCloseModalCita}
+        id_Cita={22}
+      />
     </Paper>
   );
 };
