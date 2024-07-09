@@ -31,7 +31,7 @@ export default function Router() {
     {
       path: "consultar",
       children: [
-        { element: <Navigate to={PATH_CONSULTA.index} replace /> , index: true },
+        { element: <Navigate to={PATH_CONSULTA.index} replace />, index: true },
         { path: "miCita", element: <ConsultaPage /> },
       ],
     },
@@ -48,7 +48,7 @@ export default function Router() {
     {
       path: "auth",
       children: [
-        {element:<Navigate to={PATH_AFTER_LOGIN} replace /> , index: true},
+        { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         {
           path: "login",
           element: (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   ViewState,
   EditingState,
@@ -71,6 +71,8 @@ const CitasCalendarV2 = () => {
 
   const { state, dispatch } = useCitasContext();
 
+  const [calendarData, setCalendarData] = useState([]);
+
   // const [resources] = useState([
   //   {
   //     fieldName: "estilista",
@@ -79,6 +81,21 @@ const CitasCalendarV2 = () => {
   //     instances: estilista,
   //   },
   // ]);
+
+  const fetchDataFromAPI = useCallback(async () => {
+    try {
+      const response = await axios.get(`/api/citas_v`);
+      setCalendarData(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchDataFromAPI();
+  }, [fetchDataFromAPI]);
 
   const handleOpenModalCita = () => {
     setModalCitaOpen(true);
@@ -119,9 +136,10 @@ const CitasCalendarV2 = () => {
           estilista: updatedData.map((item) => item.estilista),
           servicios: updatedData.map((item) => item.servicio),
         };
-        console.log(values);
-        setInfoToolbar(dispatch, values);
-        console.log(startingAddedId);
+        // console.log(values);
+        // setInfoToolbar(dispatch, values);
+        // console.log(startingAddedId);
+        fetchDataFromAPI();
       }
       if (changed) {
         updatedData = updatedData.map((appointment) =>
@@ -175,13 +193,19 @@ const CitasCalendarV2 = () => {
 
   const handleAddedAppointmentChange = async (addedAppointment) => {
     if (addedAppointment !== undefined) {
-      console.log(addedAppointment);
-      const cita_dominio = await axios.get(`/api/cita_dominio`);
+      // console.log(addedAppointment);
+      const listaEst = await axios.get(`/api/estilistas`);
       const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
         fecha_inicio: addedAppointment.endDate,
         fecha_final: addedAppointment.startDate,
       });
-      setIFoptions(busquedaEst.data);
+      const listaEstFiltrada = listaEst?.data?.data?.filter(
+        (estilistas) =>
+          !busquedaEst?.data?.some(
+            (busqEst) => busqEst?.EstilistaID === estilistas?.EstilistaID
+          )
+      );
+      setIFoptions(listaEstFiltrada);
     }
     setAddedAppointments(addedAppointment);
     if (editingAppointments !== undefined) {
@@ -209,7 +233,7 @@ const CitasCalendarV2 = () => {
 
   return (
     <Paper>
-      <Scheduler data={data} height={660}>
+      <Scheduler data={calendarData} height={660}>
         <ViewState />
         {/* <ViewState currentDate={currentDate} /> */}
         <EditingState
@@ -221,7 +245,7 @@ const CitasCalendarV2 = () => {
         <WeekView startDayHour={startDayHour} endDayHour={endDayHour} />
         <MonthView />
         <AllDayPanel />
-        <EditRecurrenceMenu />
+        {/* <EditRecurrenceMenu /> */}
         <Appointments />
         <AppointmentTooltip
           showOpenButton
@@ -252,7 +276,7 @@ const CitasCalendarV2 = () => {
         <ViewSwitcher />
         <AppointmentForm
           overlayComponent={appointmentForm}
-          visible={editingFormVisible}
+          // visible={editingFormVisible}
           onVisibilityChange={setEditingFormVisible}
         />
         {/* <DragDropProvider /> */}
@@ -295,7 +319,6 @@ const CitasCalendarV2 = () => {
         open={modalCitaOpen}
         onClose={handleCloseModalCita}
         id_Cita={id_Cita}
-        
       />
     </Paper>
   );

@@ -42,7 +42,7 @@ export default function GeneralBookingPage() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <BookingDetails
               title="Ultimas Citas"
               tableData={_bookings}
@@ -56,7 +56,7 @@ export default function GeneralBookingPage() {
                 { id: '' },
               ]}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </>

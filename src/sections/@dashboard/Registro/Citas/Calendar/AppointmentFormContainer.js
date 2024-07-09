@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { format } from "date-fns";
 
 import {
   Close,
@@ -44,6 +45,21 @@ const AppointmentFormContainer = ({
   const [stilistOption, setStylistOption] = useState(IFoptions);
 
   const [services, setServices] = useState([]);
+
+  const [clientes, setClientes] = useState([]);
+
+  useEffect(() => {
+    const getClientes = async () => {
+      try {
+        const clientesData = await axios.get(`/api/cliente`);
+        setClientes(clientesData.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+      }
+    };
+    getClientes();
+  }, []);
 
   useEffect(() => {
     const getServices = async () => {
@@ -86,18 +102,18 @@ const AppointmentFormContainer = ({
     const getAppointmentMod = {
       ...getAppointmentChanges(),
       // cliente: infoToolbar?.cliente,
-      cliente: {
-        ClienteID: 4,
-        Nomb_Clt: "cliente",
-        Apell_Clt: "cliente1",
-        Apell_Pater: "cliente2",
-        Telef_Clt: 312312,
-        Email_Clt: "siea39521@gmail.com",
-        FechaReg_Clt: "2024-07-09",
-        idEstado: 1,
-        created_at: "2024-07-09 04:52:44",
-        updated_at: null,
-      },
+      // cliente: {
+      //   ClienteID: 4,
+      //   Nomb_Clt: "cliente",
+      //   Apell_Clt: "cliente1",
+      //   Apell_Pater: "cliente2",
+      //   Telef_Clt: 312312,
+      //   Email_Clt: "siea39521@gmail.com",
+      //   FechaReg_Clt: "2024-07-09",
+      //   idEstado: 1,
+      //   created_at: "2024-07-09 04:52:44",
+      //   updated_at: null,
+      // },
 
       estilista:
         typeof getAppointmentChanges().estilista === "string"
@@ -119,8 +135,8 @@ const AppointmentFormContainer = ({
     const detalle = [];
     const newAppointment = appointment.servicio.forEach((servicio) => {
       const nuevoDetalle = {
-        FechaInicio: appointment.startDate,
-        FechaFin: appointment.endDate,
+        FechaInicio: format(appointment.startDate, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+        FechaFin: format(appointment.endDate, "yyyy-MM-dd'T'HH:mm:ssxxx"),
         ServicioID: servicio.ServicioID,
         EstilistaID: appointment.estilista.id,
       };
@@ -132,10 +148,12 @@ const AppointmentFormContainer = ({
       ClienteID: appointment.cliente.ClienteID,
     };
 
+    console.log(sendAppointment);
+
     const sendCita = await axios.post(`/api/cita`, sendAppointment);
 
     if (sendCita.status === 200) {
-      console.log(sendCita.data.cita_id)
+      console.log(sendCita.data.cita_id);
       setId_Cita(sendCita.data.cita_id);
       handleOpenModalCita();
     }
@@ -173,6 +191,7 @@ const AppointmentFormContainer = ({
 
   const autocompleteEditorProps = (field) => ({
     value: displayAppointmentData[field],
+    size: "small",
     onChange: (event, newValue) =>
       changeAppointment({
         field: [field],
@@ -181,6 +200,26 @@ const AppointmentFormContainer = ({
     renderInput: (params) => (
       <TextField
         {...params}
+        size="small"
+        label={field[0].toUpperCase() + field.slice(1)}
+        placeholder=""
+        {...textEditorProps(field)}
+      />
+    ),
+  });
+
+  const autocompleteModalEditorProps = (field) => ({
+    value: displayAppointmentData[field],
+    size: "small",
+    onChange: (event, newValue) =>
+      changeAppointment({
+        field: [field],
+        changes: newValue,
+      }),
+    renderInput: (params) => (
+      <TextField
+        {...params}
+        size="small"
         label={field[0].toUpperCase() + field.slice(1)}
         placeholder=""
         {...textEditorProps(field)}
@@ -215,13 +254,20 @@ const AppointmentFormContainer = ({
   const handleSearchStylist = async () => {
     try {
       const valuesSearch = getAppointmentData();
-      // const cita_dominio = await axios.get(`/api/cita_dominio`);
+      const listaEst = await axios.get(`/api/estilistas`);
       const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
         fecha_inicio: displayAppointmentData.endDate,
         fecha_final: displayAppointmentData.startDate,
       });
+      const listaEstFiltrada = listaEst?.data?.data?.filter(
+        (estilista) =>
+          !busquedaEst?.data?.some(
+            (busqEst) => busqEst?.EstilistaID === estilista?.EstilistaID
+          )
+      );
+      console.log(listaEstFiltrada);
 
-      setStylistOption(busquedaEst.data);
+      setStylistOption(listaEstFiltrada);
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
@@ -250,6 +296,20 @@ const AppointmentFormContainer = ({
               <div className={classes.wrapper}>
                 <Create className={classes.icon} color="action" />
                 <TextField {...textEditorProps("title")} />
+              </div>
+              <div className={classes.wrapper}>
+                <LocationOn className={classes.icon} color="action" />
+                <Autocomplete
+                  fullWidth
+                  id="tags-outlined"
+                  options={clientes ?? []}
+                  getOptionLabel={(option) => option?.Nomb_Clt}
+                  {...autocompleteModalEditorProps("cliente")}
+                  filterSelectedOptions
+                  renderInput={(params) => (
+                    <TextField {...params} label="Cliente" placeholder="" />
+                  )}
+                />
               </div>
               <div className={classes.wrapper}>
                 <LocationOn className={classes.icon} color="action" />

@@ -1,4 +1,4 @@
-import createPdf from "./createPdf";
+import createPdf from "../../utils/createPdf";
 
 const generateTicket = (output, datApi) => {
   const content = [
@@ -9,7 +9,7 @@ const generateTicket = (output, datApi) => {
           fit: [70, 50],
         },
         {
-          text: `Ticket de Pago `,
+          text: `Detalle de Cita`,
           style: "header",
           alignment: "center",
         },
@@ -19,14 +19,14 @@ const generateTicket = (output, datApi) => {
       columns: [
         {
           width: "50%",
-          text: "Número:",
+          text: "Cliente:",
           alignment: "left",
           bold: true,
           fontSize: 12,
         },
         {
           width: "50%",
-          text: `F001-${datApi.cita_id}`,
+          text: `${datApi.ticket.Nomb_Clt}`,
           alignment: "right",
           fontSize: 12,
         },
@@ -37,14 +37,32 @@ const generateTicket = (output, datApi) => {
       columns: [
         {
           width: "50%",
-          text: "Fecha de Registro:",
+          text: "Estilista:",
           alignment: "left",
           bold: true,
           fontSize: 12,
         },
         {
           width: "50%",
-          text: `${datApi.detalles[0].FechaInicio}`,
+          text: `${datApi.ticket.Nombr_Est}`,
+          alignment: "right",
+          fontSize: 12,
+        },
+      ],
+      margin: [0, 5],
+    },
+    {
+      columns: [
+        {
+          width: "50%",
+          text: "Fecha:",
+          alignment: "left",
+          bold: true,
+          fontSize: 12,
+        },
+        {
+          width: "50%",
+          text: `${datApi.ticket.FechaInicio}`,
           alignment: "right",
           fontSize: 12,
         },
@@ -62,56 +80,55 @@ const generateTicket = (output, datApi) => {
         },
         {
           width: "50%",
-          text: `${datApi.detalles[0].EstilistaID}`,
+          text: `${datApi.ticket.Nombr_Est}`,
           alignment: "right",
           fontSize: 12,
         },
       ],
       margin: [0, 5],
     },
-    {
-      columns: [
-        {
-          width: "50%",
-          text: "Total:",
-          alignment: "left",
-          bold: true,
-          fontSize: 12,
-        },
-        {
-          width: "50%",
-          text: `${datApi.monto_total}`,
-          alignment: "right",
-          fontSize: 12,
-        },
-      ],
-      margin: [0, 5],
-    },
-    {
-      columns: [
-        {
-          width: "50%",
-          text: "Vigente Hasta:",
-          alignment: "left",
-          bold: true,
-          fontSize: 12,
-        },
-        {
-          width: "50%",
-          text: "08/07/2024",
-          alignment: "right",
-          fontSize: 12,
-        },
-      ],
-      margin: [0, 5],
-    },
-    // {
-    //   qr: "https://ejemplo.com",
-    //   fit: 70,
-    //   alignment: "center",
-    //   margin: [0, 20, 0, 0],
-    // },
   ];
+
+  datApi.servicio.forEach(servicio => {
+    content.push({
+      columns: [
+        {
+          width: "50%",
+          text: `${servicio.Nomb_Serv}`,
+          alignment: "left",
+          bold: true,
+          fontSize: 12,
+        },
+        {
+          width: "50%",
+          text: `${servicio.Precio_Serv}/S`,
+          alignment: "right",
+          fontSize: 12,
+        },
+      ],
+      margin: [0, 5],
+    });
+  });
+
+  const totalPrecio = datApi.servicio.reduce((total, servicio) => total + servicio.Precio_Serv, 0);
+  content.push({
+    columns: [
+      {
+        width: "50%",
+        text: "Total",
+        alignment: "left",
+        bold: true,
+        fontSize: 12,
+      },
+      {
+        width: "50%",
+        text: `${totalPrecio}/S`,
+        alignment: "right",
+        fontSize: 12,
+      },
+    ],
+    margin: [0, 5],
+  });
 
   const response = createPdf({ content }, output);
   return response;

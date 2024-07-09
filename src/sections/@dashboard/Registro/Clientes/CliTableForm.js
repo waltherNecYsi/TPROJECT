@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import { Icon } from "@iconify/react";
 import {
@@ -26,6 +28,14 @@ import FormProvider from "../../../../components/hook-form/FormProvider";
 
 import axios from "../../../../utils/axios";
 
+const validateFields = Yup.object().shape({
+  nombre: Yup.string().required("Requerido"),
+  apellido_mat: Yup.string().required("Requerido"),
+  apellido_pat: Yup.string().required("Requerido"),
+  telefono: Yup.number().required("Requerido"),
+  email: Yup.string().required("Requerido"),
+});
+
 export default function CliTableForm({
   inputs,
   request,
@@ -44,29 +54,37 @@ export default function CliTableForm({
   const [openModal, setOpenModal] = useState(true);
 
   const methods = useForm({
+    resolver: yupResolver(validateFields),
     defaultValues,
+    shouldUnregister: true,
   });
   const values = methods.getValues();
 
   const {
+    control,
+    register,
+    getValues,
     watch,
     reset,
     setValue,
     handleSubmit,
-    // formState: { isSubmitting },
+    trigger,
+    formState: { isSubmitting, isValid },
   } = methods;
 
   const handleSubmitDef = async (formData) => {
     // setIsSubmitting(true);
-    console.log("hola");
-    try {
-      await request(formData);
-      closeModal();
-      // fetchDataFromAPI();
-    } catch (error) {
-      console.error("Error al enviar el formulario:", error);
+    await trigger();
+    if (isValid) {
+      try {
+        await request(formData);
+        closeModal();
+        fetchDataFromAPI();
+      } catch (error) {
+        console.error("Error al enviar el formulario:", error);
+      }
+      // setIsSubmitting(false);
     }
-    // setIsSubmitting(false);
   };
 
   const onSubmit = async () => {
@@ -82,9 +100,7 @@ export default function CliTableForm({
     };
 
     try {
-      handleSubmitDef(DataSubmit);
-      closeModal();
-      fetchDataFromAPI();
+      await handleSubmitDef(DataSubmit);
     } catch (error) {
       console.error(error);
       alert("no se ha podido registrar");

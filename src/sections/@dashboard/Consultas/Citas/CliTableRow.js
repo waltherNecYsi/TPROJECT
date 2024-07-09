@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import PropTypes from "prop-types";
+import { useState } from "react";
 // @mui
 import {
   Link,
@@ -12,16 +12,21 @@ import {
   TableCell,
   IconButton,
   Typography,
-} from '@mui/material';
+  Tooltip,
+} from "@mui/material";
 // utils
-import { fDate } from '../../../../utils/formatTime';
-import { fCurrency } from '../../../../utils/formatNumber';
+import { fDate } from "../../../../utils/formatTime";
+import { fCurrency } from "../../../../utils/formatNumber";
 // components
-import Label from '../../../../components/label';
-import Iconify from '../../../../components/iconify';
-import { CustomAvatar } from '../../../../components/custom-avatar';
-import MenuPopover from '../../../../components/menu-popover';
-import ConfirmDialog from '../../../../components/confirm-dialog';
+import Label from "../../../../components/label";
+import Iconify from "../../../../components/iconify";
+import { CustomAvatar } from "../../../../components/custom-avatar";
+import MenuPopover from "../../../../components/menu-popover";
+import ConfirmDialog from "../../../../components/confirm-dialog";
+import FileThumbnail, { fileData } from "../../../../components/file-thumbnail";
+
+import { DataApiGet } from "../../../../utils/connectApis";
+import generateTicket from "../../../Main/Mainticket";
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +40,7 @@ CliTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function CliTableRow ({
+export default function CliTableRow({
   row,
   keyIndex,
   selected,
@@ -44,7 +49,7 @@ export default function CliTableRow ({
   onEditRow,
   onDeleteRow,
 }) {
-  const { Nomb_Clt , Apell_Clt , Telef_Clt , Email_Clt , FechaReg_Clt } = row;
+  const { CitaID, Nomb_Clt, Nomb_Serv, Nombr_Est, FechaCreacion } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -66,29 +71,29 @@ export default function CliTableRow ({
     setOpenPopover(null);
   };
 
+  const DownloadTicket = async () => {
+    const data = await DataApiGet(`/api/consulta_ticket/${CitaID}`);
+    const ticket = await generateTicket("print", data);
+  };
 
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox" align='center'>
+        <TableCell padding="checkbox" align="center">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-
-
-        <TableCell align="left">{keyIndex + 1}</TableCell>
+        <TableCell align="left">{CitaID.toString()}</TableCell>
 
         {/* <TableCell align="left">{ane_numdoc}</TableCell> */}
 
         <TableCell align="left">{Nomb_Clt}</TableCell>
 
-        <TableCell align="left">{Apell_Clt}</TableCell>
+        <TableCell align="left">{Nomb_Serv}</TableCell>
 
-        <TableCell align="left">{Telef_Clt}</TableCell>
+        <TableCell align="left">{Nombr_Est}</TableCell>
 
-        <TableCell align="left">{Email_Clt}</TableCell>
-        
-        <TableCell align="left">{FechaReg_Clt}</TableCell>
+        <TableCell align="left">{FechaCreacion}</TableCell>
 
         {/* <TableCell align="left">{fDate(created_at)}</TableCell> */}
 
@@ -117,9 +122,41 @@ export default function CliTableRow ({
 */}
 
         <TableCell align="right">
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+          <Stack
+            direction="row"
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
+            {/* <Tooltip title="Editar" placement="top" arrow>
+              <IconButton sx={{}} color="default">
+                <Iconify icon="eva:edit-fill" width="1rem" height="1rem" />
+              </IconButton>
+            </Tooltip> */}
+            {/* <Tooltip title="Eliminar" placement="top" arrow>
+              <IconButton
+                sx={{}}
+                color="default"
+                onClick={() => {
+                  handleOpenConfirm();
+                  handleClosePopover();
+                }}
+              >
+                <Iconify
+                  icon="eva:trash-2-outline"
+                  width="1rem"
+                  height="1rem"
+                />
+              </IconButton>
+            </Tooltip> */}
+            <Tooltip title="Ticket Pago" placement="top" arrow>
+              <IconButton color="default" onClick={DownloadTicket}>
+                <FileThumbnail
+                  imageView
+                  file="pdfv2"
+                  sx={{ width: "0.9rem", height: "0.9rem" }}
+                />
+              </IconButton>
+            </Tooltip>
+          </Stack>
         </TableCell>
       </TableRow>
 
@@ -149,14 +186,14 @@ export default function CliTableRow ({
           Edit
         </MenuItem>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: "dashed" }} />
 
         <MenuItem
           onClick={() => {
             handleOpenConfirm();
             handleClosePopover();
           }}
-          sx={{ color: 'error.main' }}
+          sx={{ color: "error.main" }}
         >
           <Iconify icon="eva:trash-2-outline" />
           Delete
@@ -166,11 +203,11 @@ export default function CliTableRow ({
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
+        title="Eliminar"
+        content="Estas seguro que deseas eliminar esta cita?"
         action={
           <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
+            Eliminar
           </Button>
         }
       />

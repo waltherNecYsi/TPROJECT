@@ -58,10 +58,9 @@ import {
 
 const TABLE_HEAD = [
   { id: 0, label: "ID", align: "left" },
-  { id: 1, label: "Nombre", align: "left" },
-  { id: 2, label: "Apellido", align: "left" },
-  { id: 3, label: "Telefono", align: "left" },
-  { id: 4, label: "Email", align: "left" },
+  { id: 1, label: "Cliente", align: "left" },
+  { id: 2, label: "Estilista", align: "left" },
+  { id: 3, label: "Servicios", align: "left" },
   { id: 5, label: "F. Registro", align: "left" },
   { id: "" },
 ];
@@ -232,7 +231,7 @@ export default function RegistroClientesPage() {
           page: page + 1,
           fecha_inicio: filterStartDate,
           fecha_final: filterEndDate,
-          nombre: filterName,
+          CitaID: filterName,
         },
       });
       setTableData(response.data.data);
@@ -241,7 +240,7 @@ export default function RegistroClientesPage() {
       console.error("Error fetching data:", error);
       throw error;
     }
-  }, [ page , filterStartDate, filterEndDate , filterName]);
+  }, [page, filterStartDate, filterEndDate, filterName]);
 
   useEffect(() => {
     fetchDataFromAPI()

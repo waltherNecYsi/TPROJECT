@@ -15,9 +15,9 @@ const createPdf = (props, output = "print") =>
         pageMargins = [20, 40, 20, 40],
         info = {
           title: "Cita_Sukha",
-          author: "maclode",
+          author: "Sukha",
           subject: "ticket",
-          keywords: "tck, sale",
+          keywords: "tck, cita",
         },
         styles = {
           header: {
@@ -46,33 +46,21 @@ const createPdf = (props, output = "print") =>
         images,
       };
 
-      if (output === "b64") {
-        const pdfMakeCreatePdf = pdfMake.createPdf(docDefinition);
-        pdfMakeCreatePdf.getBase64((data) => {
-          resolve({
-            success: true,
-            content: data,
-            message: "Archivo generado correctamente.",
-          });
-        });
-        return;
-      }
+      // if (output === "b64") {
+      //   const pdfMakeCreatePdf = pdfMake.createPdf(docDefinition);
+      //   pdfMakeCreatePdf.getBase64((data) => {
+      //     resolve({
+      //       success: true,
+      //       content: data,
+      //       message: "Archivo generado correctamente.",
+      //     });
+      //   });
+      //   return;
+      // }
 
       //  ENVIAR A IMPRESIÓN DIRECTA
       if (output === "print") {
         pdfMake.createPdf(docDefinition).download();
-        // pdfMakeCreatePdf.getBase64((data) => {
-        //   printjs({
-        //     printable: data,
-        //     type: "pdf",
-        //     base64: true,
-        //   });
-        //   resolve({
-        //     success: true,
-        //     content: null,
-        //     message: "Documento enviado a impresión.",
-        //   });
-        // });
         return;
       }
 
