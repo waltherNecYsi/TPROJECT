@@ -6,7 +6,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title> Login | Nubefa</title>
+        <title> Login | Sukha</title>
       </Helmet>
       <Login />
     </>

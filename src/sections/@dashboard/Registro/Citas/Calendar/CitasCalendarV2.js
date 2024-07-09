@@ -67,6 +67,8 @@ const CitasCalendarV2 = () => {
 
   const [modalCitaOpen, setModalCitaOpen] = useState(false);
 
+  const [id_Cita, setId_Cita] = useState(0);
+
   const { state, dispatch } = useCitasContext();
 
   // const [resources] = useState([
@@ -162,6 +164,7 @@ const CitasCalendarV2 = () => {
       cancelAppointment,
       IFoptions,
       handleOpenModalCita,
+      setId_Cita,
     };
   });
 
@@ -291,7 +294,8 @@ const CitasCalendarV2 = () => {
       <ModalCita
         open={modalCitaOpen}
         onClose={handleCloseModalCita}
-        id_Cita={22}
+        id_Cita={id_Cita}
+        
       />
     </Paper>
   );

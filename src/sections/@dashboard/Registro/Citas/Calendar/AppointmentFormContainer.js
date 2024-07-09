@@ -31,6 +31,7 @@ const AppointmentFormContainer = ({
   onHide,
   IFoptions,
   handleOpenModalCita,
+  setId_Cita,
 }) => {
   const [appointmentChanges, setAppointmentChanges] = useState({});
 
@@ -43,8 +44,6 @@ const AppointmentFormContainer = ({
   const [stilistOption, setStylistOption] = useState(IFoptions);
 
   const [services, setServices] = useState([]);
-
-
 
   useEffect(() => {
     const getServices = async () => {
@@ -88,17 +87,17 @@ const AppointmentFormContainer = ({
       ...getAppointmentChanges(),
       // cliente: infoToolbar?.cliente,
       cliente: {
-        "ClienteID": 1,
-        "Nomb_Clt": "dasdas",
-        "Apell_Clt": "dsdasdssa",
-        "Apell_Pater": "sdadasd",
-        "Telef_Clt": 23213123,
-        "Email_Clt": "siea39521@gmail.com",
-        "FechaReg_Clt": "2024-07-07",
-        "idEstado": 1,
-        "created_at": "2024-07-07 18:02:59",
-        "updated_at": null
-    },
+        ClienteID: 4,
+        Nomb_Clt: "cliente",
+        Apell_Clt: "cliente1",
+        Apell_Pater: "cliente2",
+        Telef_Clt: 312312,
+        Email_Clt: "siea39521@gmail.com",
+        FechaReg_Clt: "2024-07-09",
+        idEstado: 1,
+        created_at: "2024-07-09 04:52:44",
+        updated_at: null,
+      },
 
       estilista:
         typeof getAppointmentChanges().estilista === "string"
@@ -136,6 +135,8 @@ const AppointmentFormContainer = ({
     const sendCita = await axios.post(`/api/cita`, sendAppointment);
 
     if (sendCita.status === 200) {
+      console.log(sendCita.data.cita_id)
+      setId_Cita(sendCita.data.cita_id);
       handleOpenModalCita();
     }
 
@@ -226,7 +227,6 @@ const AppointmentFormContainer = ({
       throw error;
     }
   };
-
 
   return (
     <StyledDiv>
@@ -343,7 +343,6 @@ const AppointmentFormContainer = ({
         </StyledDiv>
       </AppointmentForm.Overlay>
     </StyledDiv>
-
   );
 };
 
@@ -356,6 +355,7 @@ AppointmentFormContainer.propTypes = {
   target: PropTypes.any,
   onHide: PropTypes.func.isRequired,
   handleOpenModalCita: PropTypes.func.isRequired,
+  setId_Cita: PropTypes.func.isRequired,
   IFoptions: PropTypes.array.isRequired,
 };
 

@@ -11,6 +11,10 @@ const Loadable = (Component) => (props) =>
       </Suspense>
     );
 
+// Consulta
+export const ConsultaPage = Loadable(lazy(() => import('../pages/Main/ConsultaPage')));
+
+
 // AUTH
 export const LoginPage = Loadable(lazy(() => import('../pages/auth/LoginPage')))
 export const RegisterPage = Loadable(lazy(() => import('../pages/auth/RegisterPage')));

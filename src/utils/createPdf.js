@@ -14,7 +14,7 @@ const createPdf = (props, output = "print") =>
         },
         pageMargins = [20, 40, 20, 40],
         info = {
-          title: "F001-000001",
+          title: "Cita_Sukha",
           author: "maclode",
           subject: "ticket",
           keywords: "tck, sale",

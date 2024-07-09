@@ -1,5 +1,5 @@
 import { Navigate, useRoutes, Outlet } from "react-router-dom";
-import { PATH_AUTH } from "./paths";
+import { PATH_AUTH, PATH_CONSULTA } from "./paths";
 
 import GuestGuard from "../auth/GuestGuard";
 import { PATH_AFTER_LOGIN } from "../config-global";
@@ -8,6 +8,8 @@ import DashboardLayout from "../layouts/dashboard";
 import CompactLayout from "../layouts/compact";
 
 import {
+  // Consulta
+  ConsultaPage,
   // Auth
   LoginPage,
   RegisterPage,
@@ -27,6 +29,13 @@ import {
 export default function Router() {
   return useRoutes([
     {
+      path: "consultar",
+      children: [
+        { element: <Navigate to={PATH_CONSULTA.index} replace /> , index: true },
+        { path: "miCita", element: <ConsultaPage /> },
+      ],
+    },
+    {
       path: "*",
       element: (
         <GuestGuard>
@@ -39,6 +48,7 @@ export default function Router() {
     {
       path: "auth",
       children: [
+        {element:<Navigate to={PATH_AFTER_LOGIN} replace /> , index: true},
         {
           path: "login",
           element: (
@@ -67,8 +77,8 @@ export default function Router() {
         </GuestGuard>
       ),
       children: [
-        { path: "app", element: <GeneralBookingPage /> },
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+        { path: "app", element: <GeneralBookingPage /> },
         {
           path: "registro",
           children: [

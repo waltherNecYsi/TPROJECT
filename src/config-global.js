@@ -1,10 +1,10 @@
 // routes
-import { PATH_DASHBOARD } from './routes/paths';
+import { PATH_DASHBOARD } from "./routes/paths";
 // API
 // ----------------------------------------------------------------------
 
 // export const HOST_API_KEY = process.env.REACT_APP_HOST_API_KEY || '';
-export const HOST_API_KEY = '127.0.0.1:8000';
+export const HOST_API_KEY = "127.0.0.1:8000";
 // export const HOST_API_KEY = 'www.glomeran.com';
 
 export const FIREBASE_API = {
@@ -31,6 +31,7 @@ export const MAP_API = import.meta.VITE_MAPBOX_API;
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
 export const PATH_AFTER_LOGIN = PATH_DASHBOARD.general.app; // as '/dashboard/app'
+export const PATH_CONSULTA = "/consultar"; // as '/dashboard/app'
 
 // LAYOUT
 // ----------------------------------------------------------------------
