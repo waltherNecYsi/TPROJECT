@@ -281,7 +281,7 @@ const CitasCalendarV2 = () => {
       </Dialog>
 
       <StyledFab
-        color="secondary"
+        color="primary"
         className={classes.addButton}
         onClick={handleAddAppointment}
       >

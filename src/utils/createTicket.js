@@ -1,51 +1,117 @@
-import createPdf from './createPdf';
+import createPdf from "./createPdf";
 
 const generateTicket = (output, datApi) => {
+  console.log(datApi);
   const content = [
-    //  DATOS EMPRESA
-
-
-    //  DATOS CEBECERA FACTURAR
     {
-      text: 'TICKET DE PAGO',
-      style: 'tHeaderValue',
-      alignment: 'center',
-      margin: [0, 10, 0, 0],
-    },
-    { text: '----------------', style: 'tHeaderLabel', alignment: 'center' , width: '100%' },
-    { text: `Numero: aaa`, style: 'tHeaderLabel', alignment: 'left' },
-    {
-      text: `Fecha Registro : 9999`,
-      style: 'tHeaderLabel',
-      alignment: 'left',
-    },
-    { text: `Registrado Por : 2313`, style: 'tHeaderLabel', alignment: 'left' },
-    { text: `RUC: 3232`, style: 'tHeaderValue', alignment: 'left' },
-    { text: `Vigente Hasta: 3232`, style: 'tHeaderValue', alignment: 'left' },
-
-
-
-    //  QR FACTURA
-    {
-      stack: [
+      columns: [
         {
-          qr: '20603831404|03|B002|000131|724.94|4,752.30|30/09/2023|1|70477554|v2Ez4sKStje4NiqcXiuTcmTtPwgbrqgnXpWPltJKEhk=|',
-          fit: 115,
-          alignment: 'center',
-          eccLevel: 'Q',
-          margin: [0, 10, 0, 3],
+          image: "my",
+          fit: [70, 50],
         },
         {
-          text: 'Consulta tu comprobante aquí:',
-          style: 'text',
-        },
-        {
-          text: 'www.sukha.com',
-          // link: 'www.nubefa.com',
-          style: 'text',
+          text: `Ticket de Pago `,
+          style: "header",
+          alignment: "center",
         },
       ],
     },
+    {
+      columns: [
+        {
+          width: "50%",
+          text: "Número:",
+          alignment: "left",
+          bold: true,
+          fontSize: 12,
+        },
+        {
+          width: "50%",
+          text: `F001-${datApi.cita_id}`,
+          alignment: "right",
+          fontSize: 12,
+        },
+      ],
+      margin: [0, 5],
+    },
+    {
+      columns: [
+        {
+          width: "50%",
+          text: "Fecha de Registro:",
+          alignment: "left",
+          bold: true,
+          fontSize: 12,
+        },
+        {
+          width: "50%",
+          text: `${datApi.detalles[0].FechaInicio}`,
+          alignment: "right",
+          fontSize: 12,
+        },
+      ],
+      margin: [0, 5],
+    },
+    {
+      columns: [
+        {
+          width: "50%",
+          text: "Registrado Por:",
+          alignment: "left",
+          bold: true,
+          fontSize: 12,
+        },
+        {
+          width: "50%",
+          text: `${datApi.detalles[0].EstilistaID}`,
+          alignment: "right",
+          fontSize: 12,
+        },
+      ],
+      margin: [0, 5],
+    },
+    {
+      columns: [
+        {
+          width: "50%",
+          text: "Total:",
+          alignment: "left",
+          bold: true,
+          fontSize: 12,
+        },
+        {
+          width: "50%",
+          text: `${datApi.monto_total}`,
+          alignment: "right",
+          fontSize: 12,
+        },
+      ],
+      margin: [0, 5],
+    },
+    {
+      columns: [
+        {
+          width: "50%",
+          text: "Vigente Hasta:",
+          alignment: "left",
+          bold: true,
+          fontSize: 12,
+        },
+        {
+          width: "50%",
+          text: "08/07/2024",
+          alignment: "right",
+          fontSize: 12,
+        },
+      ],
+      margin: [0, 5],
+    },
+    // {
+    //   qr: "https://ejemplo.com",
+    //   fit: 70,
+    //   alignment: "center",
+    //   margin: [0, 20, 0, 0],
+    // },
   ];
 
   const response = createPdf({ content }, output);
