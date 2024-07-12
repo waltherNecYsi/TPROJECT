@@ -12,6 +12,9 @@ export const IVCitas = {
     tiempo: [],
     estilista: [],
   },
+  data: {
+    estilistasD: [],
+  },
   cita: {},
   citaticket: {},
 };
@@ -75,6 +78,18 @@ export function citaticketReducer(state, action) {
     // }
     // case "resetValues":
     //   return ISProducts.Pago;
+    default:
+      return state;
+  }
+}
+
+export function dataReducer(state, action) {
+  switch (action.type) {
+    case "setDataCreation": {
+      console.log(action.payload);
+      const { estilistasD } = action.payload;
+      return { ...state, estilistasD };
+    }
     default:
       return state;
   }

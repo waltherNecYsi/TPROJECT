@@ -39,7 +39,8 @@ export default function ModalCita({ id_Cita, open, onClose }) {
       ),
       showConfirmButton: false,
       didClose: () => {
-        setShowGenerateConfirmation(true);
+        setShowGenerateConfirmation(false);
+        onClose();
       },
       didOpen: () => {
         const swalContainer = document.querySelector(".swal2-container");

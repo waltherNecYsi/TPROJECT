@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  ViewState,
-  EditingState,
-  Resources,
-} from "@devexpress/dx-react-scheduler";
+import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
 import {
   Scheduler,
   Toolbar,
@@ -16,8 +12,6 @@ import {
   Appointments,
   AppointmentTooltip,
   AppointmentForm,
-  DragDropProvider,
-  EditRecurrenceMenu,
   AllDayPanel,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { connectProps } from "@devexpress/dx-react-core";
@@ -30,21 +24,18 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
-
 import AddIcon from "@mui/icons-material/Add";
+import axios from "../../../../../utils/axios";
 
 import { appointments } from "../demo-data/appointments";
 import AppointmentFormContainer from "./AppointmentFormContainer";
 import { StyledFab, classes } from "./StyledComponents";
 import Content from "./CustomAptTooltip";
 import { useCitasContext } from "../Context/CitasContextPage";
-import { setInfoToolbar } from "../Context/CitasActionspage";
-
-import axios from "../../../../../utils/axios";
-
+import { setDataCreation } from "../Context/CitasActionspage";
 import ModalCita from "./ModalCita";
 
-const estilista = [
+const estilistas = [
   { id: 1, text: "Andrew Glover" },
   { id: 2, text: "Arnie Schwartz" },
   { id: 3, text: "John Heart" },
@@ -57,30 +48,18 @@ const CitasCalendarV2 = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [confirmationVisible, setConfirmationVisible] = useState(false);
   const [editingFormVisible, setEditingFormVisible] = useState(false);
-  const [deletedAppointmentId, setDeletedAppointmentId] = useState(undefined);
-  const [editingAppointments, setEditingAppointments] = useState(undefined);
-  const [previousAppointment, setPreviousAppointment] = useState(undefined);
+  const [deletedAppointmentId, setDeletedAppointmentId] = useState(null);
+  const [editingAppointments, setEditingAppointments] = useState(null);
+  const [previousAppointment, setPreviousAppointment] = useState(null);
   const [addedAppointments, setAddedAppointments] = useState({});
+  const [isNewAppointment, setIsNewAppointment] = useState(false);
   const [startDayHour] = useState(7);
   const [endDayHour] = useState(20);
-  const [isNewAppointment, setIsNewAppointment] = useState(false);
-
   const [modalCitaOpen, setModalCitaOpen] = useState(false);
-
   const [id_Cita, setId_Cita] = useState(0);
-
   const { state, dispatch } = useCitasContext();
-
   const [calendarData, setCalendarData] = useState([]);
-
-  // const [resources] = useState([
-  //   {
-  //     fieldName: "estilista",
-  //     title: "Estilista",
-  //     // allowMultiple: true,
-  //     instances: estilista,
-  //   },
-  // ]);
+  const [IFoptions, setIFoptions] = useState([]);
 
   const fetchDataFromAPI = useCallback(async () => {
     try {
@@ -97,6 +76,10 @@ const CitasCalendarV2 = () => {
     fetchDataFromAPI();
   }, [fetchDataFromAPI]);
 
+  const toggleConfirmationVisible = useCallback(() => {
+    setConfirmationVisible((prev) => !prev);
+  }, []);
+
   const handleOpenModalCita = () => {
     setModalCitaOpen(true);
   };
@@ -105,59 +88,43 @@ const CitasCalendarV2 = () => {
     setModalCitaOpen(false);
   };
 
-  const toggleConfirmationVisible = () => {
-    setConfirmationVisible((prev) => !prev);
-  };
-
-  const commitDeletedAppointment = () => {
-    setData((states) => {
-      const nextData = states.filter(
-        (appointment) => appointment.id !== deletedAppointmentId
-      );
-      return nextData;
-    });
+  const commitDeletedAppointment = useCallback(() => {
+    setData((prevData) =>
+      prevData.filter((appointment) => appointment.id !== deletedAppointmentId)
+    );
     toggleConfirmationVisible();
-  };
+  }, [deletedAppointmentId, toggleConfirmationVisible]);
 
-  const commitChanges = ({ added, changed, deleted }) => {
-    setData((states) => {
-      let updatedData = [...states];
-      console.log(updatedData);
+  const commitChanges = useCallback(
+    ({ added, changed, deleted }) => {
+      setData((prevData) => {
+        let updatedData = [...prevData];
 
-      if (added) {
-        const startingAddedId =
-          updatedData.length > 0
-            ? updatedData[updatedData.length - 1].id + 1
-            : 0;
-        updatedData.push({ id: startingAddedId, ...added });
-
-        const values = {
-          tiempo: updatedData.map((item) => item.endDate),
-          estilista: updatedData.map((item) => item.estilista),
-          servicios: updatedData.map((item) => item.servicio),
-        };
-        // console.log(values);
-        // setInfoToolbar(dispatch, values);
-        // console.log(startingAddedId);
-        fetchDataFromAPI();
-      }
-      if (changed) {
-        updatedData = updatedData.map((appointment) =>
-          changed[appointment.id]
-            ? { ...appointment, ...changed[appointment.id] }
-            : appointment
-        );
-      }
-      if (deleted !== undefined) {
-        setDeletedAppointmentId(deleted);
-        toggleConfirmationVisible();
-      }
-      return updatedData;
-    });
-    setAddedAppointments({});
-  };
-
-  const [IFoptions, setIFoptions] = useState([]);
+        if (added) {
+          const startingAddedId =
+            updatedData.length > 0
+              ? updatedData[updatedData.length - 1].id + 1
+              : 0;
+          updatedData.push({ id: startingAddedId, ...added });
+          fetchDataFromAPI();
+        }
+        if (changed) {
+          updatedData = updatedData.map((appointment) =>
+            changed[appointment.id]
+              ? { ...appointment, ...changed[appointment.id] }
+              : appointment
+          );
+        }
+        if (deleted !== undefined) {
+          setDeletedAppointmentId(deleted);
+          toggleConfirmationVisible();
+        }
+        return updatedData;
+      });
+      setAddedAppointments({});
+    },
+    [fetchDataFromAPI, toggleConfirmationVisible]
+  );
 
   const appointmentForm = connectProps(AppointmentFormContainer, () => {
     const currentAppointment =
@@ -186,56 +153,55 @@ const CitasCalendarV2 = () => {
     };
   });
 
-  // Cuando se edita una cita, se guarda el objeto en estado
-  const handleEditingAppointmentChange = (editingAppointment) => {
+  const handleEditingAppointmentChange = useCallback((editingAppointment) => {
     setEditingAppointments(editingAppointment);
-  };
+  }, []);
 
-  const handleAddedAppointmentChange = async (addedAppointment) => {
-    if (addedAppointment !== undefined) {
-      // console.log(addedAppointment);
-      const listaEst = await axios.get(`/api/estilistas`);
-      const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
-        fecha_inicio: addedAppointment.endDate,
-        fecha_final: addedAppointment.startDate,
-      });
-      const listaEstFiltrada = listaEst?.data?.data?.filter(
-        (estilistas) =>
-          !busquedaEst?.data?.some(
-            (busqEst) => busqEst?.EstilistaID === estilistas?.EstilistaID
-          )
-      );
-      setIFoptions(listaEstFiltrada);
-    }
-    setAddedAppointments(addedAppointment);
-    if (editingAppointments !== undefined) {
-      setPreviousAppointment(editingAppointments);
-    }
-    setEditingAppointments(undefined);
-    setIsNewAppointment(true);
-  };
+  const handleAddedAppointmentChange = useCallback(
+    async (addedAppointment) => {
+      if (addedAppointment !== undefined) {
+        const listaEst = await axios.get(`/api/estilistas`);
+        const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
+          fecha_inicio: addedAppointment.endDate,
+          fecha_final: addedAppointment.startDate,
+        });
+        const listaEstFiltrada = listaEst?.data?.data?.filter(
+          (estilista) =>
+            !busquedaEst?.data?.some(
+              (busqEst) => busqEst?.EstilistaID === estilista?.EstilistaID
+            )
+        );
+        // setDataCreation(dispatch, { estilistasD: listaEstFiltrada });
+        setIFoptions(listaEstFiltrada);
+      }
+      setAddedAppointments(addedAppointment);
+      if (editingAppointments !== undefined) {
+        setPreviousAppointment(editingAppointments);
+      }
+      setEditingAppointments(null);
+      setIsNewAppointment(true);
+    },
+    [editingAppointments]
+  );
 
-  // Cuando se borra una cita, se guarda el id de la cita en estado
-  const handleDeleteAppointment = () => {
+  const handleDeleteAppointment = useCallback(() => {
     setDeletedAppointmentId(deletedAppointmentId);
     toggleConfirmationVisible();
-  };
+  }, [deletedAppointmentId, toggleConfirmationVisible]);
 
-  // botton +
-  const handleAddAppointment = () => {
+  const handleAddAppointment = useCallback(() => {
     setEditingFormVisible(true);
-    setEditingAppointments(undefined);
+    setEditingAppointments(null);
     setAddedAppointments({
       startDate: new Date(currentDate).setHours(startDayHour),
       endDate: new Date(currentDate).setHours(startDayHour + 1),
     });
-  };
+  }, [currentDate, startDayHour]);
 
   return (
     <Paper>
       <Scheduler data={calendarData} height={660}>
         <ViewState />
-        {/* <ViewState currentDate={currentDate} /> */}
         <EditingState
           onCommitChanges={commitChanges}
           onEditingAppointmentChange={handleEditingAppointmentChange}
@@ -245,41 +211,21 @@ const CitasCalendarV2 = () => {
         <WeekView startDayHour={startDayHour} endDayHour={endDayHour} />
         <MonthView />
         <AllDayPanel />
-        {/* <EditRecurrenceMenu /> */}
         <Appointments />
         <AppointmentTooltip
-          showOpenButton
+          showOpenButton={false}
           showCloseButton
-          showDeleteButton
+          showDeleteButton={false}
           contentComponent={Content}
-          // headerComponent={() => null}
-          // layoutComponent={() => null}
         />
-        {/* <Resources
-          data={resources}
-          mainResourceName="estilista"
-          palette={[
-            "#009688",
-            "#00695C",
-            "#D32F2F",
-            "#7B1FA2",
-            "#8E24AA",
-            "#EB8834",
-            "#F57C00",
-            "#FF9800",
-            "#607D8B",
-          ]}
-        /> */}
         <Toolbar />
         <DateNavigator />
         <TodayButton />
         <ViewSwitcher />
         <AppointmentForm
           overlayComponent={appointmentForm}
-          // visible={editingFormVisible}
           onVisibilityChange={setEditingFormVisible}
         />
-        {/* <DragDropProvider /> */}
       </Scheduler>
 
       <Dialog open={confirmationVisible} onClose={() => {}}>

@@ -341,33 +341,33 @@ export default function RegistroClientesPage() {
                   tableData.map((row) => row.ane_id)
                 )
               }
-              action={
-                <Stack direction="row">
-                  <Tooltip title="Sent">
-                    <IconButton color="primary">
-                      <Iconify icon="ic:round-send" />
-                    </IconButton>
-                  </Tooltip>
+              // action={
+              //   <Stack direction="row">
+              //     <Tooltip title="Sent">
+              //       <IconButton color="primary">
+              //         <Iconify icon="ic:round-send" />
+              //       </IconButton>
+              //     </Tooltip>
 
-                  <Tooltip title="Download">
-                    <IconButton color="primary">
-                      <Iconify icon="eva:download-outline" />
-                    </IconButton>
-                  </Tooltip>
+              //     <Tooltip title="Download">
+              //       <IconButton color="primary">
+              //         <Iconify icon="eva:download-outline" />
+              //       </IconButton>
+              //     </Tooltip>
 
-                  <Tooltip title="Print">
-                    <IconButton color="primary">
-                      <Iconify icon="eva:printer-fill" />
-                    </IconButton>
-                  </Tooltip>
+              //     <Tooltip title="Print">
+              //       <IconButton color="primary">
+              //         <Iconify icon="eva:printer-fill" />
+              //       </IconButton>
+              //     </Tooltip>
 
-                  <Tooltip title="Delete">
-                    <IconButton color="primary" onClick={handleOpenConfirm}>
-                      <Iconify icon="eva:trash-2-outline" />
-                    </IconButton>
-                  </Tooltip>
-                </Stack>
-              }
+              //     <Tooltip title="Delete">
+              //       <IconButton color="primary" onClick={handleOpenConfirm}>
+              //         <Iconify icon="eva:trash-2-outline" />
+              //       </IconButton>
+              //     </Tooltip>
+              //   </Stack>
+              // }
             />
 
             <Scrollbar>
@@ -379,12 +379,12 @@ export default function RegistroClientesPage() {
                   rowCount={tableData.length}
                   numSelected={selected.length}
                   onSort={onSort}
-                  onSelectAllRows={(checked) =>
-                    onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.ane_id)
-                    )
-                  }
+                  // onSelectAllRows={(checked) =>
+                  //   onSelectAllRows(
+                  //     checked,
+                  //     tableData.map((row) => row.ane_id)
+                  //   )
+                  // }
                 />
 
                 <TableBody>

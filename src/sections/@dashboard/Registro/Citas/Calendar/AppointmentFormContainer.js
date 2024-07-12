@@ -40,8 +40,6 @@ const AppointmentFormContainer = ({
 
   const { infoToolbar } = state;
 
-  console.log(IFoptions);
-
   const [stilistOption, setStylistOption] = useState(IFoptions);
 
   const [services, setServices] = useState([]);
@@ -64,7 +62,6 @@ const AppointmentFormContainer = ({
   useEffect(() => {
     const getServices = async () => {
       try {
-        const valuesSearch = infoToolbar?.cliente;
         const servicesData = await axios.get(`/api/servicio`);
         setServices(servicesData.data.data);
       } catch (error) {

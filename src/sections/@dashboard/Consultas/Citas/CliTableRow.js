@@ -79,9 +79,9 @@ export default function CliTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox" align="center">
+        {/* <TableCell padding="checkbox" align="center">
           <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="left">{CitaID.toString()}</TableCell>
 

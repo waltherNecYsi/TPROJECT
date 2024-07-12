@@ -18,6 +18,15 @@ export const setInfoToolbar = (dispatch, payload) => {
   dispatch(action);
 };
 
+export const setDataCreation = (dispatch, payload) => {
+  const action = {
+    type: "setDataCreation",
+    payload,
+  };
+  console.log(payload);
+  dispatch(action);
+};
+
 //   export const changeProduct = (dispatch, payload, index) => {
 //     const action = {
 //       type: 'changeProduct',
