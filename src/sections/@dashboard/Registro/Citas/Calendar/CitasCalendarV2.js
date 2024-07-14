@@ -25,6 +25,7 @@ import {
   Button,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { styled } from '@mui/material/styles';
 import axios from "../../../../../utils/axios";
 
 import { appointments } from "../demo-data/appointments";
@@ -234,7 +235,7 @@ const CitasCalendarV2 = () => {
         <Toolbar />
         <DateNavigator />
         <TodayButton messages={messages} />
-        <ViewSwitcher />
+        <ViewSwitcher style={{ padding: '0px' }} />
         <AppointmentForm
           overlayComponent={appointmentForm}
           onVisibilityChange={setEditingFormVisible}

@@ -6,6 +6,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { format } from "date-fns";
+import esLocale from "date-fns/locale/es";
 
 import {
   Close,
@@ -343,6 +344,7 @@ const AppointmentFormContainer = ({
               </div>
               <div className={classes.wrapper}>
                 <CalendarToday className={classes.icon} color="action" />
+                {/* <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={esLocale}> */}
                 <LocalizationProvider dateAdapter={AdapterMoment}>
                   <DateTimePicker
                     label="Start Date"
