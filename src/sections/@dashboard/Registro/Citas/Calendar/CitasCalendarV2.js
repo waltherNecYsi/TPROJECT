@@ -198,18 +198,26 @@ const CitasCalendarV2 = () => {
     });
   }, [currentDate, startDayHour]);
 
+  const messages = {
+    today: "Hoy",
+
+    day: "Día",
+    week: "Semana",
+    month: "Mes",
+  };
+
   return (
     <Paper>
-      <Scheduler data={calendarData} height={660}>
+      <Scheduler data={calendarData} height={660} locale='es'>
         <ViewState />
         <EditingState
           onCommitChanges={commitChanges}
           onEditingAppointmentChange={handleEditingAppointmentChange}
           onAddedAppointmentChange={handleAddedAppointmentChange}
         />
-        <DayView startDayHour={startDayHour} endDayHour={endDayHour} />
-        <WeekView startDayHour={startDayHour} endDayHour={endDayHour} />
-        <MonthView />
+        <DayView startDayHour={startDayHour} endDayHour={endDayHour}  name="Dia" />
+        <WeekView startDayHour={startDayHour} endDayHour={endDayHour} name="Semana" />
+        <MonthView name="Mes" />
         <AllDayPanel />
         <Appointments />
         <AppointmentTooltip
@@ -220,7 +228,7 @@ const CitasCalendarV2 = () => {
         />
         <Toolbar />
         <DateNavigator />
-        <TodayButton />
+        <TodayButton messages={messages} />
         <ViewSwitcher />
         <AppointmentForm
           overlayComponent={appointmentForm}

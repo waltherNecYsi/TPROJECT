@@ -3,6 +3,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Provider as ReduxProvider } from "react-redux";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import esLocale from 'date-fns/locale/es';
 
 import Router from "./routes";
 
@@ -21,7 +22,7 @@ export default function App() {
     <AuthProvider>
       <HelmetProvider>
         <ReduxProvider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={esLocale}>
             <SettingsProvider>
               <BrowserRouter>
                 <ThemeProvider>
