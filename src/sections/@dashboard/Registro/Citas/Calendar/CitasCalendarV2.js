@@ -200,25 +200,30 @@ const CitasCalendarV2 = () => {
 
   const messages = {
     today: "Hoy",
-
-    day: "Día",
-    week: "Semana",
-    month: "Mes",
+    allDay: "Todo el Dia",
   };
 
   return (
     <Paper>
-      <Scheduler data={calendarData} height={660} locale='es'>
+      <Scheduler data={calendarData} height={660} locale="es">
         <ViewState />
         <EditingState
           onCommitChanges={commitChanges}
           onEditingAppointmentChange={handleEditingAppointmentChange}
           onAddedAppointmentChange={handleAddedAppointmentChange}
         />
-        <DayView startDayHour={startDayHour} endDayHour={endDayHour}  name="Dia" />
-        <WeekView startDayHour={startDayHour} endDayHour={endDayHour} name="Semana" />
+        <DayView
+          startDayHour={startDayHour}
+          endDayHour={endDayHour}
+          name="Dia"
+        />
+        <WeekView
+          startDayHour={startDayHour}
+          endDayHour={endDayHour}
+          name="Semana"
+        />
         <MonthView name="Mes" />
-        <AllDayPanel />
+        <AllDayPanel messages={messages} />
         <Appointments />
         <AppointmentTooltip
           showOpenButton={false}
