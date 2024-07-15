@@ -297,7 +297,7 @@ const AppointmentFormContainer = ({
             <div className={classes.content}>
               <div className={classes.wrapper}>
                 <Create className={classes.icon} color="action" />
-                <TextField {...textEditorProps("title")} />
+                <TextField {...textEditorProps("title")} label="Titulo" />
               </div>
               <div className={classes.wrapper}>
                 <LocationOn className={classes.icon} color="action" />
@@ -352,7 +352,7 @@ const AppointmentFormContainer = ({
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                   <DateTimePicker
                     adapterLocale={esLocale}  
-                    label="Start Date"
+                    label="Cita Inicio"
                     renderInput={(props) => (
                       <TextField {...props} className={classes.picker} />
                     )}
@@ -360,7 +360,7 @@ const AppointmentFormContainer = ({
                   />
                   <DateTimePicker
                     adapterLocale={esLocale}
-                    label="End Date"
+                    label="Cita Fin"
                     renderInput={(props) => (
                       <TextField {...props} className={classes.picker} />
                     )}
@@ -370,8 +370,8 @@ const AppointmentFormContainer = ({
               </div>
 
               <div className={classes.wrapper}>
-                <Notes className={classes.icon} color="action" />
-                <TextField {...textEditorProps("notes")} multiline rows="6" />
+                <Notes className={classes.icon} color="action"  />
+                <TextField {...textEditorProps("notes")} multiline rows="6" label="Detalles" />
               </div>
             </div>
             <div className={classes.buttonGroup}>
