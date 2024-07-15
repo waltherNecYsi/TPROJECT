@@ -6,6 +6,9 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { format } from "date-fns";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import "dayjs/locale/es";
+
 import esLocale from "date-fns/locale/es";
 
 import {
@@ -42,6 +45,7 @@ const AppointmentFormContainer = ({
   const { infoToolbar } = state;
 
   const [stilistOption, setStylistOption] = useState(IFoptions);
+  const [locale, setLocale] = useState('es');
 
   const [services, setServices] = useState([]);
 
@@ -345,8 +349,9 @@ const AppointmentFormContainer = ({
               <div className={classes.wrapper}>
                 <CalendarToday className={classes.icon} color="action" />
                 {/* <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={esLocale}> */}
-                <LocalizationProvider dateAdapter={AdapterMoment}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                   <DateTimePicker
+                    adapterLocale={esLocale}  
                     label="Start Date"
                     renderInput={(props) => (
                       <TextField {...props} className={classes.picker} />
@@ -354,6 +359,7 @@ const AppointmentFormContainer = ({
                     {...startDatePickerProps}
                   />
                   <DateTimePicker
+                    adapterLocale={esLocale}
                     label="End Date"
                     renderInput={(props) => (
                       <TextField {...props} className={classes.picker} />

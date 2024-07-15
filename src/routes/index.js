@@ -72,9 +72,9 @@ export default function Router() {
     {
       path: "dashboard",
       element: (
-        <GuestGuard>
+        // <GuestGuard>
           <DashboardLayout />
-        </GuestGuard>
+        // </GuestGuard>
       ),
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
