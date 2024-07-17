@@ -25,7 +25,7 @@ import {
   Button,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import axios from "../../../../../utils/axios";
 
 import { appointments } from "../demo-data/appointments";
@@ -161,19 +161,19 @@ const CitasCalendarV2 = () => {
   const handleAddedAppointmentChange = useCallback(
     async (addedAppointment) => {
       if (addedAppointment !== undefined) {
-        const listaEst = await axios.get(`/api/estilistas`);
-        const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
-          fecha_inicio: addedAppointment.endDate,
-          fecha_final: addedAppointment.startDate,
-        });
-        const listaEstFiltrada = listaEst?.data?.data?.filter(
-          (estilista) =>
-            !busquedaEst?.data?.some(
-              (busqEst) => busqEst?.EstilistaID === estilista?.EstilistaID
-            )
-        );
+        // const listaEst = await axios.get(`/api/estilistas`);
+        // const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
+        //   fecha_inicio: addedAppointment.endDate,
+        //   fecha_final: addedAppointment.startDate,
+        // });
+        // const listaEstFiltrada = listaEst?.data?.data?.filter(
+        //   (estilista) =>
+        //     !busquedaEst?.data?.some(
+        //       (busqEst) => busqEst?.EstilistaID === estilista?.EstilistaID
+        //     )
+        // );
         // setDataCreation(dispatch, { estilistasD: listaEstFiltrada });
-        setIFoptions(listaEstFiltrada);
+        // setIFoptions(listaEstFiltrada);
       }
       setAddedAppointments(addedAppointment);
       if (editingAppointments !== undefined) {
@@ -235,7 +235,7 @@ const CitasCalendarV2 = () => {
         <Toolbar />
         <DateNavigator />
         <TodayButton messages={messages} />
-        <ViewSwitcher style={{ padding: '0px' }} />
+        <ViewSwitcher style={{ padding: "0px" }} />
         <AppointmentForm
           overlayComponent={appointmentForm}
           onVisibilityChange={setEditingFormVisible}

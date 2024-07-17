@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { TextField, MenuItem, IconButton, Autocomplete } from "@mui/material";
+import {
+  TextField,
+  MenuItem,
+  IconButton,
+  Autocomplete,
+  Typography,
+  Box,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -34,18 +41,43 @@ const AppointmentFormContainer = ({
   cancelAppointment,
   target,
   onHide,
-  IFoptions,
+  // IFoptions,
   handleOpenModalCita,
   setId_Cita,
 }) => {
+  useEffect(() => {
+    const listaEst = async () => {
+      try {
+        const listaActEstilista = await axios.get(`/api/estilistas`);
+        console.log(listaActEstilista.data.data);
+        const busquedaEst = await axios.post(`/api/buscar_disponibilidad`, {
+          fecha_inicio: appointmentData?.endDate,
+          fecha_final: appointmentData?.startDate,
+        });
+        const listaEstFiltrada = listaActEstilista?.data?.data?.filter(
+          (estilista) =>
+            !busquedaEst?.data?.some(
+              (busqEst) => busqEst?.EstilistaID === estilista?.EstilistaID
+            )
+        );
+        setStylistOption(listaEstFiltrada);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setStylistOption([]);
+        throw error;
+      }
+    };
+    listaEst();
+  }, [appointmentData]);
+
   const [appointmentChanges, setAppointmentChanges] = useState({});
 
   const { state, dispatch } = useCitasContext();
 
   const { infoToolbar } = state;
 
-  const [stilistOption, setStylistOption] = useState(IFoptions);
-  const [locale, setLocale] = useState('es');
+  const [stilistOption, setStylistOption] = useState([]);
+  const [locale, setLocale] = useState("es");
 
   const [services, setServices] = useState([]);
 
@@ -331,27 +363,44 @@ const AppointmentFormContainer = ({
               </div>
               <div className={classes.wrapper}>
                 <Create className={classes.icon} color="action" />
-                <TextField {...textEditorProps("estilista")} select>
-                  {stilistOption.map((option) => (
-                    <MenuItem
-                      key={option.EstilistaID}
-                      value={JSON.stringify({
-                        id: option.EstilistaID,
-                        text: option.Nombr_Est,
-                      })}
-                      inputvalue={option.Nombr_Est}
-                    >
-                      {option.Nombr_Est}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                  }}
+                >
+                  <TextField {...textEditorProps("estilista")} select>
+                    {stilistOption.map((option) => (
+                      <MenuItem
+                        key={option.EstilistaID}
+                        value={JSON.stringify({
+                          id: option.EstilistaID,
+                          text: option.Nombr_Est,
+                        })}
+                        inputvalue={option.Nombr_Est}
+                      >
+                        {option.Nombr_Est}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  {stilistOption.length === 0 && (
+                    <Typography variant="caption" color="text.secondary">
+                      No hay estilistas disponibles
+                    </Typography>
+                  )}
+                </Box>
               </div>
               <div className={classes.wrapper}>
                 <CalendarToday className={classes.icon} color="action" />
                 {/* <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={esLocale}> */}
-                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale={locale}
+                >
                   <DateTimePicker
-                    adapterLocale={esLocale}  
+                    adapterLocale={esLocale}
                     label="Cita Inicio"
                     renderInput={(props) => (
                       <TextField {...props} className={classes.picker} />
@@ -370,8 +419,13 @@ const AppointmentFormContainer = ({
               </div>
 
               <div className={classes.wrapper}>
-                <Notes className={classes.icon} color="action"  />
-                <TextField {...textEditorProps("notes")} multiline rows="6" label="Detalles" />
+                <Notes className={classes.icon} color="action" />
+                <TextField
+                  {...textEditorProps("notes")}
+                  multiline
+                  rows="6"
+                  label="Detalles"
+                />
               </div>
             </div>
             <div className={classes.buttonGroup}>
@@ -421,7 +475,7 @@ AppointmentFormContainer.propTypes = {
   onHide: PropTypes.func.isRequired,
   handleOpenModalCita: PropTypes.func.isRequired,
   setId_Cita: PropTypes.func.isRequired,
-  IFoptions: PropTypes.array.isRequired,
+  // IFoptions: PropTypes.array.isRequired,
 };
 
 export default AppointmentFormContainer;
