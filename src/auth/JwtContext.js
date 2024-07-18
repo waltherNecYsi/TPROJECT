@@ -9,7 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { PATH_DASHBOARD, PATH_AUTH } from "../routes/paths";
-import useCustomSWR, { fetcher , fetchget } from "./useCustomSWR";
+import useCustomSWR, { fetcher, fetchget } from "./useCustomSWR";
 import { HOST_API_KEY } from "../config-global";
 
 // utils
@@ -102,8 +102,9 @@ const AuthProvider = ({ children }) => {
           ? localStorage.getItem("accessToken")
           : "";
 
-        const tokenData = await fetchget(`http://${HOST_API_KEY}/api/verifyToken`, 
-          accessToken,
+        const tokenData = await fetchget(
+          `http://${HOST_API_KEY}/api/verifyToken`,
+          accessToken
         );
 
         const { token, user } = tokenData;
@@ -180,34 +181,34 @@ const AuthProvider = ({ children }) => {
 
   const login = useCallback(async (email, password) => {
     try {
-      const loginData = await fetcher(
-        `http://${HOST_API_KEY}/api/login`,
-        {
-          email,
-          password,
-        }
-      );
-
-      const { access_token , user } = loginData;
-
-      console.log("User: ", user);
-      console.log("Token :", access_token);
-
-      setSession(access_token, user);
-
-      dispatch({
-        type: "LOGIN",
-        payload: {
-          user: {
-            ...user,
-            displayName: user?.name ?? "Nombre",
-            // empId: user.empresa.id,
-            // localId: user.local.id,
-            // photoURL: user?.empresa.imagen,
-            role: user?.rol ?? "Rol",
-          },
-        },
+      const loginData = await fetcher(`http://${HOST_API_KEY}/api/login`, {
+        email,
+        password,
       });
+
+
+      if (loginData?.user) {
+        const { access_token, user } = loginData;
+
+        console.log("User: ", user);
+        console.log("Token :", access_token);
+
+        setSession(access_token, user);
+
+        dispatch({
+          type: "LOGIN",
+          payload: {
+            user: {
+              ...user,
+              displayName: user?.name ?? "Nombre",
+              // empId: user.empresa.id,
+              // localId: user.local.id,
+              // photoURL: user?.empresa.imagen,
+              role: user?.rol ?? "Rol",
+            },
+          },
+        });
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error.message);
     }
@@ -253,7 +254,7 @@ const AuthProvider = ({ children }) => {
 
   // REGISTER
 
-  const register = useCallback(async (email, password, name , DNI) => {
+  const register = useCallback(async (email, password, name, DNI) => {
     try {
       const { data, error, isLoading } = await fetcher(
         `http://${HOST_API_KEY}/api/register`,

@@ -17,6 +17,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/es";
 
 import esLocale from "date-fns/locale/es";
+import { debounce } from "lodash";
 
 import {
   Close,
@@ -261,30 +262,6 @@ const AppointmentFormContainer = ({
     ),
   });
 
-  const pickerEditorProps = (field) => ({
-    value: displayAppointmentData[field],
-    onChange: (date) => {
-      console.log(date);
-      changeAppointment({
-        field,
-        changes: date ? date.toDate() : new Date(displayAppointmentData[field]),
-      });
-      handleSearchStylist();
-    },
-    ampm: true,
-    inputFormat: "DD/MM/YYYY HH:mm",
-    onError: () => null,
-  });
-
-  const startDatePickerProps = pickerEditorProps("startDate");
-  const endDatePickerProps = pickerEditorProps("endDate");
-
-  const cancelChanges = () => {
-    setAppointmentChanges({});
-    visibleChange();
-    cancelAppointment();
-  };
-
   const handleSearchStylist = async () => {
     try {
       const valuesSearch = getAppointmentData();
@@ -306,6 +283,34 @@ const AppointmentFormContainer = ({
       console.error("Error fetching data:", error);
       throw error;
     }
+  };
+
+  const handleSearchStylistDebounced = debounce(handleSearchStylist, 1000);
+
+  const pickerEditorProps = (field) => ({
+    value: displayAppointmentData[field],
+    onChange: (date) => {
+      console.log(date);
+      changeAppointment({
+        field,
+        changes: date ? date.toDate() : new Date(displayAppointmentData[field]),
+      });
+      // debounce(handleSearchStylist, 200);
+      handleSearchStylistDebounced();
+      // handleSearchStylist();
+    },
+    ampm: true,
+    inputFormat: "DD/MM/YYYY HH:mm",
+    onError: () => null,
+  });
+
+  const startDatePickerProps = pickerEditorProps("startDate");
+  const endDatePickerProps = pickerEditorProps("endDate");
+
+  const cancelChanges = () => {
+    setAppointmentChanges({});
+    visibleChange();
+    cancelAppointment();
   };
 
   return (

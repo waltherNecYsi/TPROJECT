@@ -54,17 +54,9 @@ import {
   CliTableEdit,
 } from "../../../sections/@dashboard/Registro/Clientes";
 
-// ----------------------------------------------------------------------
+import { useAuthContext } from "../../../auth/useAuthContext";
 
-const TABLE_HEAD = [
-  { id: 0, label: "ID", align: "left" },
-  { id: 1, label: "Nombre", align: "left" },
-  { id: 2, label: "Apellido", align: "left" },
-  { id: 3, label: "Telefono", align: "left" },
-  { id: 4, label: "Email", align: "left" },
-  { id: 5, label: "F. Registro", align: "left" },
-  { id: "" },
-];
+// ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
@@ -74,6 +66,21 @@ export default function RegistroClientesPage() {
   const { themeStretch } = useSettingsContext();
 
   const navigate = useNavigate();
+
+  const { user } = useAuthContext();
+
+  const TABLE_HEAD = [
+    { id: 0, label: "ID", align: "left" },
+    { id: 1, label: "Nombre", align: "left" },
+    { id: 2, label: "Apellido", align: "left" },
+    { id: 3, label: "Telefono", align: "left" },
+    { id: 4, label: "Email", align: "left" },
+    { id: 6, label: "F. Registro", align: "left" },
+    ...(user?.rol === "Atencion al Cliente"
+      ? [{ id: 5, label: "Usuario", align: "left" }]
+      : []),
+    { id: "", label: "" },
+  ];
 
   const {
     dense,
@@ -226,9 +233,8 @@ export default function RegistroClientesPage() {
   };
 
   useEffect(() => {
-     console.log(filterStartDate, filterEndDate);
+    console.log(filterStartDate, filterEndDate);
   }, [filterStartDate, filterEndDate]);
-
 
   const fetchDataFromAPI = useCallback(async () => {
     try {
@@ -236,8 +242,8 @@ export default function RegistroClientesPage() {
         params: {
           page: page + 1,
           fecha_inicio: filterStartDate,
-          fecha_final :filterEndDate,
-          nombre: filterName
+          fecha_final: filterEndDate,
+          nombre: filterName,
         },
       });
       setTableData(response.data.data);
@@ -246,7 +252,7 @@ export default function RegistroClientesPage() {
       console.error("Error fetching data:", error);
       throw error;
     }
-  }, [page , filterStartDate, filterEndDate , filterName]);
+  }, [page, filterStartDate, filterEndDate, filterName]);
 
   useEffect(() => {
     fetchDataFromAPI()

@@ -394,7 +394,7 @@ export default function RegistroEstilistasPage() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
                       <EstilistasTableRow
-                        key={row.ane_id}
+                        key={index}
                         keyIndex={index}
                         row={row}
                         selected={selected.includes(row.ane_id)}

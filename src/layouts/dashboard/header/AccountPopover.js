@@ -220,7 +220,7 @@ export default function AccountPopover() {
           sx={{ pt: 2, pb: 0, pr: 1, pl: SPACING }}
         >
           <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
-            Settings
+            Ajustes
           </Typography>
           <Divider sx={{ borderStyle: "dashed" }} />
 

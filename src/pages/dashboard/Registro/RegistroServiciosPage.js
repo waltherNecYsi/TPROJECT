@@ -62,7 +62,7 @@ const TABLE_HEAD = [
   { id: 2, label: "Descripcion", align: "left" },
   { id: 3, label: "Precio", align: "left" },
   { id: 4, label: "Duracion", align: "left" },
-  { id: 4, label: "Fecha de Registro", align: "left" },
+  { id: 5, label: "Fecha de Registro", align: "left" },
   { id: "" },
 ];
 

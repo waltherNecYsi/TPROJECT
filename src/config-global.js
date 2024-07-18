@@ -4,7 +4,7 @@ import { PATH_DASHBOARD } from "./routes/paths";
 // ----------------------------------------------------------------------
 
 // export const HOST_API_KEY = process.env.REACT_APP_HOST_API_KEY || '';
-export const HOST_API_KEY = "127.0.0.1:8000";
+export const HOST_API_KEY = "18.222.222.166";
 // export const HOST_API_KEY = 'www.glomeran.com';
 
 export const FIREBASE_API = {

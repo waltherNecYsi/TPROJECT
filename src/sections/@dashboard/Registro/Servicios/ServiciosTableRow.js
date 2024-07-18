@@ -25,7 +25,7 @@ import ConfirmDialog from "../../../../components/confirm-dialog";
 
 // ----------------------------------------------------------------------
 
-EstilistasTableRow.propTypes = {
+ServiciosTableRow.propTypes = {
   row: PropTypes.object,
   keyIndex: PropTypes.number,
   selected: PropTypes.bool,
@@ -35,7 +35,7 @@ EstilistasTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function EstilistasTableRow({
+export default function ServiciosTableRow({
   row,
   keyIndex,
   selected,

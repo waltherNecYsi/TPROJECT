@@ -126,12 +126,14 @@ export default function CliTableRow({
             direction="row"
             sx={{ display: "flex", justifyContent: "center" }}
           >
-            {/* <Tooltip title="Editar" placement="top" arrow>
-              <IconButton sx={{}} color="default">
+             <Tooltip title="Editar" placement="top" arrow>
+              <IconButton sx={{}} color="default" onClick={ () => {
+                alert("zzz");
+              }}>
                 <Iconify icon="eva:edit-fill" width="1rem" height="1rem" />
               </IconButton>
-            </Tooltip> */}
-            {/* <Tooltip title="Eliminar" placement="top" arrow>
+            </Tooltip> 
+            <Tooltip title="Eliminar" placement="top" arrow>
               <IconButton
                 sx={{}}
                 color="default"
@@ -146,7 +148,7 @@ export default function CliTableRow({
                   height="1rem"
                 />
               </IconButton>
-            </Tooltip> */}
+            </Tooltip> 
             <Tooltip title="Ticket Pago" placement="top" arrow>
               <IconButton color="default" onClick={DownloadTicket}>
                 <FileThumbnail

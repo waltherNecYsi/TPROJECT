@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import PropTypes from "prop-types";
+import { useState } from "react";
 // @mui
 import {
   Link,
@@ -12,16 +12,17 @@ import {
   TableCell,
   IconButton,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 // utils
-import { fDate } from '../../../../utils/formatTime';
-import { fCurrency } from '../../../../utils/formatNumber';
+import { fDate } from "../../../../utils/formatTime";
+import { fCurrency } from "../../../../utils/formatNumber";
 // components
-import Label from '../../../../components/label';
-import Iconify from '../../../../components/iconify';
-import { CustomAvatar } from '../../../../components/custom-avatar';
-import MenuPopover from '../../../../components/menu-popover';
-import ConfirmDialog from '../../../../components/confirm-dialog';
+import Label from "../../../../components/label";
+import Iconify from "../../../../components/iconify";
+import { CustomAvatar } from "../../../../components/custom-avatar";
+import MenuPopover from "../../../../components/menu-popover";
+import ConfirmDialog from "../../../../components/confirm-dialog";
+import { useAuthContext } from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +36,7 @@ CliTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function CliTableRow ({
+export default function CliTableRow({
   row,
   keyIndex,
   selected,
@@ -44,7 +45,15 @@ export default function CliTableRow ({
   onEditRow,
   onDeleteRow,
 }) {
-  const { Nomb_Clt , Apell_Clt , Telef_Clt , Email_Clt , FechaReg_Clt } = row;
+  const { Nomb_Clt, Apell_Clt, Telef_Clt, Email_Clt, FechaReg_Clt, idEstado } =
+    row;
+
+  const { user } = useAuthContext();
+
+  // const Estados = [
+  //   { id: 0, label: "Eliminado" },
+  //   { id: 1, label: "Creado" },
+  // ];
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -66,15 +75,16 @@ export default function CliTableRow ({
     setOpenPopover(null);
   };
 
+  const handleActive = async () => {
+    alert("Activo Usuario");
+  }
 
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox" align='center'>
+        <TableCell padding="checkbox" align="center">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
-
-
 
         <TableCell align="left">{keyIndex + 1}</TableCell>
 
@@ -87,8 +97,30 @@ export default function CliTableRow ({
         <TableCell align="left">{Telef_Clt}</TableCell>
 
         <TableCell align="left">{Email_Clt}</TableCell>
-        
+
         <TableCell align="left">{FechaReg_Clt}</TableCell>
+
+        {user?.rol === "Atencion al Cliente" ? (
+          <TableCell align="left">
+            <Button
+              variant="contained"
+              color={idEstado === 0 ? "error" : "success"}
+              sx={{
+                fontSize: "0.7rem",
+                ...(idEstado === 1 && {
+                  backgroundColor: '#00ab55!important',
+                  color: "white!important",
+                }),
+              }}
+              disabled={idEstado !== 0}
+              onClick={handleActive}
+              // onClick={alert("Activar Usuario")}
+            >
+              {" "}
+              {idEstado === 0 ? "Eliminado" : "Activo"}
+            </Button>
+          </TableCell>
+        ) : null}
 
         {/* <TableCell align="left">{fDate(created_at)}</TableCell> */}
 
@@ -117,7 +149,10 @@ export default function CliTableRow ({
 */}
 
         <TableCell align="right">
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
+          <IconButton
+            color={openPopover ? "inherit" : "default"}
+            onClick={handleOpenPopover}
+          >
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
@@ -149,14 +184,14 @@ export default function CliTableRow ({
           Edit
         </MenuItem>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: "dashed" }} />
 
         <MenuItem
           onClick={() => {
             handleOpenConfirm();
             handleClosePopover();
           }}
-          sx={{ color: 'error.main' }}
+          sx={{ color: "error.main" }}
         >
           <Iconify icon="eva:trash-2-outline" />
           Delete
