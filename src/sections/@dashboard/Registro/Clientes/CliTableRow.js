@@ -34,6 +34,7 @@ CliTableRow.propTypes = {
   onViewRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onSelectRow: PropTypes.func,
+  onActive: PropTypes.func,
 };
 
 export default function CliTableRow({
@@ -44,6 +45,7 @@ export default function CliTableRow({
   onViewRow,
   onEditRow,
   onDeleteRow,
+  onActive,
 }) {
   const { Nomb_Clt, Apell_Clt, Telef_Clt, Email_Clt, FechaReg_Clt, idEstado } =
     row;
@@ -102,23 +104,22 @@ export default function CliTableRow({
 
         {user?.rol === "Atencion al Cliente" ? (
           <TableCell align="left">
-            <Button
-              variant="contained"
-              color={idEstado === 0 ? "error" : "success"}
-              sx={{
-                fontSize: "0.7rem",
-                ...(idEstado === 1 && {
-                  backgroundColor: '#00ab55!important',
-                  color: "white!important",
-                }),
-              }}
-              disabled={idEstado !== 0}
-              onClick={handleActive}
-              // onClick={alert("Activar Usuario")}
-            >
-              {" "}
-              {idEstado === 0 ? "Eliminado" : "Activo"}
-            </Button>
+          <Button
+            variant="contained"
+            color={idEstado === 0 ? "error" : "success"}
+            sx={{
+              fontSize: "0.7rem",
+              ...(idEstado === 1 && {
+                backgroundColor: "#00ab55!important",
+                color: "white!important",
+              }),
+            }}
+            onClick={onActive}
+            // onClick={alert("Activar Usuario")}
+          >
+            {" "}
+            {idEstado === 0 ? "Eliminado" : "Activo"}
+          </Button>
           </TableCell>
         ) : null}
 

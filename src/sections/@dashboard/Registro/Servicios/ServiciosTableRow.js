@@ -23,6 +23,8 @@ import { CustomAvatar } from "../../../../components/custom-avatar";
 import MenuPopover from "../../../../components/menu-popover";
 import ConfirmDialog from "../../../../components/confirm-dialog";
 
+import { useAuthContext } from "../../../../auth/useAuthContext";
+
 // ----------------------------------------------------------------------
 
 ServiciosTableRow.propTypes = {
@@ -33,6 +35,7 @@ ServiciosTableRow.propTypes = {
   onViewRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onSelectRow: PropTypes.func,
+  onActive: PropTypes.func,
 };
 
 export default function ServiciosTableRow({
@@ -43,8 +46,11 @@ export default function ServiciosTableRow({
   onViewRow,
   onEditRow,
   onDeleteRow,
+  onActive,
 }) {
-  const { Nomb_Serv, Desc_Serv, Precio_Serv, DurMin_Serv , FechaReg_Serv } = row;
+  const { Nomb_Serv, Desc_Serv, Precio_Serv, DurMin_Serv, FechaReg_Serv , idEstado} = row;
+
+  const { user } = useAuthContext();
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -84,6 +90,27 @@ export default function ServiciosTableRow({
         <TableCell align="left">{DurMin_Serv}</TableCell>
 
         <TableCell align="left">{FechaReg_Serv}</TableCell>
+
+        {user?.rol === "Atencion al Cliente" ? (
+          <TableCell align="left">
+          <Button
+            variant="contained"
+            color={idEstado === 0 ? "error" : "success"}
+            sx={{
+              fontSize: "0.7rem",
+              ...(idEstado === 1 && {
+                backgroundColor: "#00ab55!important",
+                color: "white!important",
+              }),
+            }}
+            onClick={onActive}
+            // onClick={alert("Activar Usuario")}
+          >
+            {" "}
+            {idEstado === 0 ? "Eliminado" : "Activo"}
+          </Button>
+          </TableCell>
+        ) : null}
 
         <TableCell align="right">
           <IconButton

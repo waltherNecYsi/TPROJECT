@@ -55,16 +55,9 @@ import {
   ServiciosTableEdit,
 } from "../../../sections/@dashboard/Registro/Servicios";
 
-// ----------------------------------------------------------------------
+import { useAuthContext } from "../../../auth/useAuthContext";
 
-const TABLE_HEAD = [
-  { id: 1, label: "Servicio", align: "left" },
-  { id: 2, label: "Descripcion", align: "left" },
-  { id: 3, label: "Precio", align: "left" },
-  { id: 4, label: "Duracion", align: "left" },
-  { id: 5, label: "Fecha de Registro", align: "left" },
-  { id: "" },
-];
+// ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
@@ -74,6 +67,19 @@ export default function RegistroClientesPage() {
   const { themeStretch } = useSettingsContext();
 
   const navigate = useNavigate();
+  const { user } = useAuthContext();
+
+  const TABLE_HEAD = [
+    { id: 1, label: "Servicio", align: "left" },
+    { id: 2, label: "Descripcion", align: "left" },
+    { id: 3, label: "Precio", align: "left" },
+    { id: 4, label: "Duracion", align: "left" },
+    { id: 5, label: "Fecha de Registro", align: "left" },
+    ...(user?.rol === "Atencion al Cliente"
+      ? [{ id: 6, label: "Estado", align: "left" }]
+      : []),
+    { id: "" },
+  ];
 
   const {
     dense,
@@ -212,6 +218,17 @@ export default function RegistroClientesPage() {
   const handleShowEditModal = async (id) => {
     const response = await axios.get(`/api/servicio/${id.ServicioID}`);
     return response.data;
+  };
+
+  const handleActive = async (id) => {
+    try {
+      const response = await axios.get(`/api/inahibilitar/${id.id}`);
+      fetchDataFromAPI();
+      return response.data;
+    } catch (error) {
+      console.error("Error al realizar la solicitud Habilitar:", error);
+      throw error;
+    }
   };
 
   const handleOpenEditModal = async (id) => {
@@ -397,6 +414,7 @@ export default function RegistroClientesPage() {
                         // onEditRow={() => handleEditRow(row.ane_id)}
                         onEditRow={() => handleOpenEditModal(row)}
                         onDeleteRow={() => handleDeleteRow(row)}
+                        onActive={() => handleActive(row)}
                       />
                     ))}
 

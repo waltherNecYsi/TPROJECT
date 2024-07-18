@@ -54,17 +54,12 @@ import {
   EstilistasTableEdit,
 } from "../../../sections/@dashboard/Registro/Estilistas";
 
+import { useAuthContext } from "../../../auth/useAuthContext";
+
+
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 0, label: "ID", align: "left" },
-  { id: 1, label: "Nombre", align: "left" },
-  { id: 2, label: "Apellido", align: "left" },
-  { id: 3, label: "Telefono", align: "left" },
-  { id: 4, label: "Email", align: "left" },
-  { id: 5, label: "F. Registro", align: "left" },
-  { id: 6 },
-];
+
 
 // ----------------------------------------------------------------------
 
@@ -74,6 +69,21 @@ export default function RegistroEstilistasPage() {
   const { themeStretch } = useSettingsContext();
 
   const navigate = useNavigate();
+
+  const { user } = useAuthContext();
+
+  const TABLE_HEAD = [
+    { id: 0, label: "ID", align: "left" },
+    { id: 1, label: "Nombre", align: "left" },
+    { id: 2, label: "Apellido", align: "left" },
+    { id: 3, label: "Telefono", align: "left" },
+    { id: 4, label: "Email", align: "left" },
+    { id: 5, label: "F. Registro", align: "left" },
+    ...(user?.rol === "Atencion al Cliente"
+      ? [{ id: 6, label: "Estado", align: "left" }]
+      : []),
+    { id: 6 },
+  ];
 
   const {
     dense,
@@ -218,6 +228,17 @@ export default function RegistroEstilistasPage() {
       return response.data;
     } catch (error) {
       console.error("Error fetching data:", error);
+      throw error;
+    }
+  };
+
+  const handleActive = async (id) => {
+    try {
+      const response = await axios.get(`/api/inahibilitar/${id.id}`);
+      fetchDataFromAPI();
+      return response.data;
+    } catch (error) {
+      console.error("Error al realizar la solicitud Habilitar:", error);
       throw error;
     }
   };
@@ -403,6 +424,7 @@ export default function RegistroEstilistasPage() {
                         // onEditRow={() => handleEditRow(row.ane_id)}
                         onEditRow={() => handleOpenEditModal(row)}
                         onDeleteRow={() => handleDeleteRow(row)}
+                        onActive={() => handleActive(row)}
                       />
                     ))}
                   <EstilistasTableEdit

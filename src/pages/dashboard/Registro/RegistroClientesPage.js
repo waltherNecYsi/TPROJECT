@@ -77,7 +77,7 @@ export default function RegistroClientesPage() {
     { id: 4, label: "Email", align: "left" },
     { id: 6, label: "F. Registro", align: "left" },
     ...(user?.rol === "Atencion al Cliente"
-      ? [{ id: 5, label: "Usuario", align: "left" }]
+      ? [{ id: 5, label: "Estado", align: "left" }]
       : []),
     { id: "", label: "" },
   ];
@@ -229,6 +229,17 @@ export default function RegistroClientesPage() {
       setIsModalEditOpen(true);
     } catch (error) {
       setIsModalEditOpen(false);
+    }
+  };
+
+  const handleActive = async (id) => {
+    try {
+      const response = await axios.get(`/api/inahibilitar/${id.id}`);
+      fetchDataFromAPI();
+      return response.data;
+    } catch (error) {
+      console.error("Error al realizar la solicitud Habilitar:", error);
+      throw error;
     }
   };
 
@@ -413,6 +424,7 @@ export default function RegistroClientesPage() {
                         // onEditRow={() => handleEditRow(row.ane_id)}
                         onEditRow={() => handleOpenEditModal(row)}
                         onDeleteRow={() => handleDeleteRow(row)}
+                        onActive={() => handleActive(row)}
                       />
                     ))}
                   <CliTableEdit

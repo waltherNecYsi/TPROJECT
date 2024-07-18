@@ -1,15 +1,22 @@
-import PropTypes from 'prop-types';
-import { useRef } from 'react';
+import PropTypes from "prop-types";
+import { useRef } from "react";
 // @mui
-import { useTheme } from '@mui/material/styles';
-import { Box, Stack, Paper, Avatar, Typography, CardHeader } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
+import {
+  Box,
+  Stack,
+  Paper,
+  Avatar,
+  Typography,
+  CardHeader,
+} from "@mui/material";
 // utils
-import { fDateTime } from '../../../../utils/formatTime';
+import { fDateTime } from "../../../../utils/formatTime";
 // components
-import Label from '../../../../components/label';
-import Image from '../../../../components/image';
-import Iconify from '../../../../components/iconify';
-import Carousel, { CarouselArrows } from '../../../../components/carousel';
+import Label from "../../../../components/label";
+import Image from "../../../../components/image";
+import Iconify from "../../../../components/iconify";
+import Carousel, { CarouselArrows } from "../../../../components/carousel";
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +27,13 @@ BookingNewestBooking.propTypes = {
   subheader: PropTypes.string,
 };
 
-export default function BookingNewestBooking({ title, subheader, list, sx, ...other }) {
+export default function BookingNewestBooking({
+  title,
+  subheader,
+  list,
+  sx,
+  ...other
+}) {
   const theme = useTheme();
 
   const carouselRef = useRef(null);
@@ -30,7 +43,7 @@ export default function BookingNewestBooking({ title, subheader, list, sx, ...ot
     arrows: false,
     slidesToShow: 4,
     slidesToScroll: 1,
-    rtl: Boolean(theme.direction === 'rtl'),
+    rtl: Boolean(theme.direction === "rtl"),
     responsive: [
       {
         breakpoint: theme.breakpoints.values.lg,
@@ -70,7 +83,7 @@ export default function BookingNewestBooking({ title, subheader, list, sx, ...ot
         sx={{
           p: 0,
           mb: 3,
-          '& .MuiCardHeader-action': { alignSelf: 'center' },
+          "& .MuiCardHeader-action": { alignSelf: "center" },
         }}
       />
 
@@ -101,7 +114,7 @@ function BookingItem({ item }) {
   const { avatar, name, roomNumber, bookdAt, person, cover, roomType } = item;
 
   return (
-    <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
+    <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: "background.neutral" }}>
       <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
         <Stack direction="row" alignItems="center" spacing={2}>
           <Avatar alt={name} src={avatar} />
@@ -111,7 +124,7 @@ function BookingItem({ item }) {
 
             <Typography
               variant="caption"
-              sx={{ color: 'text.disabled', mt: 0.5, display: 'block' }}
+              sx={{ color: "text.disabled", mt: 0.5, display: "block" }}
             >
               {fDateTime(bookdAt)}
             </Typography>
@@ -131,8 +144,8 @@ function BookingItem({ item }) {
         </Stack> */}
       </Stack>
 
-      <Box sx={{ p: 1, position: 'relative' }}>
-        <Label
+      <Box sx={{ p: 1, position: "relative" }}>
+        {/* <Label
           variant="filled"
           color={(roomType === 'king' && 'error') || (roomType === 'double' && 'info') || 'warning'}
           sx={{
@@ -143,7 +156,7 @@ function BookingItem({ item }) {
           }}
         >
           {roomType}
-        </Label>
+        </Label> */}
 
         <Image alt="cover" src={cover} ratio="1/1" sx={{ borderRadius: 1.5 }} />
       </Box>

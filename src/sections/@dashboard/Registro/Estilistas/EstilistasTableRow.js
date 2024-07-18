@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import PropTypes from "prop-types";
+import { useState } from "react";
 // @mui
 import {
   Link,
@@ -12,16 +12,18 @@ import {
   TableCell,
   IconButton,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 // utils
-import { fDate } from '../../../../utils/formatTime';
-import { fCurrency } from '../../../../utils/formatNumber';
+import { fDate } from "../../../../utils/formatTime";
+import { fCurrency } from "../../../../utils/formatNumber";
 // components
-import Label from '../../../../components/label';
-import Iconify from '../../../../components/iconify';
-import { CustomAvatar } from '../../../../components/custom-avatar';
-import MenuPopover from '../../../../components/menu-popover';
-import ConfirmDialog from '../../../../components/confirm-dialog';
+import Label from "../../../../components/label";
+import Iconify from "../../../../components/iconify";
+import { CustomAvatar } from "../../../../components/custom-avatar";
+import MenuPopover from "../../../../components/menu-popover";
+import ConfirmDialog from "../../../../components/confirm-dialog";
+
+import { useAuthContext } from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -33,9 +35,10 @@ EstilistasTableRow.propTypes = {
   onViewRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onSelectRow: PropTypes.func,
+  onActive: PropTypes.func,
 };
 
-export default function EstilistasTableRow ({
+export default function EstilistasTableRow({
   row,
   keyIndex,
   selected,
@@ -43,9 +46,11 @@ export default function EstilistasTableRow ({
   onViewRow,
   onEditRow,
   onDeleteRow,
+  onActive,
 }) {
-  const { Nombr_Est , Apell_Est, Telef_Est , Email_Est , created_at
-  } = row;
+  const { Nombr_Est, Apell_Est, Telef_Est, Email_Est, created_at , idEstado } = row;
+
+  const { user } = useAuthContext();
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -67,15 +72,12 @@ export default function EstilistasTableRow ({
     setOpenPopover(null);
   };
 
-
   return (
     <>
       <TableRow hover selected={selected}>
         <TableCell padding="checkbox" align="center">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
-
-
 
         <TableCell align="left">{keyIndex + 1}</TableCell>
 
@@ -86,8 +88,29 @@ export default function EstilistasTableRow ({
         <TableCell align="left">{Telef_Est}</TableCell>
 
         <TableCell align="left">{Email_Est}</TableCell>
-        
+
         <TableCell align="left">{created_at}</TableCell>
+
+        {user?.rol === "Atencion al Cliente" ? (
+          <TableCell align="left">
+          <Button
+            variant="contained"
+            color={idEstado === 0 ? "error" : "success"}
+            sx={{
+              fontSize: "0.7rem",
+              ...(idEstado === 1 && {
+                backgroundColor: "#00ab55!important",
+                color: "white!important",
+              }),
+            }}
+            onClick={onActive}
+            // onClick={alert("Activar Usuario")}
+          >
+            {" "}
+            {idEstado === 0 ? "Eliminado" : "Activo"}
+          </Button>
+          </TableCell>
+        ) : null}
 
         {/* <TableCell align="left">{fDate(created_at)}</TableCell> */}
 
@@ -116,7 +139,10 @@ export default function EstilistasTableRow ({
 */}
 
         <TableCell align="right">
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
+          <IconButton
+            color={openPopover ? "inherit" : "default"}
+            onClick={handleOpenPopover}
+          >
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
@@ -148,14 +174,14 @@ export default function EstilistasTableRow ({
           Edit
         </MenuItem>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: "dashed" }} />
 
         <MenuItem
           onClick={() => {
             handleOpenConfirm();
             handleClosePopover();
           }}
-          sx={{ color: 'error.main' }}
+          sx={{ color: "error.main" }}
         >
           <Iconify icon="eva:trash-2-outline" />
           Delete
