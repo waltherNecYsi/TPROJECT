@@ -41,3 +41,6 @@ export const RegistroServiciosPage = Loadable(
 export const ConsultaCitasPage = Loadable(
   lazy(() => import('../pages/dashboard/Consulta/ConsultaCitasPage'))
 );
+export const ConsultaUsuariosPage = Loadable(
+  lazy(() => import('../pages/dashboard/Consulta/ConsultaUsuariosPage'))
+);

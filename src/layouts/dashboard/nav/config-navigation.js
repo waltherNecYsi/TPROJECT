@@ -76,6 +76,7 @@ const navConfig = [
         icon: ICONS.file,
         children: [
           { title: "citas", path: PATH_DASHBOARD.consulta.consultaCitas },
+          { title: "usuarios", path: PATH_DASHBOARD.consulta.consultaUsuarios },
         ],
       }
     ],

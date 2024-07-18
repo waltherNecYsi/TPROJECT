@@ -48,32 +48,36 @@ import {
 // sections
 
 import {
-  ServiciosTableRow,
-  ServiciosTableToolbar,
-  ServiciosTableButtom,
-  ServiciosTableForm,
-  ServiciosTableEdit,
-} from "../../../sections/@dashboard/Registro/Servicios";
+  UsuariosTableRow,
+  UsuariosTableToolbar,
+  UsuariosTableButtom,
+  UsuariosTableEdit,
+} from "../../../sections/@dashboard/Consultas/Usuarios";
+
+import { useAuthContext } from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 1, label: "Servicio", align: "left" },
-  { id: 2, label: "Descripcion", align: "left" },
-  { id: 3, label: "Precio", align: "left" },
-  { id: 4, label: "Duracion", align: "left" },
-  { id: 5, label: "Fecha de Registro", align: "left" },
-  { id: "" },
-];
-
 // ----------------------------------------------------------------------
 
-export default function RegistroClientesPage() {
+export default function ConsultaUsuariosPage() {
   const theme = useTheme();
 
   const { themeStretch } = useSettingsContext();
 
   const navigate = useNavigate();
+
+  const { user } = useAuthContext();
+
+  const TABLE_HEAD = [
+    { id: 0, label: "ID", align: "left" },
+    { id: 1, label: "Nombre", align: "left" },
+    { id: 2, label: "Email", align: "left" },
+    { id: 3, label: "DNI", align: "left" },
+    { id: 6, label: "F. Registro", align: "left" },
+    { id: 5, label: "Usuario", align: "left" },
+    { id: "", label: "" },
+  ];
 
   const {
     dense,
@@ -133,17 +137,15 @@ export default function RegistroClientesPage() {
   };
 
   const handleDeleteRow = async (id) => {
-    const deleteRow = tableData.filter(
-      (row) => row.ServicioID !== id.ServicioID
-    );
+    const deleteRow = tableData.filter((row) => row.ane_id !== id.ane_id);
     setSelected([]);
     try {
-      const response = axios.delete(`/api/servicio/${id.ServicioID}`);
-      // if (page > 0 && dataInPage.length < 2) {
-      //   setPage(page - 1);
-      // }
-      // return response.data;
-      fetchDataFromAPI();
+      const response = axios.delete(`/api/cliente/${id.ClienteID}`);
+      setFetchTrigger((prevState) => !prevState);
+      if (page > 0 && dataInPage.length < 2) {
+        setPage(page - 1);
+      }
+      return response.data;
     } catch (error) {
       console.error("Error al realizar la solicitud DELETE:", error);
       throw error;
@@ -183,10 +185,11 @@ export default function RegistroClientesPage() {
 
   const modal1Request = async (formData, closeModal) => {
     try {
-      const response = await axios.post(`/api/servicio`, {
+      const response = await axios.post(`/api/register`, {
         ...formData,
       });
       console.log("Respuesta exitosa:", response.data);
+      fetchDataFromAPI();
       return response.data;
     } catch (error) {
       console.error("Error al realizar la solicitud POST:", error);
@@ -197,10 +200,11 @@ export default function RegistroClientesPage() {
 
   const modal2Request = async (formData, closeModal) => {
     try {
-      const response = await axios.put(`/api/servicio/${formData.ServicioID}`, {
+      const response = await axios.put(`/api/editUsuario/${formData.id}`, {
         ...formData,
       });
       console.log("Respuesta exitosa:", response.data);
+      fetchDataFromAPI();
       return response.data;
     } catch (error) {
       console.error("Error al realizar la solicitud POST:", error);
@@ -210,12 +214,23 @@ export default function RegistroClientesPage() {
   };
 
   const handleShowEditModal = async (id) => {
-    const response = await axios.get(`/api/servicio/${id.ServicioID}`);
+    const response = await axios.get(`/api/showUsuario/${id.id}`);
     return response.data;
   };
 
+  const handleActive = async (id) => {
+    try {
+      const response = await axios.get(`/api/inahibilitar/${id.id}`);
+      fetchDataFromAPI();
+      return response.data;
+    } catch (error) {
+      console.error("Error al realizar la solicitud Habilitar:", error);
+      throw error;
+    }
+  };
+
   const handleOpenEditModal = async (id) => {
-    console.log("Se seleccionó editar la fila con ID:", id.ServicioID);
+    console.log("Se seleccionó editar la fila con ID:", id.id);
     try {
       const response = await handleShowEditModal(id);
       setRowData(response);
@@ -225,9 +240,13 @@ export default function RegistroClientesPage() {
     }
   };
 
+  useEffect(() => {
+    console.log(filterStartDate, filterEndDate);
+  }, [filterStartDate, filterEndDate]);
+
   const fetchDataFromAPI = useCallback(async () => {
     try {
-      const response = await axios.get("/api/servicio", {
+      const response = await axios.get("/api/usuarios", {
         params: {
           page: page + 1,
           fecha_inicio: filterStartDate,
@@ -235,7 +254,7 @@ export default function RegistroClientesPage() {
           nombre: filterName,
         },
       });
-      if (response.data.data.length > 0) {
+      if (response?.data?.data) {
         setTableData(response.data.data);
       }
       return response.data.data;
@@ -278,27 +297,27 @@ export default function RegistroClientesPage() {
   return (
     <>
       <Helmet>
-        <title>Clientes</title>
+        <title>Usuarios</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : "lg"}>
         <CustomBreadcrumbs
-          heading="Servicios"
+          heading="Usuarios"
           links={[
             {
               name: "Dashboard",
               href: PATH_DASHBOARD.root,
             },
             {
-              name: "Registros",
-              href: PATH_DASHBOARD.registro.root,
+              name: "Consultas",
+              href: PATH_DASHBOARD.consulta.root,
             },
             {
-              name: "Servicios",
+              name: "usuarios",
             },
           ]}
           action={
-            <ServiciosTableButtom
+            <UsuariosTableButtom
               modal1Request={modal1Request}
               fetchDataFromAPI={fetchDataFromAPI}
             />
@@ -308,7 +327,7 @@ export default function RegistroClientesPage() {
         <Card>
           <Divider />
 
-          <ServiciosTableToolbar
+          <UsuariosTableToolbar
             filterName={filterName}
             isFiltered={isFiltered}
             // filterService={filterService}
@@ -387,19 +406,26 @@ export default function RegistroClientesPage() {
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
-                      <ServiciosTableRow
+                      <UsuariosTableRow
                         key={index}
                         keyIndex={index}
                         row={row}
                         selected={selected.includes(row.ane_id)}
                         onSelectRow={() => onSelectRow(row.ane_id)}
-                        onViewRow={() => handleViewRow(row.ane_id)}
+                        // onViewRow={() => handleViewRow(row.ane_id)}
                         // onEditRow={() => handleEditRow(row.ane_id)}
                         onEditRow={() => handleOpenEditModal(row)}
-                        onDeleteRow={() => handleDeleteRow(row)}
+                        onActive={() => handleActive(row)}
+                        // onDeleteRow={() => handleDeleteRow(row)}
                       />
                     ))}
-
+                  <UsuariosTableEdit
+                    modal2Request={modal2Request}
+                    fetchDataFromAPI={fetchDataFromAPI}
+                    isModalOpen={isModalEditOpen}
+                    setIsModalOpen={setIsModalEditOpen}
+                    rowData={rowData}
+                  />
                   <TableEmptyRows
                     height={denseHeight}
                     emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
@@ -423,14 +449,6 @@ export default function RegistroClientesPage() {
           />
         </Card>
       </Container>
-
-      <ServiciosTableEdit
-        modal2Request={modal2Request}
-        fetchDataFromAPI={fetchDataFromAPI}
-        isModalOpen={isModalEditOpen}
-        setIsModalOpen={setIsModalEditOpen}
-        rowData={rowData}
-      />
 
       <ConfirmDialog
         open={openConfirm}

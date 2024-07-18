@@ -26,6 +26,7 @@ export const PATH_DASHBOARD = {
   consulta: {
     root: path(ROOTS_DASHBOARD, "/consulta"),
     consultaCitas: path(ROOTS_DASHBOARD, "/consulta/citas"),
+    consultaUsuarios: path(ROOTS_DASHBOARD, "/consulta/usuarios"),
   },
 };
 

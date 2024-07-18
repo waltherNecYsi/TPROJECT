@@ -214,43 +214,43 @@ const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const Mainregister = async (
-    name,
-    email,
-    ruc,
-    phone,
-    password,
-    reppassword
-  ) => {
-    try {
-      const { data, error, isLoading } = await fetcher(
-        `http://${HOST_API_KEY}/api/main`,
-        {
-          email,
-          password,
-          name,
-          ruc,
-          phone,
-          reppassword,
-        }
-      );
+  // const Mainregister = async (
+  //   name,
+  //   email,
+  //   ruc,
+  //   phone,
+  //   password,
+  //   reppassword
+  // ) => {
+  //   try {
+  //     const { data, error, isLoading } = await fetcher(
+  //       `http://${HOST_API_KEY}/api/main`,
+  //       {
+  //         email,
+  //         password,
+  //         name,
+  //         ruc,
+  //         phone,
+  //         reppassword,
+  //       }
+  //     );
 
-      if (!error) {
-        const { accessToken, user } = data;
+  //     if (!error) {
+  //       const { accessToken, user } = data;
 
-        if (accessToken && user) {
-          console.log("La solicitud de registro fue exitosa");
-          console.log(data);
-        } else {
-          console.error("La respuesta exitosa no contiene accessToken o user");
-        }
-      } else {
-        console.error(`Error en la solicitud: ${error}`);
-      }
-    } catch (error) {
-      console.error("Error en la solicitud:", error);
-    }
-  };
+  //       if (accessToken && user) {
+  //         console.log("La solicitud de registro fue exitosa");
+  //         console.log(data);
+  //       } else {
+  //         console.error("La respuesta exitosa no contiene accessToken o user");
+  //       }
+  //     } else {
+  //       console.error(`Error en la solicitud: ${error}`);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error en la solicitud:", error);
+  //   }
+  // };
 
   // REGISTER
 

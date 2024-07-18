@@ -24,6 +24,7 @@ import {
   RegistroEstilistasPage,
   RegistroServiciosPage,
   ConsultaCitasPage,
+  ConsultaUsuariosPage,
 } from "./elements";
 
 export default function Router() {
@@ -94,7 +95,10 @@ export default function Router() {
         },
         {
           path: "consulta",
-          children: [{ path: "citas", element: <ConsultaCitasPage /> }],
+          children: [
+            { path: "citas", element: <ConsultaCitasPage /> },
+            { path: "usuarios", element: <ConsultaUsuariosPage /> },
+          ],
         },
       ],
     },
