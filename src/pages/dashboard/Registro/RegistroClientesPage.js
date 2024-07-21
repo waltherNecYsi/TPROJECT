@@ -76,7 +76,7 @@ export default function RegistroClientesPage() {
     { id: 3, label: "Telefono", align: "left" },
     { id: 4, label: "Email", align: "left" },
     { id: 6, label: "F. Registro", align: "left" },
-    ...(user?.rol === "Atencion al Cliente"
+    ...(user?.rol === "Administrador"
       ? [{ id: 5, label: "Estado", align: "left" }]
       : []),
     { id: "", label: "" },
@@ -234,7 +234,7 @@ export default function RegistroClientesPage() {
 
   const handleActive = async (id) => {
     try {
-      const response = await axios.get(`/api/inahibilitar/${id.id}`);
+      const response = await axios.get(`/api/inahibilitar_cliente/${id.ClienteID}`);
       fetchDataFromAPI();
       return response.data;
     } catch (error) {
@@ -402,12 +402,12 @@ export default function RegistroClientesPage() {
                   rowCount={tableData.length}
                   numSelected={selected.length}
                   onSort={onSort}
-                  onSelectAllRows={(checked) =>
-                    onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.ane_id)
-                    )
-                  }
+                  // onSelectAllRows={(checked) =>
+                  //   onSelectAllRows(
+                  //     checked,
+                  //     tableData.map((row) => row.ane_id)
+                  //   )
+                  // }
                 />
 
                 <TableBody>

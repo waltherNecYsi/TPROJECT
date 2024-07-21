@@ -394,12 +394,12 @@ export default function ConsultaUsuariosPage() {
                   rowCount={tableData.length}
                   numSelected={selected.length}
                   onSort={onSort}
-                  onSelectAllRows={(checked) =>
-                    onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.ane_id)
-                    )
-                  }
+                  // onSelectAllRows={(checked) =>
+                  //   onSelectAllRows(
+                  //     checked,
+                  //     tableData.map((row) => row.ane_id)
+                  //   )
+                  // }
                 />
 
                 <TableBody>
@@ -410,8 +410,8 @@ export default function ConsultaUsuariosPage() {
                         key={index}
                         keyIndex={index}
                         row={row}
-                        selected={selected.includes(row.ane_id)}
-                        onSelectRow={() => onSelectRow(row.ane_id)}
+                        // selected={selected.includes(row.ane_id)}
+                        // onSelectRow={() => onSelectRow(row.ane_id)}
                         // onViewRow={() => handleViewRow(row.ane_id)}
                         // onEditRow={() => handleEditRow(row.ane_id)}
                         onEditRow={() => handleOpenEditModal(row)}

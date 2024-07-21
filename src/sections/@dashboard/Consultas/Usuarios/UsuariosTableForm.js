@@ -35,6 +35,7 @@ const validateFields = Yup.object().shape({
   email: Yup.string().required("Requerido"),
   DNI: Yup.string().required("Requerido"),
   password: Yup.string().required("Requerido"),
+  rol: Yup.object().required("Requerido"),
 });
 
 export default function CliTableForm({
@@ -49,6 +50,7 @@ export default function CliTableForm({
     email: rowData?.email ?? "",
     DNI: rowData?.DNI ?? "",
     password: rowData?.password ?? "",
+    rol: rowData?.rol ?? null,
   };
 
   const [openModal, setOpenModal] = useState(true);
@@ -91,8 +93,9 @@ export default function CliTableForm({
   const onSubmit = async () => {
     const valuesSubmit = getValues();
 
-    const formData= {
+    const formData = {
       ...valuesSubmit,
+      rol: valuesSubmit?.rol?.value,
       id: rowData?.id ?? "",
     };
 
@@ -231,6 +234,18 @@ export default function CliTableForm({
                   ),
                 }}
                 sx={{ width: "-webkit-fill-available", m: 1 }}
+              />
+              <RHFAutocomplete
+                name="rol"
+                label="Rol"
+                size="small"
+                freesolo
+                sx={{ width: "-webkit-fill-available", m: 1 }}
+                getOptionLabel={(option) => option.rol}
+                options={[
+                  { rol: "Administrador", value: 1 },
+                  { rol: "Estilista", value: 2 },
+                ]}
               />
             </Box>
           </DialogContent>

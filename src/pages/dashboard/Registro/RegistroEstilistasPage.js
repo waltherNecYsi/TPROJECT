@@ -56,10 +56,7 @@ import {
 
 import { useAuthContext } from "../../../auth/useAuthContext";
 
-
 // ----------------------------------------------------------------------
-
-
 
 // ----------------------------------------------------------------------
 
@@ -79,10 +76,10 @@ export default function RegistroEstilistasPage() {
     { id: 3, label: "Telefono", align: "left" },
     { id: 4, label: "Email", align: "left" },
     { id: 5, label: "F. Registro", align: "left" },
-    ...(user?.rol === "Atencion al Cliente"
+    ...(user?.rol === "Administrador"
       ? [{ id: 6, label: "Estado", align: "left" }]
       : []),
-    { id: 6 },
+    { id: 7 },
   ];
 
   const {
@@ -149,6 +146,7 @@ export default function RegistroEstilistasPage() {
     // setSelected([]);
     try {
       const response = axios.delete(`/api/estilistas/${id.EstilistaID}`);
+      handleCloseConfirm();
       fetchDataFromAPI();
       return response.data;
     } catch (error) {
@@ -234,7 +232,9 @@ export default function RegistroEstilistasPage() {
 
   const handleActive = async (id) => {
     try {
-      const response = await axios.get(`/api/inahibilitar/${id.id}`);
+      const response = await axios.get(
+        `/api/estilistas_inahibilitar/${id.EstilistaID}`
+      );
       fetchDataFromAPI();
       return response.data;
     } catch (error) {
@@ -402,12 +402,12 @@ export default function RegistroEstilistasPage() {
                   rowCount={tableData.length}
                   numSelected={selected.length}
                   onSort={onSort}
-                  onSelectAllRows={(checked) =>
-                    onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.ane_id)
-                    )
-                  }
+                  // onSelectAllRows={(checked) =>
+                  //   onSelectAllRows(
+                  //     checked,
+                  //     tableData.map((row) => row.ane_id)
+                  //   )
+                  // }
                 />
 
                 <TableBody>
@@ -464,7 +464,7 @@ export default function RegistroEstilistasPage() {
         title="Delete"
         content={
           <>
-            Are you sure want to delete <strong> {selected.length} </strong>{" "}
+            Esta seguro que desea eliminar <strong> {selected.length} </strong>{" "}
             items?
           </>
         }
@@ -473,7 +473,7 @@ export default function RegistroEstilistasPage() {
             variant="contained"
             color="error"
             onClick={() => {
-              handleDeleteRows(selected);
+              // handleDeleteRows(selected);
               handleCloseConfirm();
             }}
           >

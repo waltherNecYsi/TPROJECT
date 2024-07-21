@@ -38,6 +38,8 @@ export default function NavList({ data, depth, hasChild }) {
     setOpen(false);
   };
 
+  
+
   return (
     <>
       <NavItem

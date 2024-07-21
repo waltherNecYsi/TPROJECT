@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 // @mui
 import { Box, Stack, Drawer, Typography } from "@mui/material";
@@ -12,10 +12,11 @@ import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/scrollbar";
 import { NavSectionVertical } from "../../../components/nav-section";
 //
-import navConfig from "./config-navigation";
+import navConfig , { navConfigAdmin } from "./config-navigation";
 // import NavDocs from './NavDocs';
 import NavAccount from "./NavAccount";
 import NavToggleButton from "./NavToggleButton";
+import { useAuthContext } from "../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +29,14 @@ export default function NavVertical({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
 
   const isDesktop = useResponsive("up", "lg");
+
+  const { user } = useAuthContext();
+
+  const isAdmin = user?.rol === "Administrador";
+
+  const [configAdmin, setConfigAdmin] = useState(
+    isAdmin ? navConfigAdmin : navConfig
+  );
 
   useEffect(() => {
     if (openNav) {
@@ -66,7 +75,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         <NavAccount />
       </Stack>
 
-      <NavSectionVertical data={navConfig} />
+      <NavSectionVertical data={configAdmin} />
 
       <Box
         sx={{

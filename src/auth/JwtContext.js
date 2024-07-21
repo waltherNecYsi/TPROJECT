@@ -96,7 +96,7 @@ const AuthProvider = ({ children }) => {
   const storageAvailable = localStorageAvailable();
 
   const handleAuthentication = useCallback(
-    async (establishmentId) => {
+    async () => {
       try {
         const accessToken = storageAvailable
           ? localStorage.getItem("accessToken")
@@ -107,7 +107,7 @@ const AuthProvider = ({ children }) => {
           accessToken
         );
 
-        const { token, user } = tokenData;
+        const { access_token, user } = tokenData;
 
         setSession(accessToken, user);
 
@@ -116,7 +116,7 @@ const AuthProvider = ({ children }) => {
           payload: {
             isAuthenticated: true,
             isRegistered: true,
-            isEstablishment: establishmentId,
+            // isEstablishment: establishmentId,
             user: {
               ...user,
               displayName: user?.name ?? "Logan",
@@ -129,6 +129,14 @@ const AuthProvider = ({ children }) => {
         // return { data, error, isLoading };
       } catch (error) {
         console.error("Error en la solicitud:", error.message);
+        dispatch({
+          type: "INITIAL",
+          payload: {
+            isAuthenticated: false,
+            isEstablishment: null,
+            user: null,
+          },
+        });
       }
     },
     [storageAvailable]
@@ -149,9 +157,9 @@ const AuthProvider = ({ children }) => {
             : "";
           setEstablishment(establishmentId);
 
-          handleAuthentication(establishmentId);
+          handleAuthentication();
         } else {
-          console.log("else");
+          console.log("No hay token al Inicio");
           dispatch({
             type: "INITIAL",
             payload: {
@@ -186,9 +194,11 @@ const AuthProvider = ({ children }) => {
         password,
       });
 
-
-      if (loginData?.user) {
         const { access_token, user } = loginData;
+
+        console.log(access_token);
+
+        setEstablishment(1);
 
         console.log("User: ", user);
         console.log("Token :", access_token);
@@ -208,7 +218,7 @@ const AuthProvider = ({ children }) => {
             },
           },
         });
-      }
+      
     } catch (error) {
       console.error("Error en la solicitud:", error.message);
     }

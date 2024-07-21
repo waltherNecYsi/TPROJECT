@@ -6,7 +6,6 @@ import Iconify from "../../../components/iconify";
 import SvgColor from "../../../components/svg-color";
 
 // ----------------------------------------------------------------------
-
 const icon = (name) => (
   <SvgColor
     src={`/assets/icons/navbar/${name}.svg`}
@@ -53,7 +52,6 @@ const ICONS = {
 };
 
 const navConfig = [
-
   // MANAGEMENT
   // ----------------------------------------------------------------------
   {
@@ -76,11 +74,49 @@ const navConfig = [
         icon: ICONS.file,
         children: [
           { title: "citas", path: PATH_DASHBOARD.consulta.consultaCitas },
-          { title: "usuarios", path: PATH_DASHBOARD.consulta.consultaUsuarios },
+
+          // {
+          //   title: "usuarios",
+          //   path: PATH_DASHBOARD.consulta.consultaUsuarios,
+          // },
         ],
-      }
+      },
     ],
   },
 ];
 
 export default navConfig;
+
+export const navConfigAdmin = [
+  // MANAGEMENT
+  // ----------------------------------------------------------------------
+  {
+    subheader: "Registros",
+    items: [
+      {
+        title: "Registros",
+        path: PATH_DASHBOARD.registro.regCliente,
+        icon: ICONS.file,
+        children: [
+          { title: "clientes", path: PATH_DASHBOARD.registro.regCliente },
+          { title: "citas", path: PATH_DASHBOARD.registro.regCitas },
+          { title: "estilistas", path: PATH_DASHBOARD.registro.regEstilistas },
+          { title: "servicios", path: PATH_DASHBOARD.registro.regServicios },
+        ],
+      },
+      {
+        title: "Consultas",
+        path: PATH_DASHBOARD.consulta.consultaCitas,
+        icon: ICONS.file,
+        children: [
+          { title: "citas", path: PATH_DASHBOARD.consulta.consultaCitas },
+
+          {
+            title: "usuarios",
+            path: PATH_DASHBOARD.consulta.consultaUsuarios,
+          },
+        ],
+      },
+    ],
+  },
+];

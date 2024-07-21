@@ -75,7 +75,7 @@ export default function RegistroClientesPage() {
     { id: 3, label: "Precio", align: "left" },
     { id: 4, label: "Duracion", align: "left" },
     { id: 5, label: "Fecha de Registro", align: "left" },
-    ...(user?.rol === "Atencion al Cliente"
+    ...(user?.rol === "Administrador"
       ? [{ id: 6, label: "Estado", align: "left" }]
       : []),
     { id: "" },
@@ -142,13 +142,14 @@ export default function RegistroClientesPage() {
     const deleteRow = tableData.filter(
       (row) => row.ServicioID !== id.ServicioID
     );
-    setSelected([]);
+    // setSelected([]);
     try {
       const response = axios.delete(`/api/servicio/${id.ServicioID}`);
       // if (page > 0 && dataInPage.length < 2) {
       //   setPage(page - 1);
       // }
       // return response.data;
+      handleCloseConfirm();
       fetchDataFromAPI();
     } catch (error) {
       console.error("Error al realizar la solicitud DELETE:", error);
@@ -222,7 +223,7 @@ export default function RegistroClientesPage() {
 
   const handleActive = async (id) => {
     try {
-      const response = await axios.get(`/api/inahibilitar/${id.id}`);
+      const response = await axios.get(`/api/inahibilitar_servicio/${id.ServicioID}`);
       fetchDataFromAPI();
       return response.data;
     } catch (error) {
@@ -392,12 +393,12 @@ export default function RegistroClientesPage() {
                   rowCount={tableData.length}
                   numSelected={selected.length}
                   onSort={onSort}
-                  onSelectAllRows={(checked) =>
-                    onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.ane_id)
-                    )
-                  }
+                  // onSelectAllRows={(checked) =>
+                  //   onSelectAllRows(
+                  //     checked,
+                  //     tableData.map((row) => row.ane_id)
+                  //   )
+                  // }
                 />
 
                 <TableBody>
@@ -465,7 +466,7 @@ export default function RegistroClientesPage() {
             variant="contained"
             color="error"
             onClick={() => {
-              handleDeleteRows(selected);
+              // handleDeleteRows(selected);
               handleCloseConfirm();
             }}
           >

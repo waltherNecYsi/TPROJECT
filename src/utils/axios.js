@@ -1,29 +1,30 @@
 import axios from "axios";
+import { useEffect } from "react";
 // config
 import { HOST_API_KEY } from "../config-global";
 import { useAuthContext } from "../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 // get sub
-const storedToken = localStorage.getItem("accessToken");
+const storedToken = localStorage.getItem("accessToken") || "";
 
 const axiosInstance = axios.create({
   baseURL: `http://${HOST_API_KEY}`,
   headers: {
     Accept: "/",
     // 'Content-Type': 'application/json',
-    Authorization: `Bearer ${storedToken}`,
+    "Authorization": `Bearer ${storedToken}`,
     "X-Requested-With": "XMLHttpRequest",
   },
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    // const { user } = useAuthContext();
+    const token = localStorage.getItem("accessToken");
     config.data = {
       ...config.data,
-      token: localStorage.getItem("accessToken"),
     };
+    config.headers.Authorization = `Bearer ${token}` || "";
     return config;
   },
   (error) => Promise.reject(error)
@@ -39,4 +40,3 @@ axiosInstance.interceptors.response.use(
 
 export default axiosInstance;
 
-// 403 forbiden usuario no inicio session

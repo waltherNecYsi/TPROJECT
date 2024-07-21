@@ -126,13 +126,13 @@ export default function CliTableRow({
             direction="row"
             sx={{ display: "flex", justifyContent: "center" }}
           >
-             <Tooltip title="Editar" placement="top" arrow>
+             {/* <Tooltip title="Editar" placement="top" arrow>
               <IconButton sx={{}} color="default" onClick={ () => {
                 alert("zzz");
               }}>
                 <Iconify icon="eva:edit-fill" width="1rem" height="1rem" />
               </IconButton>
-            </Tooltip> 
+            </Tooltip>  */}
             <Tooltip title="Eliminar" placement="top" arrow>
               <IconButton
                 sx={{}}

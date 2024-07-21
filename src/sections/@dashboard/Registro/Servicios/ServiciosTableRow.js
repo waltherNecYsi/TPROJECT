@@ -48,7 +48,14 @@ export default function ServiciosTableRow({
   onDeleteRow,
   onActive,
 }) {
-  const { Nomb_Serv, Desc_Serv, Precio_Serv, DurMin_Serv, FechaReg_Serv , idEstado} = row;
+  const {
+    Nomb_Serv,
+    Desc_Serv,
+    Precio_Serv,
+    DurMin_Serv,
+    FechaReg_Serv,
+    idEstado,
+  } = row;
 
   const { user } = useAuthContext();
 
@@ -75,9 +82,9 @@ export default function ServiciosTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox" align="center">
+        {/* <TableCell padding="checkbox" align="center">
           <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
+        </TableCell> */}
 
         {/* <TableCell align="left">{keyIndex + 1}</TableCell> */}
 
@@ -91,24 +98,24 @@ export default function ServiciosTableRow({
 
         <TableCell align="left">{FechaReg_Serv}</TableCell>
 
-        {user?.rol === "Atencion al Cliente" ? (
+        {user?.rol === "Administrador" ? (
           <TableCell align="left">
-          <Button
-            variant="contained"
-            color={idEstado === 0 ? "error" : "success"}
-            sx={{
-              fontSize: "0.7rem",
-              ...(idEstado === 1 && {
-                backgroundColor: "#00ab55!important",
-                color: "white!important",
-              }),
-            }}
-            onClick={onActive}
-            // onClick={alert("Activar Usuario")}
-          >
-            {" "}
-            {idEstado === 0 ? "Eliminado" : "Activo"}
-          </Button>
+            <Button
+              variant="contained"
+              color={idEstado === 0 ? "error" : "success"}
+              sx={{
+                fontSize: "0.7rem",
+                ...(idEstado === 1 && {
+                  backgroundColor: "#00ab55!important",
+                  color: "white!important",
+                }),
+              }}
+              onClick={onActive}
+              // onClick={alert("Activar Usuario")}
+            >
+              {" "}
+              {idEstado === 0 ? "Eliminado" : "Activo"}
+            </Button>
           </TableCell>
         ) : null}
 
@@ -128,7 +135,7 @@ export default function ServiciosTableRow({
         arrow="right-top"
         sx={{ width: 160 }}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             onViewRow();
             handleClosePopover();
@@ -136,7 +143,7 @@ export default function ServiciosTableRow({
         >
           <Iconify icon="eva:eye-fill" />
           View
-        </MenuItem>
+        </MenuItem> */}
 
         <MenuItem
           onClick={() => {
@@ -145,7 +152,7 @@ export default function ServiciosTableRow({
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Edit
+          Editar
         </MenuItem>
 
         <Divider sx={{ borderStyle: "dashed" }} />
@@ -158,17 +165,24 @@ export default function ServiciosTableRow({
           sx={{ color: "error.main" }}
         >
           <Iconify icon="eva:trash-2-outline" />
-          Delete
+          Eliminar
         </MenuItem>
       </MenuPopover>
 
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
+        title="Eliminar"
+        content="Esta seguro que desea eliminar?"
         action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              onDeleteRow();
+              handleCloseConfirm();
+            }}
+          >
             Delete
           </Button>
         }

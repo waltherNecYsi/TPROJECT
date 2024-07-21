@@ -20,11 +20,11 @@ export default function TablePaginationCustom({
 }) {
   return (
     <Box sx={{ position: 'relative', ...sx }}>
-      <TablePagination rowsPerPageOptions={rowsPerPageOptions} component="div" {...other} />
+      <TablePagination rowsPerPageOptions={rowsPerPageOptions} component="div" {...other}  labelRowsPerPage="Filas por página:" />
 
       {onChangeDense && (
         <FormControlLabel
-          label="Dense"
+          label="Densidad"
           control={<Switch checked={dense} onChange={onChangeDense} />}
           sx={{
             pl: 2,
