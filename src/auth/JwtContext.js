@@ -95,52 +95,49 @@ const AuthProvider = ({ children }) => {
 
   const storageAvailable = localStorageAvailable();
 
-  const handleAuthentication = useCallback(
-    async () => {
-      try {
-        const accessToken = storageAvailable
-          ? localStorage.getItem("accessToken")
-          : "";
+  const handleAuthentication = useCallback(async () => {
+    try {
+      const accessToken = storageAvailable
+        ? localStorage.getItem("accessToken")
+        : "";
 
-        const tokenData = await fetchget(
-          `http://${HOST_API_KEY}/api/verifyToken`,
-          accessToken
-        );
+      const tokenData = await fetchget(
+        `http://${HOST_API_KEY}/api/verifyToken`,
+        accessToken
+      );
 
-        const { access_token, user } = tokenData;
+      const { access_token, user } = tokenData;
 
-        setSession(accessToken, user);
+      setSession(accessToken, user);
 
-        dispatch({
-          type: "INITIAL",
-          payload: {
-            isAuthenticated: true,
-            isRegistered: true,
-            // isEstablishment: establishmentId,
-            user: {
-              ...user,
-              displayName: user?.name ?? "Logan",
-              // photoURL: user?.empresa.imagen,
-              role: user?.rol ?? "estilista",
-            },
+      dispatch({
+        type: "INITIAL",
+        payload: {
+          isAuthenticated: true,
+          isRegistered: true,
+          // isEstablishment: establishmentId,
+          user: {
+            ...user,
+            displayName: user?.name ?? "Logan",
+            // photoURL: user?.empresa.imagen,
+            role: user?.rol ?? "estilista",
           },
-        });
+        },
+      });
 
-        // return { data, error, isLoading };
-      } catch (error) {
-        console.error("Error en la solicitud:", error.message);
-        dispatch({
-          type: "INITIAL",
-          payload: {
-            isAuthenticated: false,
-            isEstablishment: null,
-            user: null,
-          },
-        });
-      }
-    },
-    [storageAvailable]
-  );
+      // return { data, error, isLoading };
+    } catch (error) {
+      console.error("Error en la solicitud:", error.message);
+      dispatch({
+        type: "INITIAL",
+        payload: {
+          isAuthenticated: false,
+          isEstablishment: null,
+          user: null,
+        },
+      });
+    }
+  }, [storageAvailable]);
 
   useEffect(() => {
     const initialize = async () => {
@@ -194,14 +191,8 @@ const AuthProvider = ({ children }) => {
         password,
       });
 
+      if (!loginData?.error) {
         const { access_token, user } = loginData;
-
-        console.log(access_token);
-
-        setEstablishment(1);
-
-        console.log("User: ", user);
-        console.log("Token :", access_token);
 
         setSession(access_token, user);
 
@@ -209,18 +200,28 @@ const AuthProvider = ({ children }) => {
           type: "LOGIN",
           payload: {
             user: {
-              ...user,
+              isAuthenticated: true,
+              isEstablishment: "1",
               displayName: user?.name ?? "Nombre",
-              // empId: user.empresa.id,
-              // localId: user.local.id,
-              // photoURL: user?.empresa.imagen,
               role: user?.rol ?? "Rol",
             },
           },
         });
-      
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error.message);
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          user: {
+            isAuthenticated: false,
+            isRegistered: false,
+            isEstablishment: null,
+            displayName: "",
+            role: "",
+          },
+        },
+      });
     }
   }, []);
 

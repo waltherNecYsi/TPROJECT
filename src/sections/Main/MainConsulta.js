@@ -49,13 +49,12 @@ export default function MainConsulta() {
 
   const onSubmit = async (formData) => {
     try {
-      const data = await DataApiGet(`/api/consulta_ticket/${formData.codigo}`);
-      const ticket = await generateTicket("print", data);
+      const DataTicket = await DataApiGet(
+        `/api/consulta_ticket/${formData.codigo}`
+      );
       reset();
-      if (ticket) {
-        reset();
-        console.log(ticket);
-      }
+      const ticket = await generateTicket("print", DataTicket);
+      reset();
     } catch (error) {
       reset();
       console.error(error);

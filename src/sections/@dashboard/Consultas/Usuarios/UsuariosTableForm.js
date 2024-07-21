@@ -244,7 +244,7 @@ export default function CliTableForm({
                 getOptionLabel={(option) => option.rol}
                 options={[
                   { rol: "Administrador", value: 1 },
-                  { rol: "Estilista", value: 2 },
+                  { rol: "Atencion al Cliente", value: 2 },
                 ]}
               />
             </Box>
